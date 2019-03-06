@@ -26,10 +26,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter
         http.
                 anonymous().disable()
                 .authorizeRequests()
-                .antMatchers("/orders/**").access("hasAnyRole('ROLE_MGR', 'ROLE_USER')")
-                .antMatchers("/products/**").access("hasAnyRole('ROLE_MGR', 'ROLE_USER')")
-                .antMatchers("/suppliers/**").access("hasAnyRole('ROLE_MGR', 'ROLE_USER')")
-                .antMatchers("/users/**").access("hasAnyRole('ROLE_MGR', 'ROLE_USR')")
+                .antMatchers("/orders/**").access("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+                .antMatchers("/products/**").access("hasAnyRole('ROLE_ADMIN')")
+                .antMatchers("/suppliers/**").access("hasAnyRole('ROLE_USER')")
+                .antMatchers("/users/**").access("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
                 .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
     }
 }

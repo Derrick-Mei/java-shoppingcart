@@ -18,13 +18,14 @@ public class User
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userid;
 
-    @Column(length = 250, unique = true)
+    @Column(length = 250, unique = true )
     private String username;
 
     @JsonIgnore
     private String password;
 
-    private String role;
+    // set default privilege to be user
+    private String role = "user";
 
     // ==================================================================
 

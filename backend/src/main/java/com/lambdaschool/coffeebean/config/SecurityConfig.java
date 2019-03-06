@@ -25,6 +25,9 @@ import javax.annotation.Resource;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
+    // testing signup url
+    public static final String SIGN_UP_URL = "/signup";
+    public static final String MERCHANDISE_URL = "/merchandise";
 
     @Resource(name = "userService")
     private UserDetailsService userDetailsService;
@@ -43,16 +46,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .passwordEncoder(encoder());
     }
 
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception
+//    {
+//        http
+//                .csrf().disable()
+//                .anonymous().disable()
+//                .authorizeRequests()
+//                .antMatchers(HttpMethod.OPTIONS).permitAll()
+//                .antMatchers("/api-docs/**").permitAll()
+//                ;
+//    }
+
     @Override
-    protected void configure(HttpSecurity http) throws Exception
-    {
+    protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .anonymous().disable()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
+                .antMatchers(HttpMethod.GET, MERCHANDISE_URL).permitAll()
+                // What do the below 2 do?
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/api-docs/**").permitAll()
-                ;
+                .anyRequest().authenticated();
     }
 
     @Bean

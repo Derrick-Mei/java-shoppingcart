@@ -6,12 +6,12 @@
 -- ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
 -- ADD UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE;
 
-INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (1, 'Mastercard1', '2019-01-20 20:50:50', true, 'string address1', 1);
-INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (2, 'Mastercard2', '2019-01-20 20:50:50', false, 'string address1', 2);
-INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (3, 'Mastercard3', '2019-01-20 20:50:50', true, 'string address1', 2);
-INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (4, 'Mastercard4', '2019-01-20 20:50:50', false, 'string address1', 3);
+INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (1, 'Mastercard1', '2019-01-20 20:50:50', true, 'string address1', 3);
+INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (2, 'Mastercard2', null, false, 'string address1', 3);
+INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (3, 'Mastercard3', '2019-01-20 20:50:50', true, 'string address1', 4);
+INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (4, 'Mastercard4', null, false, 'string address1', 3);
 INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (5, 'Mastercard5', '2019-01-20 20:50:50', true, 'string address1', 3);
-INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (6, 'Mastercard6', '2019-01-20 20:50:50', false, 'string address1', 4);
+INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (6, 'Mastercard6', null, false, 'string address1', 4);
 
 INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (1, 'description1', '2020-01-01', 'imageurl1.com', 10.50, 'productname1', 10);
 INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (2, 'description2', '2020-01-01', 'imageurl2.com', 11.50, 'productname2', 10);
@@ -24,8 +24,8 @@ INSERT INTO suppliers (supplierid, suppliername, supplierphone) VALUES (1, 'supp
 INSERT INTO suppliers (supplierid, suppliername, supplierphone) VALUES (2, 'supplier2', '111-111-1111');
 INSERT INTO suppliers (supplierid, suppliername, supplierphone) VALUES (3, 'supplier3', '111-111-1111');
 
-INSERT INTO user (userid, role, username, password, email) VALUES (1, 'mgr', 'username1', 'password', 'email1@email.com');
-INSERT INTO user (userid, role, username, password, email) VALUES (2, 'mgr', 'username2', 'password', 'email2@email.com');
+INSERT INTO user (userid, role, username, password, email) VALUES (1, 'admin', 'username1', 'password', 'email1@email.com');
+INSERT INTO user (userid, role, username, password, email) VALUES (2, 'admin', 'username2', 'password', 'email2@email.com');
 
 INSERT INTO user (userid, role, username, password, email, customername, billingaddress, customerphone, paymentmethod, shippingaddress)
 VALUES (3, 'user', 'username3', 'password', 'email3@email.com', 'name3', 'billingaddress3', '111-111-1111', 'paymethod3', 'shippingaddress3');
