@@ -1,8 +1,19 @@
-import Router from "next/router";
 import styled from "styled-components";
-import { Menu, Dropdown, Button, Icon, Badge, Avatar } from "antd";
-
+import {
+  Menu,
+  Dropdown,
+  Button,
+  Icon,
+  Badge,
+  Avatar,
+  Drawer,
+  message
+} from "antd";
+import { useState } from "react";
+import ItemCardList from "./ItemCardList";
+import ItemCard from "./ItemCard";
 const CartFooter = () => {
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
   return (
     <CartFooterWrapper>
       <TotalDisplay>$55.55</TotalDisplay>
@@ -10,17 +21,38 @@ const CartFooter = () => {
         <Avatar shape="circle" size="small" icon="user" />
         <Avatar shape="circle" size="small" icon="user" />
       </ItemsQueueContainer>
-      <CartBtn
-        onClick={() =>
-          Router.push({
-            pathname: "/cart"
-          })
-        }
-      >
+      <CartBtn onClick={() => setDrawerOpen(true)}>
         <Badge offset={[16, 6]} count={5} showZero={false}>
           Cart
         </Badge>
       </CartBtn>
+      <Drawer
+        title="Items In Cart"
+        placement="left"
+        closable={true}
+        onClose={() => setDrawerOpen(false)}
+        visible={isDrawerOpen}
+      >
+        <ItemCardList>
+          <ItemCard
+            actionBtn={
+              <Button type="danger" onClick={() => console.log("delete")}>
+                Delete
+              </Button>
+            }
+          />
+        </ItemCardList>
+        <FinishBtn
+          type="primary"
+          onClick={() =>
+            Router.push({
+              pathname: "/checkout"
+            })
+          }
+        >
+          Finish Checkout
+        </FinishBtn>
+      </Drawer>
     </CartFooterWrapper>
   );
 };
@@ -62,5 +94,7 @@ const CartBtn = styled(Button)`
 const CartBadge = styled(Badge)`
   background: ${props => props.theme.orange};
 `;
+
+const FinishBtn = styled(Button)``;
 
 export default CartFooter;
