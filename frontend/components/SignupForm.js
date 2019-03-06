@@ -1,16 +1,29 @@
 import { Form, Icon, Input, Button, Card } from "antd";
 import styled, { withTheme } from "styled-components";
 import { StyledAuthForm } from "./styles/StyledAuthForm";
+import axios from "axios";
 
 const SignUpForm = ({ form, theme, signupInfo, setSignupInfo }) => {
   const { getFieldDecorator } = form;
 
   function handleSubmit(e) {
     e.preventDefault();
+
     form.validateFields((err, values) => {
       if (!err) {
         console.log("Received values of form: ", values);
       }
+      axios
+        .post("http://localhost:2019/signup", {
+          username: values.username,
+          password: values.password
+        })
+        .then(function(response) {
+          console.log(response);
+        })
+        .catch(function(error) {
+          console.error(error, "we have an error");
+        });
     });
   }
   const changeInputHandler = e => {
