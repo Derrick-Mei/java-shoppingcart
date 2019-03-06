@@ -32,6 +32,7 @@
     "react-adopt": "^0.6.0",
     "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.8.3",
+    "react-rewards": "^1.0.7",
     "react-stripe-checkout": "^2.6.3",
     "react-transition-group": "^2.5.0",
     "styled-components": "^3.4.9",
