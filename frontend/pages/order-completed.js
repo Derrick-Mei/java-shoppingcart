@@ -2,6 +2,8 @@ import Reward from "react-rewards";
 import { Button } from "antd";
 import { useRef, useEffect } from "react";
 import styled from "styled-components";
+import Router from "next/router";
+
 const OrderCompletedPage = () => {
   let rewardRef = useRef(null);
   useEffect(() => {
@@ -11,7 +13,15 @@ const OrderCompletedPage = () => {
     <OrderWrapper>
       <Reward ref={ref => (rewardRef.current = ref)} type="confetti">
         <h2>Thanks for your order!</h2>
-        <Button>Back to shopping</Button>
+        <Button
+          onClick={() => {
+            Router.push({
+              pathname: "/shop"
+            });
+          }}
+        >
+          Back to shopping
+        </Button>
       </Reward>
     </OrderWrapper>
   );
