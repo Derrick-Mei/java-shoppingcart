@@ -22,4 +22,6 @@ public class Productcontroller
     {
         return productrepos.findAll();
     }
+
+
 }

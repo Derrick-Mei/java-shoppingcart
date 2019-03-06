@@ -1,27 +1,37 @@
 package com.lambdaschool.coffeebean.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 //@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"username", "email"})})
 public class User
 {
-
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private long userid;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userid;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+        name = "UUID",
+        strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "userid", updatable = false, nullable = false)
+    private UUID userid;
 
     @Column(length = 250, unique = true )
     private String username;
 
-    @JsonIgnore
+//    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     // set default privilege to be user
@@ -78,12 +88,23 @@ public class User
     {
     }
 
-    public long getUserid()
+//    public long getUserid()
+//    {
+//        return userid;
+//    }
+//
+//    public void setUserid(long userid)
+//    {
+//        this.userid = userid;
+//    }
+
+
+    public UUID getUserid()
     {
         return userid;
     }
 
-    public void setUserid(long userid)
+    public void setUserid(UUID userid)
     {
         this.userid = userid;
     }
@@ -105,7 +126,10 @@ public class User
 
     public void setPassword(String password)
     {
-        this.password = password;
+//        this.password = password;
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        this.password = passwordEncoder.encode(password);
+
     }
 
     public String getRole()
