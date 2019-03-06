@@ -12,6 +12,8 @@ import {
 import { useState } from "react";
 import ItemCardList from "./ItemCardList";
 import ItemCard from "./ItemCard";
+import Router from "next/router";
+
 const CartFooter = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   return (

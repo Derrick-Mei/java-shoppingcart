@@ -1,5 +1,13 @@
+import styled from "styled-components";
+import CheckoutForm from "../components/CheckoutForm";
+
 const CheckoutPage = () => {
-  return <div>checkout</div>;
+  return (
+    <CheckoutWrapper>
+      <CheckoutForm />
+    </CheckoutWrapper>
+  );
 };
 
+const CheckoutWrapper = styled.div``;
 export default CheckoutPage;
