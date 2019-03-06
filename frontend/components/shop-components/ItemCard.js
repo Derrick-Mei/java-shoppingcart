@@ -1,16 +1,14 @@
 import styled from "styled-components";
 import { Card, Button } from "antd";
 
-const ItemCard = ({ title, description, price }) => {
+const ItemCard = ({ title, description, price, actionBtn }) => {
   return (
     <StyledCard>
       <ItemImage src={"https://via.placeholder.com/16"} />
       <ItemTextContainer>
         <ItemTitle>Green Bean</ItemTitle>
         <ItemDescription>This bean is green.</ItemDescription>
-        <BuyBtn type="primary" onClick={() => console.log("bought")}>
-          Buy: 19.99
-        </BuyBtn>
+        <ActionsContainer>{React.cloneElement(actionBtn)}</ActionsContainer>
       </ItemTextContainer>
     </StyledCard>
   );
@@ -40,6 +38,10 @@ const ItemDescription = styled.p`
 const ItemImage = styled.img`
   height: 100%;
   width: 35%;
+`;
+const ActionsContainer = styled.div`
+  /* display: flex;
+  justify-content: space-around; */
 `;
 const BuyBtn = styled(Button)``;
 export default ItemCard;

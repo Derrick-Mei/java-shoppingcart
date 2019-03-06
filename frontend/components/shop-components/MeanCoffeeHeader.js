@@ -1,31 +1,31 @@
 import styled from "styled-components";
-import { Menu, Dropdown, Button, Icon } from "antd";
+import { Menu, Dropdown, Button, Icon, Drawer } from "antd";
+import { useState } from "react";
+
 const MeanCoffeeHeader = () => {
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
   return (
     <MeanCoffeeWrapper>
       <Title>
         Mean!
         <br /> <Emphasis>Mean! Coffee Beans</Emphasis>
       </Title>
-      <Dropdown overlay={menu}>
-        <MenuBtn>Menu</MenuBtn>
-      </Dropdown>
+      <MenuBtn onClick={() => setDrawerOpen(true)}>Menu</MenuBtn>
+      <Drawer
+        title="Menu Options"
+        placement="left"
+        closable={true}
+        onClose={() => setDrawerOpen(false)}
+        visible={isDrawerOpen}
+      >
+        <DrawerBtn block>User Profile</DrawerBtn>
+        <DrawerBtn block>Order History</DrawerBtn>
+        <DrawerBtn block>Light / Dark</DrawerBtn>
+      </Drawer>
     </MeanCoffeeWrapper>
   );
 };
-const menu = (
-  <Menu>
-    <Menu.Item key="1">
-      <Icon type="user" />
-      User Profile
-    </Menu.Item>
 
-    <Menu.Item key="2">
-      <Icon type="alert" />
-      Light/Dark
-    </Menu.Item>
-  </Menu>
-);
 const MeanCoffeeWrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -57,6 +57,13 @@ const MenuBtn = styled(Button)`
   padding: 0.1em 0.5em;
   font-size: 1.4rem;
   border: none;
+`;
+
+const DrawerBtn = styled(Button).attrs({
+  block: true
+})`
+  height: 5rem;
+  margin-bottom: 2.4rem;
 `;
 
 export default MeanCoffeeHeader;
