@@ -1,13 +1,8 @@
 import styled from "styled-components";
 import ItemCard from "./ItemCard";
 
-const ItemCardList = () => {
-  return (
-    <ItemsWrapper>
-      <ItemCard />
-      <ItemCard />
-    </ItemsWrapper>
-  );
+const ItemCardList = props => {
+  return <ItemsWrapper>{props.children}</ItemsWrapper>;
 };
 const ItemsWrapper = styled.div`
   display: flex;
