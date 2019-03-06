@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Card, Button } from "antd";
 
-const ItemCard = ({ title, description, price, actionBtn }) => {
+const ItemCard = ({ image, title, description, price, actionBtn }) => {
   return (
     <StyledCard>
       <ItemImage src={"https://via.placeholder.com/16"} />

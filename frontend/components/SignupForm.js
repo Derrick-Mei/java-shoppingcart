@@ -2,7 +2,7 @@ import { Form, Icon, Input, Button, Card } from "antd";
 import styled, { withTheme } from "styled-components";
 import { StyledAuthForm } from "./styles/StyledAuthForm";
 
-const SignUpForm = ({ form, theme }) => {
+const SignUpForm = ({ form, theme, signupInfo, setSignupInfo }) => {
   const { getFieldDecorator } = form;
 
   function handleSubmit(e) {
@@ -13,6 +13,9 @@ const SignUpForm = ({ form, theme }) => {
       }
     });
   }
+  const changeInputHandler = e => {
+    setSignupInfo({ ...signupInfo, [e.target.name]: e.target.value });
+  };
 
   return (
     <StyledAuthForm onSubmit={handleSubmit}>
@@ -37,6 +40,8 @@ const SignUpForm = ({ form, theme }) => {
             <Input
               prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
               placeholder="Username"
+              name="username"
+              onChange={changeInputHandler}
             />
           )}
         </Form.Item>
@@ -48,6 +53,8 @@ const SignUpForm = ({ form, theme }) => {
               prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
               type="password"
               placeholder="Password"
+              name="password"
+              onChange={changeInputHandler}
             />
           )}
         </Form.Item>
