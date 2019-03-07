@@ -6,5 +6,10 @@ public interface CartItems
 
     String getDescription();
 
+    String getImage();
+
     double getPrice();
+
+    int getQuantityincart();
+
 }

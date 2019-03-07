@@ -6,6 +6,13 @@
 -- ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
 -- ADD UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE;
 
+ALTER TABLE cart ADD COLUMN quantityincart INT NULL AFTER productid;
+
+-- totalorderhistory quantity is optional stretch goal
+
+-- order products need quantity
+
+
 INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (1, 'Mastercard1', '2019-01-20 20:50:50', true, 'string address1', 3);
 INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (2, 'Mastercard2', '2019-01-20 20:50:50', false, 'string address1', 3);
 INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (3, 'Mastercard3', '2019-01-20 20:50:50', true, 'string address1', 4);
@@ -49,12 +56,19 @@ INSERT INTO user (userid, role, username, password, email, customername, billing
 VALUES (4, 'user', 'username4', '$2a$10$nRfvJ7epiIt8SJ9SIiiIdePm7GcV/mP6kJ.e7X3TeGh2swehrYnw2', 'email4@email.com', 'name4', 'billingaddress4', '111-111-1111', 'paymethod4', 'shippingaddress4');
 
 
-INSERT INTO cart (userid, productid) VALUES (3, 1);
-INSERT INTO cart (userid, productid) VALUES (3, 2);
-INSERT INTO cart (userid, productid) VALUES (3, 3);
-INSERT INTO cart (userid, productid) VALUES (4, 2);
-INSERT INTO cart (userid, productid) VALUES (4, 5);
-INSERT INTO cart (userid, productid) VALUES (4, 1);
+INSERT INTO cart (userid, productid, quantityincart) VALUES (3, 1, 2);
+INSERT INTO cart (userid, productid, quantityincart) VALUES (3, 2, 3);
+INSERT INTO cart (userid, productid, quantityincart) VALUES (3, 4, 4);
+INSERT INTO cart (userid, productid, quantityincart) VALUES (4, 2, 5);
+INSERT INTO cart (userid, productid, quantityincart) VALUES (4, 5, 6);
+INSERT INTO cart (userid, productid, quantityincart) VALUES (4, 1, 7);
+
+-- INSERT INTO cart (userid, productid) VALUES (('9bdce996-7588-4580-b8af-482ec8feb38a'), 1);
+-- INSERT INTO cart (userid, productid) VALUES (('9bdce996-7588-4580-b8af-482ec8feb38a'), 2);
+-- INSERT INTO cart (userid, productid) VALUES (('9bdce996-7588-4580-b8af-482ec8feb38a'), 3);
+-- INSERT INTO cart (userid, productid) VALUES (('44ea5a37-b95f-4d6c-80cc-2cdbc7ab195d'), 2);
+-- INSERT INTO cart (userid, productid) VALUES (('44ea5a37-b95f-4d6c-80cc-2cdbc7ab195d'), 5);
+-- INSERT INTO cart (userid, productid) VALUES (('44ea5a37-b95f-4d6c-80cc-2cdbc7ab195d'), 1);
 
 INSERT INTO totalorderhistory (userid, productid) VALUES (3, 1);
 INSERT INTO totalorderhistory (userid, productid) VALUES (3, 2);
