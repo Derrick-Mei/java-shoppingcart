@@ -23,15 +23,17 @@ public class Signupcontroller
     @PostMapping("")
     public Object addNewUser(@RequestBody User newuser) throws URISyntaxException
     {
+        String email = newuser.getEmail();
+
         if (userrepos.findByUsername(newuser.getUsername()) != null)
         {
-            if (newuser.getEmail() != null & userrepos.findByEmail(newuser.getEmail()) != null)
+            if (email != null && userrepos.findByEmail(email) != null)
             {
                 return "{ username unique constraint : " + newuser.getUsername() + " already exists,\nemail unique constraint : " + newuser.getEmail() + " already exists }";
             }
             return "{username unique constraint : " + newuser.getUsername() + " already exists}";
         }
-        else if (userrepos.findByEmail(newuser.getEmail()) != null & newuser.getEmail() != null)
+        else if (email != null && userrepos.findByEmail(email) != null)
         {
             return "{ email unique constraint : " + newuser.getEmail() + " already exists }";
         }

@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface Userrepository extends JpaRepository<User, Long>
 {
@@ -14,7 +13,7 @@ public interface Userrepository extends JpaRepository<User, Long>
     User findByEmail(String email);
 
     @Query(value = "SELECT * FROM cart WHERE userid = :userid", nativeQuery = true)
-    List<Object> getItemsInCartById(UUID userid);
+    List<Object> getItemsInCartById(long userid);
 
 //    @Query(value = "", nativeQuery = true)
 //    List<CartItems> getItemsInCartById2(UUID userid);
