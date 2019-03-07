@@ -24,17 +24,22 @@ const CartFooter = ({ cartItems, deleteCartItem }) => {
       </TotalDisplay>
       <ItemsQueueContainer>
         {/* returns the last three item indexes */}
-        {cartItems.slice(-3).map(item => {
-          return (
-            <Avatar
-              key={item.keyId}
-              shape="circle"
-              size="small"
-              src={item.src}
-              style={{ marginRight: "12px" }}
-            />
-          );
-        })}
+        {cartItems
+          .slice(-3)
+          .reverse()
+          .map(item => {
+            return (
+              <Avatar
+                key={item.keyId}
+                shape="circle"
+                size="small"
+                src={item.src}
+                style={{ marginLeft: "12px" }}
+              >
+                {item.productid}
+              </Avatar>
+            );
+          })}
       </ItemsQueueContainer>
       <CartBtn onClick={() => setDrawerOpen(true)}>
         <Badge offset={[16, 6]} count={cartItems.length} showZero={false}>
@@ -102,7 +107,6 @@ const TotalDisplay = styled.div`
 `;
 const ItemsQueueContainer = styled.div`
   display: flex;
-  background: ${props => props.theme.white};
   width: 100%;
 `;
 
