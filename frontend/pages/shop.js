@@ -6,7 +6,7 @@ import ItemCard from "../components/shop-components/ItemCard";
 import { Button } from "antd";
 import fetch from "isomorphic-unfetch";
 import { useEffect, useState } from "react";
-
+import axios from "axios";
 const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
 
@@ -49,11 +49,6 @@ const ShopPage = () => {
   );
 };
 
-ShopPage.getInitialProps = async ({ req }) => {
-  const res = await fetch("http://localhost:2019/merchandise");
-  const json = await res.json();
-  return { merchandise: json };
-};
 const MainContent = styled.main`
   padding: 0.5em;
 `;
