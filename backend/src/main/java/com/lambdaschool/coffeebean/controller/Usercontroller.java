@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -25,10 +26,16 @@ public class Usercontroller
     }
 
     @GetMapping("/{userid}/cart")
-    public List<Object> getItemsInCart(@PathVariable long userid)
+    public List<Object> getItemsInCart(@PathVariable UUID userid)
     {
         return userrepos.getItemsInCartById(userid);
     }
+
+//    @GetMapping("/{userid}/cart2")
+//    public List<CartItems> getItemsInCart2(@PathVariable UUID userid)
+//    {
+//        return userrepos.getItemsInCartById2(userid);
+//    }
 
     @PostMapping("/addadmin")
     public Object addNewUser(@RequestBody User newuser) throws URISyntaxException
@@ -42,7 +49,7 @@ public class Usercontroller
             }
             return "{username unique constraint : " + newuser.getUsername() + " already exists}";
         }
-        else if (userrepos.findByEmail(newuser.getEmail()) != null)
+        else if (userrepos.findByEmail(newuser.getEmail()) != null & newuser.getEmail() != null)
         {
             return "{ email unique constraint : " + newuser.getEmail() + " already exists }";
         }

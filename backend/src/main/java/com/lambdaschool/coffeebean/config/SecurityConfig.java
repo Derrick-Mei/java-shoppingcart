@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
     // testing signup url
     public static final String SIGN_UP_URL = "/signup";
-    public static final String MERCHANDISE_URL = "/merchandise";
+    public static final String SHOP_URL = "/shop";
 
     @Resource(name = "userService")
     private UserDetailsService userDetailsService;
@@ -68,7 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 //                .csrf().disable()
 //                .authorizeRequests()
 //                .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
-//                .antMatchers(HttpMethod.GET, MERCHANDISE_URL).permitAll()
+//                .antMatchers(HttpMethod.GET, SHOP_URL).permitAll()
 //                // What do the below 2 do?
 //                .antMatchers(HttpMethod.OPTIONS).permitAll()
 //                .antMatchers("/api-docs/**").permitAll()
@@ -80,10 +80,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     {
         http
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
+                .antMatchers("/swagger-ui.html").permitAll()
+                .antMatchers("/api-docs/**").permitAll()
 //                .antMatchers("/console/**").permitAll()
                 .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
-                .antMatchers(HttpMethod.GET, MERCHANDISE_URL).permitAll();
+                .antMatchers(HttpMethod.GET, SHOP_URL).permitAll();
         http.csrf().disable();
         http.headers().frameOptions().disable();
     }

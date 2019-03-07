@@ -19,13 +19,29 @@ INSERT INTO products (productid, description, expiration, image, price, productn
 INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (4, 'description4', '2020-01-01', 'imageurl4.com', 13.50, 'productname4', 10);
 INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (5, 'description5', '2020-01-01', 'imageurl5.com', 14.50, 'productname5', 10);
 INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (6, 'description6', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (7, 'description7', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (8, 'description8', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (9, 'description9', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (10, 'description10', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (11, 'description11', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (12, 'description12', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (13, 'description13', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (14, 'description14', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (15, 'description15', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (16, 'description16', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (17, 'description16', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (18, 'description18', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (19, 'description19', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (20, 'description20', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (21, 'description21', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (22, 'description22', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
 
 INSERT INTO suppliers (supplierid, suppliername, supplierphone) VALUES (1, 'supplier1', '111-111-1111');
 INSERT INTO suppliers (supplierid, suppliername, supplierphone) VALUES (2, 'supplier2', '111-111-1111');
 INSERT INTO suppliers (supplierid, suppliername, supplierphone) VALUES (3, 'supplier3', '111-111-1111');
 
-INSERT INTO user (userid, role, username, password, email) VALUES (1, 'mgr', 'username1', '$2a$10$nRfvJ7epiIt8SJ9SIiiIdePm7GcV/mP6kJ.e7X3TeGh2swehrYnw2', 'email1@email.com');
-INSERT INTO user (userid, role, username, password, email) VALUES (2, 'mgr', 'username2', '$2a$10$nRfvJ7epiIt8SJ9SIiiIdePm7GcV/mP6kJ.e7X3TeGh2swehrYnw2', 'email2@email.com');
+INSERT INTO user (userid, role, username, password, email) VALUES (1, 'admin', 'username1', '$2a$10$nRfvJ7epiIt8SJ9SIiiIdePm7GcV/mP6kJ.e7X3TeGh2swehrYnw2', 'email1@email.com');
+INSERT INTO user (userid, role, username, password, email) VALUES (2, 'admin', 'username2', '$2a$10$nRfvJ7epiIt8SJ9SIiiIdePm7GcV/mP6kJ.e7X3TeGh2swehrYnw2', 'email2@email.com');
 
 INSERT INTO user (userid, role, username, password, email, customername, billingaddress, customerphone, paymentmethod, shippingaddress)
 VALUES (3, 'user', 'username3', '$2a$10$nRfvJ7epiIt8SJ9SIiiIdePm7GcV/mP6kJ.e7X3TeGh2swehrYnw2', 'email3@email.com', 'name3', 'billingaddress3', '111-111-1111', 'paymethod3', 'shippingaddress3');
