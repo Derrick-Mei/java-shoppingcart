@@ -4,24 +4,18 @@ import CartFooter from "../components/shop-components/CartFooter";
 import ItemCardList from "../components/shop-components/ItemCardList";
 import ItemCard from "../components/shop-components/ItemCard";
 import { Button } from "antd";
-import fetch from "isomorphic-unfetch";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import fetchData from "../lib/fetchData";
 const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
-
-  async function fetchMerchandise() {
-    let url = "http://localhost:2019/merchandise";
-    const response = await fetch(url);
-    const json = await response.json();
-    setMerchandise(json);
-    return { merchandise };
-  }
-
   useEffect(() => {
-    const { merchandise } = fetchMerchandise();
+    const { data } = fetchData(
+      "http://localhost:2019/merchandise",
+      setMerchandise
+    );
   }, []);
-  console.log(merchandise);
+
   return (
     <ShopWrapper>
       <MeanCoffeeHeader />
