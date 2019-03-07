@@ -1,7 +1,8 @@
-import { Form, Icon, Input, Button, Card } from "antd";
+import { Form, Icon, Input, Button, Card, message } from "antd";
 import styled, { withTheme } from "styled-components";
 import { StyledAuthForm } from "./styles/StyledAuthForm";
 import axios from "axios";
+import Router from "next/router";
 
 const SignUpForm = ({ form, theme, signupInfo, setSignupInfo }) => {
   const { getFieldDecorator } = form;
@@ -20,6 +21,14 @@ const SignUpForm = ({ form, theme, signupInfo, setSignupInfo }) => {
         })
         .then(function(response) {
           console.log(response);
+          const { data } = response;
+          message.success(
+            `Welcome ${data.username}! You have successfully signed up.`,
+            3
+          );
+          Router.push({
+            pathname: "/shop"
+          });
         })
         .catch(function(error) {
           console.error(error, "we have an error");
