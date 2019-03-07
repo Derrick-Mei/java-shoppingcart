@@ -9,6 +9,8 @@ import axios from "axios";
 import fetchData from "../lib/fetchData";
 const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
+  const { cartItems, setCartItems, deleteCartItem } = useCartItem();
+
   useEffect(() => {
     const { data } = fetchData(
       "http://localhost:2019/merchandise",
@@ -29,7 +31,12 @@ const ShopPage = () => {
                 description={item.description}
                 image={item.image}
                 actionBtn={
-                  <Button type="primary" onClick={() => console.log("buy")}>
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      setCartItems([...cartItems, item]);
+                    }}
+                  >
                     Buy {`$${item.price}`}
                   </Button>
                 }
@@ -38,11 +45,30 @@ const ShopPage = () => {
           })}
         </ItemCardList>
       </MainContent>
-      <CartFooter />
+      <CartFooter cartItems={cartItems} deleteCartItem={deleteCartItem} />
     </ShopWrapper>
   );
 };
+const useCartItem = () => {
+  const [cartItems, setCartItems] = useState([]);
 
+  const deleteCartItem = id => {
+    console.log(cartItems);
+    const deleteIndex = cartItems.findIndex(item => {
+      return (item.productid = id);
+    });
+    setCartItems([
+      ...cartItems.slice(0, deleteIndex),
+      ...cartItems.slice(deleteIndex + 1)
+    ]);
+  };
+
+  return {
+    cartItems,
+    setCartItems,
+    deleteCartItem
+  };
+};
 const MainContent = styled.main`
   padding: 0.5em;
 `;
