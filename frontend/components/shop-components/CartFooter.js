@@ -24,7 +24,17 @@ const CartFooter = ({ cartItems, deleteCartItem }) => {
       </TotalDisplay>
       <ItemsQueueContainer>
         {/* returns the last three item indexes */}
-        <Avatar shape="circle" size="small" style={{ marginRight: "12px" }} />
+        {cartItems.slice(-3).map(item => {
+          return (
+            <Avatar
+              key={item.keyId}
+              shape="circle"
+              size="small"
+              src={item.src}
+              style={{ marginRight: "12px" }}
+            />
+          );
+        })}
       </ItemsQueueContainer>
       <CartBtn onClick={() => setDrawerOpen(true)}>
         <Badge offset={[16, 6]} count={cartItems.length} showZero={false}>
