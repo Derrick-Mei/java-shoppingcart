@@ -28,7 +28,7 @@ public class Swagger2Config
 
     private ApiInfo apiEndPointsInfo()
     {
-        return new ApiInfoBuilder().title("Our Courses")
+        return new ApiInfoBuilder().title("Mean Mean Coffee Bean")
                 .description("Our Courses")
                 .contact(new Contact("Derrick Mei", "http://www.derrickmei.com", "derrick.mei.168@gmail.com"))
                 .license("MIT")

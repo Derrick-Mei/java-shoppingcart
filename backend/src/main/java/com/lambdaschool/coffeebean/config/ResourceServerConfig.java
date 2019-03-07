@@ -29,7 +29,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter
                 .antMatchers("/orders/**").access("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
                 .antMatchers("/products/**").access("hasAnyRole('ROLE_ADMIN')")
                 .antMatchers("/suppliers/**").access("hasAnyRole('ROLE_USER')")
-                .antMatchers("/users/**").access("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+//                .antMatchers("/users/**").access("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
                 .and().exceptionHandling().accessDeniedHandler(new OAuth2AccessDeniedHandler());
     }
 }

@@ -2,7 +2,6 @@ package com.lambdaschool.coffeebean.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -10,22 +9,14 @@ import javax.persistence.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 //@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"username", "email"})})
 public class User
 {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private long userid;
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-        name = "UUID",
-        strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "userid", updatable = false, nullable = false)
-    private UUID userid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long userid;
 
     @Column(length = 250, unique = true )
     private String username;
@@ -88,23 +79,12 @@ public class User
     {
     }
 
-//    public long getUserid()
-//    {
-//        return userid;
-//    }
-//
-//    public void setUserid(long userid)
-//    {
-//        this.userid = userid;
-//    }
-
-
-    public UUID getUserid()
+    public long getUserid()
     {
         return userid;
     }
 
-    public void setUserid(UUID userid)
+    public void setUserid(long userid)
     {
         this.userid = userid;
     }
