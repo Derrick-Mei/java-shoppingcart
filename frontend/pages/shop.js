@@ -7,9 +7,16 @@ import { Button } from "antd";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import fetchData from "../lib/fetchData";
+import uuidv4 from "uuid/v4";
+
 const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
-  const { cartItems, setCartItems, deleteCartItem } = useCartItem();
+  const {
+    cartItems,
+    setCartItems,
+    deleteCartItem,
+    addCartItem
+  } = useCartItem();
 
   useEffect(() => {
     const { data } = fetchData(
@@ -34,7 +41,7 @@ const ShopPage = () => {
                   <Button
                     type="primary"
                     onClick={() => {
-                      setCartItems([...cartItems, item]);
+                      addCartItem(item);
                     }}
                   >
                     Buy {`$${item.price}`}
@@ -53,20 +60,31 @@ const useCartItem = () => {
   const [cartItems, setCartItems] = useState([]);
 
   const deleteCartItem = id => {
-    console.log(cartItems);
     const deleteIndex = cartItems.findIndex(item => {
-      return (item.productid = id);
+      return item.keyId === id;
     });
+
     setCartItems([
       ...cartItems.slice(0, deleteIndex),
       ...cartItems.slice(deleteIndex + 1)
     ]);
   };
+  const addCartItem = itemObj => {
+    console.log(itemObj);
+    const keyId = uuidv4();
+
+    const newItem = {
+      ...itemObj,
+      keyId
+    };
+    setCartItems([...cartItems, newItem]);
+  };
 
   return {
     cartItems,
     setCartItems,
-    deleteCartItem
+    deleteCartItem,
+    addCartItem
   };
 };
 const MainContent = styled.main`

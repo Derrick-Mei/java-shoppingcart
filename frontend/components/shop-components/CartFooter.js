@@ -13,7 +13,6 @@ import { useState } from "react";
 import ItemCardList from "./ItemCardList";
 import ItemCard from "./ItemCard";
 import Router from "next/router";
-
 const CartFooter = ({ cartItems, deleteCartItem }) => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   return (
@@ -24,9 +23,8 @@ const CartFooter = ({ cartItems, deleteCartItem }) => {
         }, 0)}
       </TotalDisplay>
       <ItemsQueueContainer>
-        {cartItems.map(item => {
-          return <Avatar shape="circle" size="small" icon="user" />;
-        })}
+        {/* returns the last three item indexes */}
+        <Avatar shape="circle" size="small" style={{ marginRight: "12px" }} />
       </ItemsQueueContainer>
       <CartBtn onClick={() => setDrawerOpen(true)}>
         <Badge offset={[16, 6]} count={cartItems.length} showZero={false}>
@@ -54,14 +52,14 @@ const CartFooter = ({ cartItems, deleteCartItem }) => {
           {cartItems.map(item => {
             return (
               <ItemCard
-                key={item.productid}
+                key={item.keyId}
                 title={item.productname}
                 description={item.description}
                 image={item.image}
                 actionBtn={
                   <Button
                     type="danger"
-                    onClick={() => deleteCartItem(item.productid)}
+                    onClick={() => deleteCartItem(item.keyId)}
                   >
                     Delete
                   </Button>
@@ -94,7 +92,6 @@ const TotalDisplay = styled.div`
 `;
 const ItemsQueueContainer = styled.div`
   display: flex;
-  margin-right: 12px;
   background: ${props => props.theme.white};
   width: 100%;
 `;
