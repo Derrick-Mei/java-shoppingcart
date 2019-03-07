@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URISyntaxException;
 import java.util.List;
 
-@CrossOrigin({"http://localhost:2019", "http://localhost:7777"})
 @RestController
 @RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class Usercontroller
