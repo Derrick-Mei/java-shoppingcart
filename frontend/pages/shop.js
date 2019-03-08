@@ -16,9 +16,30 @@ const ShopPage = () => {
     deleteCartItem,
     addCartItem
   } = useCartItem();
+  const [userId, setUserId] = useState("");
 
   useEffect(() => {
     const { data } = customFetch("http://localhost:2019/shop", setMerchandise);
+    fetch(
+      `http://localhost:2019/cart/user/username/${window.localStorage.getItem(
+        "username"
+      )}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization:
+            "Bearer " + window.localStorage.getItem("access_token"),
+          // "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json"
+        }
+      }
+    ).then(res => {
+      const json = res.json();
+      json.then(res => {
+        console.log(res);
+        setUserId(res.userid);
+      });
+    });
   }, []);
 
   // console.log(merchandise);
