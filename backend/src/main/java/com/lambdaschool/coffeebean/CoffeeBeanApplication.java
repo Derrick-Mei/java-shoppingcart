@@ -16,6 +16,7 @@ public class CoffeeBeanApplication
         SpringApplication.run(CoffeeBeanApplication.class, args);
     }
 
+    // Trying Cors
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurerAdapter() {
