@@ -36,12 +36,13 @@
 
 3. GET - /cart/items/{userid} - get users cart by id
 4. POST - /cart/addtocart/{userid}/{productid}/{quantity} - add to cart
-5. DELETE - /cart/remove/{userid}/{productid} - delete item from cart
-6. DELETE - /cart/deleteall/{userid} - delete all items from cart
+5. PUT - /cart/modifyquantityincart/{userid}/{productid}/{quantity} - modify quantity in cart
+6. DELETE - /cart/remove/{userid}/{productid} - delete item from cart
+7. DELETE - /cart/deleteall/{userid} - delete all items from cart
 
-7. 6. POST - /cart/buy/{userid} - buy items in cart
+8. POST - /cart/buy/{userid} - buy items in cart
 
-8. totalorder history needs 3rd column
+9. totalorder history needs 3rd column
 
 
 

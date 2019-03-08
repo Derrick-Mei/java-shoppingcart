@@ -27,6 +27,11 @@ public interface Userrepository extends JpaRepository<User, Long> {
 
     @Transactional
     @Modifying
+    @Query(value = "UPDATE cart SET quantityincart = :quantity WHERE (userid = :userid) and (productid = :productid);", nativeQuery = true)
+    void  modifyQuantityInCart(long userid, long productid, int quantity);
+
+    @Transactional
+    @Modifying
     @Query(value = "DELETE FROM cart WHERE userid=:userid AND productid=:productid", nativeQuery = true)
     void deleteOneItemFromCart(long userid, long productid);
 

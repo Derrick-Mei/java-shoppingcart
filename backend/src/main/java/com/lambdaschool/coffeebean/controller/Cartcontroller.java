@@ -59,6 +59,14 @@ public class Cartcontroller
         return "You have added " + productid + " to " + userid;
     }
 
+    @PutMapping("/modifyquantityincart/{userid}/{productid}/{quantity}")
+    public String modifyQuantityInCart(@PathVariable long userid,
+                                       @PathVariable long productid,
+                                       @PathVariable int quantity) {
+        userrepos.modifyQuantityInCart(userid, productid, quantity);
+        return "There are now " + quantity + " of " + productid +  " in " + userid + "'s cart.";
+    }
+
     @DeleteMapping("/remove/{userid}/{productid}")
     public String deleteOneItemFromCart(@PathVariable long userid, @PathVariable long productid)
     {
