@@ -12,6 +12,7 @@ import java.util.Set;
 @Table(name = "products")
 public class Product
 {
+    @JsonView(View.UserOnly.class)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long productid;
