@@ -9,8 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import javax.transaction.Transactional;
 import java.util.List;
 
-public interface Userrepository extends JpaRepository<User, Long>
-{
+public interface Userrepository extends JpaRepository<User, Long> {
     User findByUsername(String username);
 
     User findByEmail(String email);
@@ -18,7 +17,7 @@ public interface Userrepository extends JpaRepository<User, Long>
     @Query(value = "SELECT * FROM cart WHERE userid = :userid", nativeQuery = true)
     List<Object> getItemsInCartById(long userid);
 
-    @Query(value = "SELECT p.productname, p.description, p.image, p.price, c.quantityincart FROM cart c INNER JOIN products p ON c.productid=p.productid WHERE c.userid=:userid", nativeQuery = true)
+    @Query(value = "SELECT p.productid, p.productname, p.description, p.image, p.price, c.quantityincart FROM cart c INNER JOIN products p ON c.productid=p.productid WHERE c.userid=:userid", nativeQuery = true)
     List<CartItems> getCartItemsInCartById(long userid);
 
     @Transactional

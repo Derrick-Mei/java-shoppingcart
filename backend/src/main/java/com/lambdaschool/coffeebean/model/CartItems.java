@@ -1,7 +1,8 @@
 package com.lambdaschool.coffeebean.model;
 
-public interface CartItems
-{
+public interface CartItems {
+    long getProductid();
+
     String getProductname();
 
     String getDescription();
