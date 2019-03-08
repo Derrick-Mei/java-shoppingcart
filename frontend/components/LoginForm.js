@@ -11,26 +11,25 @@ const LoginForm = ({ form, theme, loginInfo, setLoginInfo }) => {
       if (!err) {
         console.log("Received values of form: ", values);
       }
-      // axios.post(
-      //   "http://localhost:2019/oauth/token",
-      //   {
-      //     username: values.username,
-      //     password: values.password,
-      //     grant_type: "password"
-      //   },
-      //   {
-      //     "Access-Control-Allow-Origin": "*",
-      //     Authorization: "Basic bGFtYmRhLWNsaWVudDpsYW1iZGEtc2VjcmV0",
-      //     auth: {
-      //       username: "lambda-client",
-      //       password: "lambda-secret"
-      //     },
-      //     data: {
-      //       grant_type: "password",
-      //       scope: "public"
-      //     }
-      //   }
-      // );
+      axios.post(
+        "http://localhost:2019/oauth/token",
+        {
+          username: values.username,
+          password: values.password,
+          grant_type: "password"
+        },
+        {
+          "Access-Control-Allow-Origin": "*",
+          auth: {
+            username: "lambda-client",
+            password: "lambda-secret"
+          },
+          data: {
+            grant_type: "password",
+            scope: "public"
+          }
+        }
+      );
     });
   }
   const changeInputHandler = e => {

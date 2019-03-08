@@ -2,9 +2,10 @@ package com.lambdaschool.coffeebean;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @SpringBootApplication
 public class CoffeeBeanApplication
@@ -15,19 +16,15 @@ public class CoffeeBeanApplication
         SpringApplication.run(CoffeeBeanApplication.class, args);
     }
 
-    @Configuration
-    public class WebMvcConfig implements WebMvcConfigurer
-    {
-
-        private final long MAX_AGE_SECS = 3600;
-
-        @Override
-        public void addCorsMappings(CorsRegistry registry) {
-            registry.addMapping("/**")
-                    .allowedOrigins("*")
-                    .allowedMethods("HEAD", "OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE")
-                    .maxAge(MAX_AGE_SECS);
-        }
+//    @Configuration
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurerAdapter() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**").allowedOrigins("*");
+            }
+        };
     }
 
 }
