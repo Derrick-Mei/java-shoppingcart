@@ -32,11 +32,11 @@
 # User Routes
 
 ## Cart Controller
-1. GET - /cart/user/{userid} - get 1 user by userid
-2. GET - /cart/user/username/{username} - get 1 user by username
+1. GET - /cart/{userid} - get 1 user by userid
+2. GET - /cart/user/username/{username} - get 1 user by username ** change to /cart/username/{username}
 
 3. GET - /cart/items/{userid} - get users cart by id
-4. POST - /cart/addtocart/{userid}/{productid}/{quantity} - add to cart
+4. POST - /cart/addtocart/{userid}/{productid}/{quantity} - add to cart, if exists add to quantity
 5. PUT - /cart/modifyquantityincart/{userid}/{productid}/{quantity} - modify quantity in cart
 6. DELETE - /cart/remove/{userid}/{productid} - delete item from cart
 7. DELETE - /cart/deleteall/{userid} - delete all items from cart

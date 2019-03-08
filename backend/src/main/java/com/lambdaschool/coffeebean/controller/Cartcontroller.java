@@ -96,6 +96,13 @@ public class Cartcontroller
         return "You have deleted " + productid + " from " + userid;
     }
 
+    @DeleteMapping("/modifytozero/{userid}/{productid}")
+    public String modifyToZero(@PathVariable long userid, @PathVariable long productid)
+    {
+        userrepos.modifyQuantityInCart(userid, productid, 0);
+        return "There are now 0 of " + productid +  " in " + userid + "'s cart.";
+    }
+
     @DeleteMapping("/deleteall/{userid}")
     public String deleteAllItemsFromCart(@PathVariable long userid)
     {
