@@ -21,7 +21,7 @@ const ShopPage = () => {
   useEffect(() => {
     const { data } = fetchData("http://localhost:2019/shop", setMerchandise);
   }, []);
-
+  console.log(merchandise);
   return (
     <ShopWrapper>
       <MeanCoffeeHeader />
