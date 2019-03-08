@@ -1,9 +1,27 @@
 import { StyledAuthForm } from "./styles/StyledAuthForm";
 import { Form, Radio, Button, Icon, Input, Card } from "antd";
 import styled, { withTheme } from "styled-components";
-
+import { useState, useEffect } from "react";
+import Router from "next/router";
 const CheckoutForm = ({ form, theme }) => {
   const { getFieldDecorator } = form;
+
+  const [orderInfo, setOrderInfo] = useState({
+    shippingAddress: "",
+    billingAddress: "",
+    shipMethod: "",
+    payMethod: "",
+    payMethodNumber: ""
+  });
+
+  const changeInputHandler = e => {
+    console.log(orderInfo);
+    // need this to add to order price
+    // if(e.target.shipMethod) {
+
+    // }
+    setOrderInfo({ ...orderInfo, [e.target.name]: e.target.value });
+  };
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -31,6 +49,8 @@ const CheckoutForm = ({ form, theme }) => {
             <Input
               prefix={<Icon type="home" style={{ color: "rgba(0,0,0,.25)" }} />}
               placeholder="Enter Shipping Address"
+              name="shippingAddress"
+              onChange={changeInputHandler}
             />
           )}
         </Form.Item>
@@ -43,6 +63,8 @@ const CheckoutForm = ({ form, theme }) => {
             <Input
               prefix={<Icon type="home" style={{ color: "rgba(0,0,0,.25)" }} />}
               placeholder="Enter Billing Address"
+              name="billingAddress"
+              onChange={changeInputHandler}
             />
           )}
         </Form.Item>
@@ -56,8 +78,10 @@ const CheckoutForm = ({ form, theme }) => {
               }
             ]
           })(
-            <Radio.Group>
-              <Radio value="3 Day Shipping">3 Day Shipping - $5.99</Radio>
+            <Radio.Group name="shipMethod" onChange={changeInputHandler}>
+              <Radio value="3 Day Shipping - $5.99">
+                3 Day Shipping - $5.99
+              </Radio>
               <Radio value="Free Shipping">
                 1 Week or More - Free Shipping
               </Radio>
@@ -73,7 +97,7 @@ const CheckoutForm = ({ form, theme }) => {
               }
             ]
           })(
-            <Radio.Group>
+            <Radio.Group name="payMethod" onChange={changeInputHandler}>
               <Radio value="Credit Card">Credit Card</Radio>
               <Radio value="Gift Card">Gift Card</Radio>
             </Radio.Group>
@@ -92,6 +116,8 @@ const CheckoutForm = ({ form, theme }) => {
             <Input
               prefix={<Icon type="home" style={{ color: "rgba(0,0,0,.25)" }} />}
               placeholder="Enter Card or Gift card number"
+              name="payMethodNumber"
+              onChange={changeInputHandler}
             />
           )}
         </Form.Item>
