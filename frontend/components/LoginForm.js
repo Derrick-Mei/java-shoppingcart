@@ -11,27 +11,18 @@ const LoginForm = ({ form, theme, loginInfo, setLoginInfo }) => {
       if (!err) {
         console.log("Received values of form: ", values);
       }
-      axios.post(
-        "http://localhost:2019/oauth/token",
-        {
-          username: values.username,
-          password: values.password,
-          grant_type: "password"
-        },
-        {
-          "Access-Control-Allow-Origin": "*",
-          auth: {
-            username: "lambda-client",
-            password: "lambda-secret"
-          },
-          data: {
-            grant_type: "password",
-            scope: "public"
-          }
-        }
-      );
+      axios
+        .get("http://localhost:2019/orders", {
+          Authorization: "Bearer 09f079d0-5789-44dd-b800-e47ebb4db41d",
+          // "Access-Control-Allow-Origin": "*",
+          crossdomain: true
+        })
+        .then(res => {
+          console.log(res);
+        });
     });
   }
+
   const changeInputHandler = e => {
     setLoginInfo({ ...loginInfo, [e.target.name]: e.target.value });
   };
