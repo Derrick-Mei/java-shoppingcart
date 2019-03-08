@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin
 @Api(value = "Some value... by DKM", description = "Order Controller by DKM")
 @RestController
 @RequestMapping(path = "/orders", produces = MediaType.APPLICATION_JSON_VALUE)
