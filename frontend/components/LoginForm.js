@@ -11,14 +11,20 @@ const LoginForm = ({ form, theme, loginInfo, setLoginInfo }) => {
       if (!err) {
         console.log("Received values of form: ", values);
       }
-      axios
-        .get("http://localhost:2019/orders", {
-          Authorization: "Bearer 09f079d0-5789-44dd-b800-e47ebb4db41d",
-          // "Access-Control-Allow-Origin": "*",
-          crossdomain: true
-        })
+      fetch("http://localhost:2019/orders", {
+        headers: {
+          Authorization: "Bearer 08c7aa6a-fa8b-45b5-8968-71fd8692892b",
+          "Access-Control-Allow-Origin": "*"
+        }
+      })
         .then(res => {
-          console.log(res);
+          const json = res.json();
+          json.then(res => {
+            console.log(res);
+          });
+        })
+        .catch(err => {
+          console.log(err);
         });
     });
   }
