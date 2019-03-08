@@ -2,6 +2,7 @@ package com.lambdaschool.coffeebean.controller;
 
 import com.lambdaschool.coffeebean.model.Order;
 import com.lambdaschool.coffeebean.repository.Orderrepository;
+import com.lambdaschool.coffeebean.repository.Userrepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -21,6 +22,9 @@ public class Ordercontroller
 {
     @Autowired
     Orderrepository orderrepos;
+
+    @Autowired
+    Userrepository userrepos;
 
     @ApiOperation(value = "find all orders - DKM", response = Order.class)
     @ApiResponses(value =
@@ -82,4 +86,14 @@ public class Ordercontroller
 //            return null;
 //        }
 //    }
+
+    // ============ Add To Order ================
+
+    @PostMapping("/buy/{userid}")
+    public Order buyItemsInCart(@RequestBody Order newOrder, @PathVariable long userid)
+    {
+        userrepos.deleteAllItemsFromCart(userid);
+
+        return orderrepos.save(newOrder);
+    }
 }
