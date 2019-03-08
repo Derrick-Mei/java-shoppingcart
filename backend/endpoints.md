@@ -14,10 +14,11 @@
 
 ## Supplier Controller
 1. GET - /suppliers - get all suppliers
-2. ** POST - /suppliers - add supplier
-3. ** PUT - /suppliers/{supplierid} - edit supplier
-4. ** DELETE /suppliers/{suppliereid} - delete supplier by supplierid
-5. ** POST /suppliers/{supplierid}/{productid} - add supplier to product in supplierproduct join table
+2. POST - /suppliers - add supplier
+3. PUT - /suppliers/{supplierid} - edit supplier
+4. DELETE - /suppliers/{suppliereid} - delete supplier by supplierid
+5. POST -  /suppliers/{supplierid}/{productid} - add supplier to product in supplierproduct join table
+6. DELETE - /suppliers/{supplierid}/{productid} - delete supplier to product in supplierproduct join table
 
 ## Product Controller
 1. GET - /products - get all products
@@ -36,12 +37,13 @@
 
 3. GET - /cart/items/{userid} - get users cart by id
 4. POST - /cart/addtocart/{userid}/{productid}/{quantity} - add to cart
-5. DELETE - /cart/remove/{userid}/{productid} - delete item from cart
-6. DELETE - /cart/deleteall/{userid} - delete all items from cart
+5. PUT - /cart/modifyquantityincart/{userid}/{productid}/{quantity} - modify quantity in cart
+6. DELETE - /cart/remove/{userid}/{productid} - delete item from cart
+7. DELETE - /cart/deleteall/{userid} - delete all items from cart
 
-7. 6. POST - /cart/buy/{userid} - buy items in cart
+8. POST - /cart/buy/{userid} - buy items in cart
 
-8. totalorder history needs 3rd column
+9. totalorder history needs 3rd column
 
 
 
