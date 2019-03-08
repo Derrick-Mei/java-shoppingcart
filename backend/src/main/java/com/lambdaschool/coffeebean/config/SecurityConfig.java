@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -61,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 //                ;
 //    }
 
-    // access without token but no bcrypt
+    // access with token but no bcrypt
 //    @Override
 //    protected void configure(HttpSecurity http) throws Exception {
 //        http
@@ -110,7 +111,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     }
 
     @Bean
-    public FilterRegistrationBean corsFilter()
+    public FilterRegistrationBean corsFilter2()
     {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
@@ -120,7 +121,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
         FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
-        bean.setOrder(0);
+        bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return bean;
     }
 }
