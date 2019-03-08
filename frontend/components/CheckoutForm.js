@@ -3,6 +3,7 @@ import { Form, Radio, Button, Icon, Input, Card } from "antd";
 import styled, { withTheme } from "styled-components";
 import { useState, useEffect } from "react";
 import Router from "next/router";
+
 const CheckoutForm = ({ form, theme }) => {
   const { getFieldDecorator } = form;
 
@@ -13,7 +14,22 @@ const CheckoutForm = ({ form, theme }) => {
     payMethod: "",
     payMethodNumber: ""
   });
-
+  // useEffect(() => {
+  //   fetch(
+  //     `http://localhost:2019/cart/user/username/${window.localStorage.getItem(
+  //       "username"
+  //     )}`,
+  //     {
+  //       method: "GET",
+  //       headers: {
+  //         Authorization:
+  //           "Bearer " + window.localStorage.getItem("access_token"),
+  //         // "Access-Control-Allow-Origin": "*",
+  //         "Content-Type": "application/json"
+  //       }
+  //     }
+  //   );
+  // }, []);
   const changeInputHandler = e => {
     console.log(orderInfo);
     // need this to add to order price
