@@ -2,33 +2,41 @@ import { Form, Icon, Input, Button, Card } from "antd";
 import styled, { withTheme } from "styled-components";
 import { StyledAuthForm } from "./styles/StyledAuthForm";
 import axios from "axios";
+import Router from "next/router";
 
 const LoginForm = ({ form, theme, loginInfo, setLoginInfo }) => {
   const { getFieldDecorator } = form;
   function handleSubmit(e) {
     e.preventDefault();
-    form.validateFields((err, values) => {
-      if (!err) {
-        console.log("Received values of form: ", values);
-      }
-      fetch("http://localhost:2019/orders", {
-        headers: {
-          Authorization: "Bearer 08c7aa6a-fa8b-45b5-8968-71fd8692892b",
-          "Access-Control-Allow-Origin": "*"
+    form
+      .validateFields((err, values) => {
+        if (!err) {
+          console.log("Received values of form: ", values);
         }
-      })
-        .then(res => {
+        fetch("http://localhost:2019/oauth/token", {
+          method: "POST",
+          body: `grant_type=password&username=${values.username}&password=${
+            values.password
+          }`,
+          headers: {
+            Authorization: "Basic bGFtYmRhLWNsaWVudDpsYW1iZGEtc2VjcmV0",
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/x-www-form-urlencoded"
+          }
+        }).then(res => {
           const json = res.json();
           json.then(res => {
             console.log(res);
+            Router.push({
+              pathname: "/shop"
+            });
           });
-        })
-        .catch(err => {
-          console.log(err);
         });
-    });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
-
   const changeInputHandler = e => {
     setLoginInfo({ ...loginInfo, [e.target.name]: e.target.value });
   };
