@@ -19,10 +19,7 @@ const ShopPage = () => {
   } = useCartItem();
 
   useEffect(() => {
-    const { data } = fetchData(
-      "http://localhost:2019/merchandise",
-      setMerchandise
-    );
+    const { data } = fetchData("http://localhost:2019/shop", setMerchandise);
   }, []);
 
   return (
