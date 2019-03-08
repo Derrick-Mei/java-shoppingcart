@@ -55,16 +55,38 @@ public class Cartcontroller
     @PostMapping("/addtocart/{userid}/{productid}/{quantity}")
     public String postItemToCart(@PathVariable long userid, @PathVariable long productid, @PathVariable int quantity)
     {
-        userrepos.postItemToCart(userid, productid, quantity);
-        return "You have added " + productid + " to " + userid;
+//        userrepos.postItemToCart(userid, productid, quantity);
+//        return "You have added " + quantity + " of " + productid + " to " + userid + "'s cart";
+        CartItems foundCartItems = userrepos.searchCart(userid, productid);
+        if (foundCartItems == null )
+        {
+            userrepos.postItemToCart(userid, productid, quantity);
+            return "You have added " + quantity + "quantity of " + productid + " to " + userid + "'s cart";
+        }
+        else
+        {
+            int previousQuantity = foundCartItems.getQuantityincart();
+            int total = previousQuantity + quantity;
+            userrepos.modifyQuantityInCart(userid, productid, quantity+previousQuantity);
+            return "You have added " + quantity + " quantity of " + productid + " to " + userid + "'s cart. " +
+                    "There are now " + total + " of " + productid +  " in " + userid + "'s cart.";
+        }
     }
 
     @PutMapping("/modifyquantityincart/{userid}/{productid}/{quantity}")
     public String modifyQuantityInCart(@PathVariable long userid,
                                        @PathVariable long productid,
                                        @PathVariable int quantity) {
-        userrepos.modifyQuantityInCart(userid, productid, quantity);
-        return "There are now " + quantity + " of " + productid +  " in " + userid + "'s cart.";
+        if (userrepos.searchCart(userid, productid) == null )
+        {
+            userrepos.postItemToCart(userid, productid, quantity);
+            return "You have added " + quantity + " of " + productid + " to " + userid + "'s cart";
+        }
+        else
+        {
+            userrepos.modifyQuantityInCart(userid, productid, quantity);
+            return "There are now " + quantity + " of " + productid +  " in " + userid + "'s cart.";
+        }
     }
 
     @DeleteMapping("/remove/{userid}/{productid}")

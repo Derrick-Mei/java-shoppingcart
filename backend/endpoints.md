@@ -14,10 +14,11 @@
 
 ## Supplier Controller
 1. GET - /suppliers - get all suppliers
-2. ** POST - /suppliers - add supplier
-3. ** PUT - /suppliers/{supplierid} - edit supplier
-4. ** DELETE /suppliers/{suppliereid} - delete supplier by supplierid
-5. ** POST /suppliers/{supplierid}/{productid} - add supplier to product in supplierproduct join table
+2. POST - /suppliers - add supplier
+3. PUT - /suppliers/{supplierid} - edit supplier
+4. DELETE - /suppliers/{suppliereid} - delete supplier by supplierid
+5. POST -  /suppliers/{supplierid}/{productid} - add supplier to product in supplierproduct join table
+6. DELETE - /suppliers/{supplierid}/{productid} - delete supplier to product in supplierproduct join table
 
 ## Product Controller
 1. GET - /products - get all products
