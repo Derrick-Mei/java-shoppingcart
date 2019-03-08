@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import customFetch from "../lib/customFetch";
 import uuidv4 from "uuid/v4";
+
 const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
   const {
@@ -16,7 +17,7 @@ const ShopPage = () => {
     deleteCartItem,
     addCartItem
   } = useCartItem();
-  const [userId, setUserId] = useState("");
+  const [userId, setUserId] = useState();
 
   useEffect(() => {
     const { data } = customFetch("http://localhost:2019/shop", setMerchandise);
@@ -59,7 +60,7 @@ const ShopPage = () => {
                   <Button
                     type="primary"
                     onClick={() => {
-                      addCartItem(item);
+                      addCartItem(item, userId);
                     }}
                   >
                     Buy {`$${item.price}`}
@@ -87,14 +88,30 @@ const useCartItem = () => {
       ...cartItems.slice(deleteIndex + 1)
     ]);
   };
-  const addCartItem = itemObj => {
+  const addCartItem = (itemObj, userId) => {
     // console.log(itemObj);
     const keyId = uuidv4();
-
+    console.log(itemObj);
+    const response = fetch(
+      `http://localhost:2019/cart/addtocart/${userId}/${itemObj.productid}/1`,
+      {
+        method: "POST",
+        headers: {
+          Authorization:
+            "Bearer " + window.localStorage.getItem("access_token"),
+          // "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json"
+        }
+      }
+    ).then(res => {
+      const json = res.json();
+      json.then(res => {});
+    });
     const newItem = {
       ...itemObj,
       keyId
     };
+    console.log(cartItems);
     setCartItems([...cartItems, newItem]);
   };
 
