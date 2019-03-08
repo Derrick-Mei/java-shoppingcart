@@ -1,6 +1,8 @@
 package com.lambdaschool.coffeebean.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.lambdaschool.coffeebean.controller.View;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -10,23 +12,30 @@ import java.util.Set;
 @Table(name = "products")
 public class Product
 {
+    @JsonView(View.UserOnly.class)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long productid;
 
+    @JsonView(View.UserOnly.class)
     private String productname;
 
+    @JsonView(View.UserOnly.class)
     private String description;
 
+    @JsonView(View.UserOnly.class)
     private double price;
 
+    @JsonView(View.UserOnly.class)
     private int quantity;
 
 
     //MySQL uses yyyy-mm-dd format for storing a date value
     // Not sure how to do date yet
+    @JsonView(View.UserOnly.class)
     private java.sql.Date expiration;
 
+    @JsonView(View.UserOnly.class)
     private String image;
 
     // *** ManyToMany with order - orderproducts - subowner***

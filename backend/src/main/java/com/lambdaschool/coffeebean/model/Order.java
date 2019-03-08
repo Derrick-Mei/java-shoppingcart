@@ -21,7 +21,7 @@ public class Order
     //yyyy-mm-dd HH:MM:SS
     private Date shipdatetime;
 
-    private boolean shippedstatus;
+    private boolean shippedstatus = false;
 
     //*** ManyToOne with user ***
     @ManyToOne

@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import { Card, Button } from "antd";
 
-const ItemCard = ({ title, description, price, actionBtn }) => {
+const ItemCard = ({ image, title, description, price, actionBtn }) => {
   return (
     <StyledCard>
-      <ItemImage src={"https://via.placeholder.com/16"} />
+      <ItemImage src={{ image }} />
       <ItemTextContainer>
-        <ItemTitle>Green Bean</ItemTitle>
-        <ItemDescription>This bean is green.</ItemDescription>
+        <ItemTitle>{title}</ItemTitle>
+        <ItemDescription>{description}</ItemDescription>
         <ActionsContainer>{React.cloneElement(actionBtn)}</ActionsContainer>
       </ItemTextContainer>
     </StyledCard>

@@ -1,5 +1,6 @@
 package com.lambdaschool.coffeebean.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.lambdaschool.coffeebean.model.Product;
 import com.lambdaschool.coffeebean.repository.Productrepository;
 import io.swagger.annotations.Api;
@@ -9,20 +10,22 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Api(value = "Some value... by DKM", description = "Product Controller by DKM")
+@Api(value = "Some value... by DKM", description = "Shop Controller by DKM")
 @RestController
-@RequestMapping(path = "/products", produces = MediaType.APPLICATION_JSON_VALUE)
-public class Productcontroller
+@RequestMapping(path = "/shop", produces = MediaType.APPLICATION_JSON_VALUE)
+public class Shopcontroller
 {
     @Autowired
     Productrepository productrepos;
 
-    @ApiOperation(value = "find all orders - DKM", response = Product.class)
+    @JsonView(View.UserOnly.class)
+    @ApiOperation(value = "find all products - DKM", response = Product.class)
     @ApiResponses(value =
             {
                     @ApiResponse(code = 200, message = "Successfully received customer - DKM"),
@@ -31,10 +34,16 @@ public class Productcontroller
                     @ApiResponse(code = 404, message = "The resource you were trying to reach is not found - DKM")
             })
     @GetMapping("")
-    public List<Product> findAllOrders()
+    public List<Product> getAllProducts()
     {
         return productrepos.findAll();
     }
 
-
+    @JsonView(View.UserOnly.class)
+    @GetMapping("/{page}")
+    public List<Product> get10Products(@PathVariable int page)
+    {
+        int start = (page -1) * 10;
+        return productrepos.get10Products(start);
+    }
 }

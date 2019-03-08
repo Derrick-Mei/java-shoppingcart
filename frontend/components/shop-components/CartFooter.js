@@ -13,18 +13,36 @@ import { useState } from "react";
 import ItemCardList from "./ItemCardList";
 import ItemCard from "./ItemCard";
 import Router from "next/router";
-
-const CartFooter = () => {
+const CartFooter = ({ cartItems, deleteCartItem }) => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   return (
     <CartFooterWrapper>
-      <TotalDisplay>$55.55</TotalDisplay>
+      <TotalDisplay>
+        {cartItems.reduce((accumulator, item) => {
+          return accumulator + item.price;
+        }, 0)}
+      </TotalDisplay>
       <ItemsQueueContainer>
-        <Avatar shape="circle" size="small" icon="user" />
-        <Avatar shape="circle" size="small" icon="user" />
+        {/* returns the last three item indexes */}
+        {cartItems
+          .slice(-3)
+          .reverse()
+          .map(item => {
+            return (
+              <Avatar
+                key={item.keyId}
+                shape="circle"
+                size="small"
+                src={item.src}
+                style={{ marginLeft: "12px" }}
+              >
+                {item.productid}
+              </Avatar>
+            );
+          })}
       </ItemsQueueContainer>
       <CartBtn onClick={() => setDrawerOpen(true)}>
-        <Badge offset={[16, 6]} count={5} showZero={false}>
+        <Badge offset={[16, 6]} count={cartItems.length} showZero={false}>
           Cart
         </Badge>
       </CartBtn>
@@ -35,15 +53,6 @@ const CartFooter = () => {
         onClose={() => setDrawerOpen(false)}
         visible={isDrawerOpen}
       >
-        <ItemCardList>
-          <ItemCard
-            actionBtn={
-              <Button type="danger" onClick={() => console.log("delete")}>
-                Delete
-              </Button>
-            }
-          />
-        </ItemCardList>
         <FinishBtn
           type="primary"
           onClick={() =>
@@ -54,6 +63,26 @@ const CartFooter = () => {
         >
           Finish Checkout
         </FinishBtn>
+        <ItemCardList>
+          {cartItems.map(item => {
+            return (
+              <ItemCard
+                key={item.keyId}
+                title={item.productname}
+                description={item.description}
+                image={item.image}
+                actionBtn={
+                  <Button
+                    type="danger"
+                    onClick={() => deleteCartItem(item.keyId)}
+                  >
+                    Delete
+                  </Button>
+                }
+              />
+            );
+          })}
+        </ItemCardList>
       </Drawer>
     </CartFooterWrapper>
   );
@@ -78,8 +107,6 @@ const TotalDisplay = styled.div`
 `;
 const ItemsQueueContainer = styled.div`
   display: flex;
-  margin-right: 12px;
-  background: ${props => props.theme.white};
   width: 100%;
 `;
 
