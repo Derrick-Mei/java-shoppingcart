@@ -91,7 +91,6 @@ const useCartItem = () => {
   const addCartItem = (itemObj, userId) => {
     // console.log(itemObj);
     const keyId = uuidv4();
-    console.log(itemObj);
     const response = fetch(
       `http://localhost:2019/cart/addtocart/${userId}/${itemObj.productid}/1`,
       {
@@ -111,7 +110,7 @@ const useCartItem = () => {
       ...itemObj,
       keyId
     };
-    console.log(cartItems);
+    // console.log(cartItems);
     setCartItems([...cartItems, newItem]);
   };
 
