@@ -115,8 +115,19 @@ public class Cartcontroller
 
     @PostMapping("/buy/{userid}")
     public Order buyItemsInCart(@RequestBody Order newOrder, @PathVariable long userid) {
+
+        List<CartItems> currentCart = userrepos.getCartItemsInCartById(userid);
+
         userrepos.deleteAllItemsFromCart(userid);
 
-        return orderrepos.save(newOrder);
+        Order currentOrder = orderrepos.save(newOrder);
+
+        long currentOrderId = currentOrder.getOrderid();
+
+        currentCart.forEach( item -> {
+            orderrepos.addToOrderProducts(currentOrderId, item.getProductid(), item.getQuantityincart());
+        });
+
+        return currentOrder;
     }
 }
