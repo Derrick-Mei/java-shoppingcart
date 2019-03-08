@@ -14,22 +14,42 @@ const CheckoutForm = ({ form, theme }) => {
     payMethod: "",
     payMethodNumber: ""
   });
-  // useEffect(() => {
-  //   fetch(
-  //     `http://localhost:2019/cart/user/username/${window.localStorage.getItem(
-  //       "username"
-  //     )}`,
-  //     {
-  //       method: "GET",
-  //       headers: {
-  //         Authorization:
-  //           "Bearer " + window.localStorage.getItem("access_token"),
-  //         // "Access-Control-Allow-Origin": "*",
-  //         "Content-Type": "application/json"
-  //       }
-  //     }
-  //   );
-  // }, []);
+  const [totalPrice, setTotalPrice] = useState(0);
+  useEffect(() => {
+    fetch(
+      `http://localhost:2019/cart/user/username/${window.localStorage.getItem(
+        "username"
+      )}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization:
+            "Bearer " + window.localStorage.getItem("access_token"),
+          // "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json"
+        }
+      }
+    ).then(res => {
+      const json = res.json();
+      json.then(res => {
+        console.log(res);
+        const productsInCart = res.productsincart;
+        let total = 0;
+        for (let i = 0; i < productsInCart.length; i++) {
+          const product = productsInCart[i];
+          total += product.price * product.quantity;
+        }
+        setOrderInfo({
+          shippingAddress: res.shippingaddress,
+          billingAddress: "",
+
+          payMethod: res.paymentmethod,
+          payMethodNumber: ""
+        });
+        setTotalPrice(total);
+      });
+    });
+  }, []);
   const changeInputHandler = e => {
     console.log(orderInfo);
     // need this to add to order price
@@ -139,7 +159,7 @@ const CheckoutForm = ({ form, theme }) => {
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Place Order - {" $155.44"}
+            Place Order - {`$${totalPrice}`}
           </Button>
         </Form.Item>
       </Card>
