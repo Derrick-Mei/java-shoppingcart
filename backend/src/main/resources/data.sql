@@ -8,6 +8,8 @@
 
 ALTER TABLE cart ADD COLUMN quantityincart INT NULL AFTER productid;
 
+ALTER TABLE orderproducts ADD COLUMN quantityinorder INT NULL AFTER productid;
+
 -- totalorderhistory quantity is optional stretch goal
 
 -- order products need quantity
