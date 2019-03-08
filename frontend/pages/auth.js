@@ -7,14 +7,22 @@ const AuthenticationPage = () => {
   const SIGNUP = "signup";
   const LOGIN = "login";
   const [tab, setTab] = useState(SIGNUP);
-  console.log(tab);
+
+  const [signupInfo, setSignupInfo] = useState({ username: "", password: "" });
+
+  const [loginInfo, setLoginInfo] = useState({ username: "", password: "" });
+
   return (
     <AuthWrapper>
       {(() => {
         if (tab === SIGNUP) {
-          return <SignupForm />;
+          return (
+            <SignupForm signupInfo={signupInfo} setSignupInfo={setSignupInfo} />
+          );
         } else {
-          return <LoginForm />;
+          return (
+            <LoginForm loginInfo={loginInfo} setLoginInfo={setLoginInfo} />
+          );
         }
       })()}
       <Radio.Group value={tab}>

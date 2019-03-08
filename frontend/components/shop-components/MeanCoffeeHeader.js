@@ -31,6 +31,7 @@ const MeanCoffeeWrapper = styled.div`
   justify-content: space-between;
   align-items: flex-end;
   position: fixed;
+  z-index: 1000;
   top: 0;
   left: 0;
   right: 0;
