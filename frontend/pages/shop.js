@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import fetchData from "../lib/fetchData";
 import uuidv4 from "uuid/v4";
-
 const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
   const {
@@ -21,7 +20,8 @@ const ShopPage = () => {
   useEffect(() => {
     const { data } = fetchData("http://localhost:2019/shop", setMerchandise);
   }, []);
-  console.log(merchandise);
+
+  // console.log(merchandise);
   return (
     <ShopWrapper>
       <MeanCoffeeHeader />
@@ -67,7 +67,7 @@ const useCartItem = () => {
     ]);
   };
   const addCartItem = itemObj => {
-    console.log(itemObj);
+    // console.log(itemObj);
     const keyId = uuidv4();
 
     const newItem = {
