@@ -17,7 +17,12 @@ const AuthenticationPage = () => {
       {(() => {
         if (tab === SIGNUP) {
           return (
-            <SignupForm signupInfo={signupInfo} setSignupInfo={setSignupInfo} />
+            <SignupForm
+              signupInfo={signupInfo}
+              setSignupInfo={setSignupInfo}
+              LOGIN={LOGIN}
+              setTab={setTab}
+            />
           );
         } else {
           return (
