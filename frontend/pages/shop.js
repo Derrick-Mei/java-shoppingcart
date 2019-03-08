@@ -6,7 +6,7 @@ import ItemCard from "../components/shop-components/ItemCard";
 import { Button } from "antd";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import fetchData from "../lib/fetchData";
+import customFetch from "../lib/customFetch";
 import uuidv4 from "uuid/v4";
 const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
@@ -18,7 +18,7 @@ const ShopPage = () => {
   } = useCartItem();
 
   useEffect(() => {
-    const { data } = fetchData("http://localhost:2019/shop", setMerchandise);
+    const { data } = customFetch("http://localhost:2019/shop", setMerchandise);
   }, []);
 
   // console.log(merchandise);
