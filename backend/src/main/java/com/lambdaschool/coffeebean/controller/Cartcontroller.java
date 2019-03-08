@@ -61,7 +61,7 @@ public class Cartcontroller
         if (foundCartItems == null )
         {
             userrepos.postItemToCart(userid, productid, quantity);
-            return "You have added " + quantity + "quantity of " + productid + " to " + userid + "'s cart";
+            return "You have added " + quantity + "quantity of " + foundCartItems.getProductname() + " to " + userid + "'s cart";
         }
         else
         {
@@ -69,7 +69,7 @@ public class Cartcontroller
             int total = previousQuantity + quantity;
             userrepos.modifyQuantityInCart(userid, productid, quantity+previousQuantity);
             return "You have added " + quantity + " quantity of " + productid + " to " + userid + "'s cart. " +
-                    "There are now " + total + " of " + productid +  " in " + userid + "'s cart.";
+                    "There are now " + total + " of " + foundCartItems.getProductname() +  " in " + userid + "'s cart.";
         }
     }
 
@@ -77,15 +77,16 @@ public class Cartcontroller
     public String modifyQuantityInCart(@PathVariable long userid,
                                        @PathVariable long productid,
                                        @PathVariable int quantity) {
-        if (userrepos.searchCart(userid, productid) == null )
+        CartItems foundCartItems = userrepos.searchCart(userid, productid);
+        if (foundCartItems == null )
         {
-            userrepos.postItemToCart(userid, productid, quantity);
-            return "You have added " + quantity + " of " + productid + " to " + userid + "'s cart";
+            return userid + " does not have product: " + foundCartItems.getProductname() + "in their cart.";
         }
         else
         {
+            int previousQuantity = foundCartItems.getQuantityincart();
             userrepos.modifyQuantityInCart(userid, productid, quantity);
-            return "There are now " + quantity + " of " + productid +  " in " + userid + "'s cart.";
+            return "There were " + previousQuantity + ", but now there are " + quantity + " of " + foundCartItems.getProductname() +  " in " + userid + "'s cart.";
         }
     }
 

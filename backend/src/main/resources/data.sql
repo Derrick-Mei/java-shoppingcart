@@ -79,12 +79,12 @@ INSERT INTO totalorderhistory (userid, productid) VALUES (4, 2);
 INSERT INTO totalorderhistory (userid, productid) VALUES (4, 5);
 INSERT INTO totalorderhistory (userid, productid) VALUES (4, 1);
 
-INSERT INTO orderproducts (orderid, productid) VALUES (1, 1);
-INSERT INTO orderproducts (orderid, productid) VALUES (1, 2);
-INSERT INTO orderproducts (orderid, productid) VALUES (1, 4);
-INSERT INTO orderproducts (orderid, productid) VALUES (2, 1);
-INSERT INTO orderproducts (orderid, productid) VALUES (2, 3);
-INSERT INTO orderproducts (orderid, productid) VALUES (2, 5);
+INSERT INTO orderproducts (orderid, productid, quantityinorder) VALUES (1, 1, 8);
+INSERT INTO orderproducts (orderid, productid, quantityinorder) VALUES (1, 2, 8);
+INSERT INTO orderproducts (orderid, productid, quantityinorder) VALUES (1, 4, 8);
+INSERT INTO orderproducts (orderid, productid, quantityinorder) VALUES (2, 1, 8);
+INSERT INTO orderproducts (orderid, productid, quantityinorder) VALUES (2, 3, 8);
+INSERT INTO orderproducts (orderid, productid, quantityinorder) VALUES (2, 5, 8);
 
 INSERT INTO supplierproduct (supplierid, productid) VALUES (1, 1);
 INSERT INTO supplierproduct (supplierid, productid) VALUES (1, 2);
