@@ -17,9 +17,7 @@ const CheckoutForm = ({ form, theme }) => {
   const [totalPrice, setTotalPrice] = useState(0);
   useEffect(() => {
     fetch(
-      `http://localhost:2019/cart/user/username/${window.localStorage.getItem(
-        "username"
-      )}`,
+      `http://localhost:2019/cart/${window.localStorage.getItem("user-id")}`,
       {
         method: "GET",
         headers: {
@@ -33,19 +31,13 @@ const CheckoutForm = ({ form, theme }) => {
       const json = res.json();
       json.then(res => {
         console.log(res);
-        const productsInCart = res.productsincart;
+        const productsInCart = res;
         let total = 0;
         for (let i = 0; i < productsInCart.length; i++) {
           const product = productsInCart[i];
-          total += product.price * product.quantity;
+          total += product.price * product.quantityincart;
         }
-        setOrderInfo({
-          shippingAddress: res.shippingaddress,
-          billingAddress: "",
 
-          payMethod: res.paymentmethod,
-          payMethodNumber: ""
-        });
         setTotalPrice(total);
       });
     });
