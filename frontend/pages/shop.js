@@ -30,7 +30,6 @@ const ShopPage = () => {
         headers: {
           Authorization:
             "Bearer " + window.localStorage.getItem("access_token"),
-          // "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json"
         }
       }
