@@ -8,11 +8,10 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Api(value = "Some value... by DKM", description = "Supplier Controller by DKM")
 @RestController
@@ -35,4 +34,46 @@ public class Suppliercontroller
     {
         return suppplierrepos.findAll();
     }
+
+    @PostMapping("")
+    public Supplier addSupplier(@RequestBody Supplier newSupplier)
+    {
+        return suppplierrepos.save(newSupplier);
+    }
+
+    @PutMapping("/{supplierid}")
+    public Supplier updateSupplierBySupplierID(@PathVariable long supplierid, @RequestBody Supplier updatedSupplier)
+    {
+        Optional<Supplier> foundSupplier = suppplierrepos.findById(supplierid);
+
+        if (foundSupplier.isPresent())
+        {
+            updatedSupplier.setSupplierid(supplierid);
+            if (updatedSupplier.getSuppliername() == null) updatedSupplier.setSuppliername(foundSupplier.get().getSuppliername());
+            if (updatedSupplier.getSupplierphone() == null) updatedSupplier.setSupplierphone(foundSupplier.get().getSupplierphone());
+            if (updatedSupplier.getProductsfromsupplier().isEmpty()) updatedSupplier.setProductsfromsupplier(foundSupplier.get().getProductsfromsupplier());
+            return suppplierrepos.save(updatedSupplier);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    @DeleteMapping("/{supplierid}")
+    public Object deleteSupplierById(@PathVariable long supplierid)
+    {
+        Optional<Supplier> foundSupplier = suppplierrepos.findById(supplierid);
+        if (foundSupplier.isPresent())
+        {
+            suppplierrepos.deleteById(supplierid);
+            return foundSupplier.get();
+        }
+        else
+        {
+            return "Supplier with id: " + supplierid + " not found.";
+        }
+    }
+
+//    @PostMapping
 }

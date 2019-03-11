@@ -1,6 +1,5 @@
 package com.lambdaschool.coffeebean.controller;
 
-import com.lambdaschool.coffeebean.model.CartItems;
 import com.lambdaschool.coffeebean.model.User;
 import com.lambdaschool.coffeebean.repository.Userrepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,42 +65,6 @@ public class Usercontroller
         {
             return null;
         }
-    }
-
-    // ==================== CART ==============================
-
-    // deprecated as it only returns id's and not actual objects
-//    @GetMapping("/{userid}/cart/deprecated")
-//    public List<Object> getItemsInCart(@PathVariable long userid)
-//    {
-//        return userrepos.getItemsInCartById(userid);
-//    }
-
-    @GetMapping("/{userid}/cart")
-    public List<CartItems> getCartItemsInCartById(@PathVariable long userid)
-    {
-        return userrepos.getCartItemsInCartById(userid);
-    }
-
-    @PostMapping("/addtocart/{userid}/{productid}/{quantity}")
-    public String postItemToCart(@PathVariable long userid, @PathVariable long productid, @PathVariable int quantity)
-    {
-        userrepos.postItemToCart(userid, productid, quantity);
-        return "You have added " + productid + " to " + userid;
-    }
-
-    @DeleteMapping("/cart/remove/{userid}/{productid}")
-    public String deleteOneItemFromCart(@PathVariable long userid, @PathVariable long productid)
-    {
-        userrepos.deleteOneItemFromCart(userid, productid);
-        return "You have deleted " + productid + " from " + userid;
-    }
-
-    @DeleteMapping("/cart/deleteall/{userid}")
-    public String deleteAllItemsFromCart(@PathVariable long userid)
-    {
-        userrepos.deleteAllItemsFromCart(userid);
-        return "You have deleted all items in cart from user " + userid;
     }
 
 }

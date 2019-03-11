@@ -4,7 +4,14 @@ import { StyledAuthForm } from "./styles/StyledAuthForm";
 import axios from "axios";
 import Router from "next/router";
 
-const SignUpForm = ({ form, theme, signupInfo, setSignupInfo }) => {
+const SignUpForm = ({
+  form,
+  theme,
+  signupInfo,
+  setSignupInfo,
+  setTab,
+  LOGIN
+}) => {
   const { getFieldDecorator } = form;
 
   function handleSubmit(e) {
@@ -23,12 +30,12 @@ const SignUpForm = ({ form, theme, signupInfo, setSignupInfo }) => {
           console.log(response);
           const { data } = response;
           message.success(
-            `Welcome ${data.username}! You have successfully signed up.`,
+            `Hi ${
+              data.username
+            }! You have successfully signed up and are ready to login!`,
             3
           );
-          Router.push({
-            pathname: "/shop"
-          });
+          setTab(LOGIN);
         })
         .catch(function(error) {
           console.error(error, "we have an error");
