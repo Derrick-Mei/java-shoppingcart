@@ -17,10 +17,10 @@ ALTER TABLE orderproducts ADD COLUMN quantityinorder INT NULL AFTER productid;
 
 INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (1, 'Mastercard1', '2019-01-20 20:50:50', true, 'string address1', 3);
 INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (2, 'Mastercard2', '2019-01-20 20:50:50', false, 'string address1', 3);
-INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (3, 'Mastercard3', '2019-01-20 20:50:50', true, 'string address1', 4);
-INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (4, 'Mastercard4', '2019-01-20 20:50:50', false, 'string address1', 3);
-INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (5, 'Mastercard5', '2019-01-20 20:50:50', true, 'string address1', 3);
-INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (6, 'Mastercard6', '2019-01-20 20:50:50', false, 'string address1', 4);
+-- INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (3, 'Mastercard3', '2019-01-20 20:50:50', true, 'string address1', 4);
+-- INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (4, 'Mastercard4', '2019-01-20 20:50:50', false, 'string address1', 3);
+-- INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (5, 'Mastercard5', '2019-01-20 20:50:50', true, 'string address1', 3);
+-- INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (6, 'Mastercard6', '2019-01-20 20:50:50', false, 'string address1', 4);
 
 INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (1, 'description1', '2020-01-01', 'imageurl1.com', 10.50, 'productname1', 10);
 INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (2, 'description2', '2020-01-01', 'imageurl2.com', 11.50, 'productname2', 10);
@@ -72,19 +72,19 @@ INSERT INTO cart (userid, productid, quantityincart) VALUES (4, 1, 7);
 -- INSERT INTO cart (userid, productid) VALUES (('44ea5a37-b95f-4d6c-80cc-2cdbc7ab195d'), 5);
 -- INSERT INTO cart (userid, productid) VALUES (('44ea5a37-b95f-4d6c-80cc-2cdbc7ab195d'), 1);
 
-INSERT INTO totalorderhistory (userid, productid) VALUES (3, 1);
-INSERT INTO totalorderhistory (userid, productid) VALUES (3, 2);
-INSERT INTO totalorderhistory (userid, productid) VALUES (3, 3);
-INSERT INTO totalorderhistory (userid, productid) VALUES (4, 2);
-INSERT INTO totalorderhistory (userid, productid) VALUES (4, 5);
-INSERT INTO totalorderhistory (userid, productid) VALUES (4, 1);
+-- INSERT INTO totalorderhistory (userid, productid) VALUES (3, 1);
+-- INSERT INTO totalorderhistory (userid, productid) VALUES (3, 2);
+-- INSERT INTO totalorderhistory (userid, productid) VALUES (3, 3);
+-- INSERT INTO totalorderhistory (userid, productid) VALUES (4, 2);
+-- INSERT INTO totalorderhistory (userid, productid) VALUES (4, 5);
+-- INSERT INTO totalorderhistory (userid, productid) VALUES (4, 1);
 
-INSERT INTO orderproducts (orderid, productid) VALUES (1, 1);
-INSERT INTO orderproducts (orderid, productid) VALUES (1, 2);
-INSERT INTO orderproducts (orderid, productid) VALUES (1, 4);
-INSERT INTO orderproducts (orderid, productid) VALUES (2, 1);
-INSERT INTO orderproducts (orderid, productid) VALUES (2, 3);
-INSERT INTO orderproducts (orderid, productid) VALUES (2, 5);
+INSERT INTO orderproducts (orderid, productid, quantityinorder) VALUES (1, 1, 8);
+INSERT INTO orderproducts (orderid, productid, quantityinorder) VALUES (1, 2, 8);
+INSERT INTO orderproducts (orderid, productid, quantityinorder) VALUES (1, 4, 8);
+INSERT INTO orderproducts (orderid, productid, quantityinorder) VALUES (2, 1, 8);
+INSERT INTO orderproducts (orderid, productid, quantityinorder) VALUES (2, 3, 8);
+INSERT INTO orderproducts (orderid, productid, quantityinorder) VALUES (2, 5, 8);
 
 INSERT INTO supplierproduct (supplierid, productid) VALUES (1, 1);
 INSERT INTO supplierproduct (supplierid, productid) VALUES (1, 2);

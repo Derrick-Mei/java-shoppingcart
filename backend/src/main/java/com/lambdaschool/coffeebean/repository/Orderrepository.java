@@ -20,4 +20,9 @@ public interface Orderrepository extends JpaRepository<Order, Long>
     @Modifying
     @Query(value = "UPDATE orders SET shipdatetime = NULL WHERE (orderid = :orderid)", nativeQuery = true)
     public void setShipDateToNull(long orderid);
+
+    @Transactional
+    @Modifying
+    @Query(value = "INSERT INTO orderproducts (orderid, productid, quantityinorder) VALUES (:orderid, :productid, :quantity);", nativeQuery = true)
+    void addToOrderProducts(long orderid, long productid, int quantity);
 }

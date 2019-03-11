@@ -13,7 +13,7 @@ import { useState } from "react";
 import ItemCardList from "./ItemCardList";
 import ItemCard from "./ItemCard";
 import Router from "next/router";
-const CartFooter = ({ cartItems, deleteCartItem }) => {
+const CartFooter = ({ cartItems, deleteCartItem, userId }) => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   return (
     <CartFooterWrapper>
@@ -74,7 +74,7 @@ const CartFooter = ({ cartItems, deleteCartItem }) => {
                 actionBtn={
                   <Button
                     type="danger"
-                    onClick={() => deleteCartItem(item.keyId)}
+                    onClick={() => deleteCartItem(item, userId)}
                   >
                     Delete
                   </Button>

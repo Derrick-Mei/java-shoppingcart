@@ -39,11 +39,12 @@
 4. POST - /cart/addtocart/{userid}/{productid}/{quantity} - add to cart, if exists add to quantity
 5. PUT - /cart/modifyquantityincart/{userid}/{productid}/{quantity} - modify quantity in cart
 6. DELETE - /cart/remove/{userid}/{productid} - delete item from cart
-7. DELETE - /cart/deleteall/{userid} - delete all items from cart
+7. DELETE - /cart/modifytozero/{userid}/{productid} - modify quantity of item in cart to 0
+8. DELETE - /cart/deleteall/{userid} - delete all items from cart
 
-8. POST - /cart/buy/{userid} - buy items in cart
+9. POST - /cart/buy/{userid} - buy items in cart
 
-9. totalorder history needs 3rd column
+10. totalorder history needs 3rd column
 
 
 
@@ -55,3 +56,7 @@
 ## Shop Controller
 1. GET - /shop - get all items without sensitive relational data
 2. GET - /shop/{pagenumber} - get 10 items of page number without sensitive relational data
+
+
+Triple join example
+SELECT p.productid, p.productname, p.description, p.image, p.price, c.quantityincart, u.username, u.userid FROM cart c INNER JOIN products p ON c.productid=p.productid INNER JOIN user u ON u.userid=c.userid WHERE u.userid = 3;

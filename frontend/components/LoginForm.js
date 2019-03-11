@@ -27,6 +27,8 @@ const LoginForm = ({ form, theme, loginInfo, setLoginInfo }) => {
           const json = res.json();
           json.then(res => {
             console.log(res);
+            window.localStorage.setItem("access_token", res.access_token);
+            window.localStorage.setItem("username", values.username);
             Router.push({
               pathname: "/shop"
             });
