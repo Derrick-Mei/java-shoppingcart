@@ -87,6 +87,7 @@ const LoginForm = ({ form, theme, loginInfo, setLoginInfo }) => {
         <Form.Item>
           <Button type="primary" htmlType="submit">
             Login
+            <div>{process.env.BACKEND_URL}</div>
           </Button>
         </Form.Item>
       </Card>
