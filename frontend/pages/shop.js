@@ -28,11 +28,17 @@ const ShopPage = () => {
     createBearerAxios()({
       method: "get",
       url: `/cart/user/username/${window.localStorage.getItem("username")}`,
-      transformResponse: function(data) {
-        return { "userid": JSON.parse(data)["userid"] };
-      }
     }).then(({ data }) => {
-      setUserId(data.userid)
+      const { productsincart } = data;
+      const cartItems = [];
+      productsincart.forEach(item => {
+        cartItems.push({
+          ...item,
+          keyId: uuidv4()
+        });
+      });
+      setUserId(data.userid);
+      setCartItems(cartItems);
     }).catch(err => {
       console.log(err);
     });
