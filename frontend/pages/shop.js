@@ -33,6 +33,8 @@ const ShopPage = () => {
       }
     }).then(({ data }) => {
       setUserId(data.userid)
+    }).catch(err => {
+      console.log(err);
     });
   }, []);
 
