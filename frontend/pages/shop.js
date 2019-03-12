@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import customFetch from "../lib/customFetch";
 import uuidv4 from "uuid/v4";
-
+import { baseAxios, createBearerAxios } from "../lib/axiosInstances";
 const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
   const {
@@ -20,25 +20,19 @@ const ShopPage = () => {
   const [userId, setUserId] = useState();
 
   useEffect(() => {
-    const { data } = customFetch("http://localhost:2019/shop", setMerchandise);
-    fetch(
-      `http://localhost:2019/cart/user/username/${window.localStorage.getItem(
-        "username"
-      )}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization:
-            "Bearer " + window.localStorage.getItem("access_token"),
-          "Content-Type": "application/json"
-        }
+    baseAxios.get("/shop").then(({data}) => {
+      setMerchandise(data);
+    }).catch(err => {
+      console.log(err);
+    });
+    createBearerAxios()({
+      method: "get",
+      url: `/cart/user/username/${window.localStorage.getItem("username")}`,
+      transformResponse: function(data) {
+        return { "userid": JSON.parse(data)["userid"] };
       }
-    ).then(res => {
-      const json = res.json();
-      json.then(res => {
-        console.log(res);
-        setUserId(res.userid);
-      });
+    }).then(({ data }) => {
+      setUserId(data.userid)
     });
   }, []);
 
