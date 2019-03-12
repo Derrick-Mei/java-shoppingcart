@@ -52,6 +52,16 @@ public class Cartcontroller
         return userrepos.getCartItemsInCartById(userid);
     }
 
+
+
+//    @GetMapping("/cartbyusername/{username}")
+//    public List<CartItems> getCartItemsInCartByUsername(@PathVariable String username)
+//    {
+//        return userrepos.getCartItemsInCartByUsername(username);
+//    }
+
+
+
     @PostMapping("/addtocart/{userid}/{productid}/{quantity}")
     public String postItemToCart(@PathVariable long userid, @PathVariable long productid, @PathVariable int quantity)
     {
@@ -67,7 +77,7 @@ public class Cartcontroller
         {
             int previousQuantity = foundCartItems.getQuantityincart();
             int total = previousQuantity + quantity;
-            userrepos.modifyQuantityInCart(userid, productid, quantity+previousQuantity);
+            userrepos.modifyQuantityInCart(userid, productid, total);
             return "You have added " + quantity + " quantity of " + productid + " to " + userid + "'s cart. " +
                     "There are now " + total + " of " + foundCartItems.getProductname() +  " in " + userid + "'s cart.";
         }
