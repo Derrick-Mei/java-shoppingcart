@@ -30,6 +30,7 @@ const LoginForm = ({ form, theme, loginInfo, setLoginInfo }) => {
         }).then(({ data }) => {
             // console.log(data);
             window.localStorage.setItem("access_token", data.access_token);
+            window.localStorage.setItem("username", values.username);
             Router.push({
               pathname: "/shop"
             });
