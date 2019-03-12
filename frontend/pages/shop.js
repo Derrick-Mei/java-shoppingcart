@@ -131,28 +131,17 @@ const useCartItem = () => {
 
   const addCartItem = (itemObj, userId) => {
     // console.log(itemObj);
-    const keyId = uuidv4();
-    const response = fetch(
-      `http://localhost:2019/cart/addtocart/${userId}/${itemObj.productid}/1`,
-      {
-        method: "POST",
-        headers: {
-          Authorization:
-            "Bearer " + window.localStorage.getItem("access_token"),
-          // "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json"
-        }
-      }
-    ).then(res => {
-      const json = res.json();
-      json.then(res => {});
-    });
+    createBearerAxios()({
+      method: "post",
+      url: `/cart/addtocart/${userId}/${itemObj.productid}/1`,
+    }).then(({ data }) => {
+      console.log(data);
     const newItem = {
       ...itemObj,
-      keyId
+        keyId: uuidv4()
     };
-    // console.log(cartItems);
     setCartItems([...cartItems, newItem]);
+    })
   };
 
   return {
