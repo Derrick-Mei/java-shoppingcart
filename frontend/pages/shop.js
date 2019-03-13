@@ -6,7 +6,7 @@ import ItemCard from "../components/shop-components/ItemCard";
 import { Button } from "antd";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import fetchData from "../lib/fetchData";
+import customFetch from "../lib/customFetch";
 import uuidv4 from "uuid/v4";
 
 const ShopPage = () => {
@@ -17,11 +17,32 @@ const ShopPage = () => {
     deleteCartItem,
     addCartItem
   } = useCartItem();
+  const [userId, setUserId] = useState();
 
   useEffect(() => {
-    const { data } = fetchData("http://localhost:2019/shop", setMerchandise);
+    const { data } = customFetch("http://localhost:2019/shop", setMerchandise);
+    fetch(
+      `http://localhost:2019/cart/user/username/${window.localStorage.getItem(
+        "username"
+      )}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization:
+            "Bearer " + window.localStorage.getItem("access_token"),
+          "Content-Type": "application/json"
+        }
+      }
+    ).then(res => {
+      const json = res.json();
+      json.then(res => {
+        console.log(res);
+        setUserId(res.userid);
+      });
+    });
   }, []);
-  console.log(merchandise);
+
+  // console.log(merchandise);
   return (
     <ShopWrapper>
       <MeanCoffeeHeader />
@@ -38,7 +59,7 @@ const ShopPage = () => {
                   <Button
                     type="primary"
                     onClick={() => {
-                      addCartItem(item);
+                      addCartItem(item, userId);
                     }}
                   >
                     Buy {`$${item.price}`}
@@ -49,16 +70,55 @@ const ShopPage = () => {
           })}
         </ItemCardList>
       </MainContent>
-      <CartFooter cartItems={cartItems} deleteCartItem={deleteCartItem} />
+      <CartFooter
+        cartItems={cartItems}
+        deleteCartItem={deleteCartItem}
+        userId={userId}
+      />
     </ShopWrapper>
   );
 };
 const useCartItem = () => {
   const [cartItems, setCartItems] = useState([]);
 
-  const deleteCartItem = id => {
+  const deleteCartItem = (currItem, userId) => {
     const deleteIndex = cartItems.findIndex(item => {
-      return item.keyId === id;
+      return item.keyId === currItem.keyId;
+    });
+    fetch(`http://localhost:2019/cart/${userId}`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + window.localStorage.getItem("access_token"),
+        // "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json"
+      }
+    }).then(res => {
+      const json = res.json();
+      json.then(res => {
+        const cartItem = res.find(
+          item => item.productid === currItem.productid
+        );
+        console.log(cartItem.quantityincart);
+        setTimeout(() => {
+          fetch(
+            `http://localhost:2019/cart/modifyquantityincart/${userId}/${
+              currItem.productid
+            }/${cartItem.quantityincart - 1}`,
+            {
+              method: "PUT",
+              headers: {
+                Authorization:
+                  "Bearer " + window.localStorage.getItem("access_token"),
+                // "Access-Control-Allow-Origin": "*",
+                "Content-Type": "application/json"
+              }
+            }
+          ).then(res => {
+            const json = res.json();
+            json.then(res => {});
+          });
+        });
+      }, 1000);
     });
 
     setCartItems([
@@ -66,14 +126,30 @@ const useCartItem = () => {
       ...cartItems.slice(deleteIndex + 1)
     ]);
   };
-  const addCartItem = itemObj => {
-    console.log(itemObj);
-    const keyId = uuidv4();
 
+  const addCartItem = (itemObj, userId) => {
+    // console.log(itemObj);
+    const keyId = uuidv4();
+    const response = fetch(
+      `http://localhost:2019/cart/addtocart/${userId}/${itemObj.productid}/1`,
+      {
+        method: "POST",
+        headers: {
+          Authorization:
+            "Bearer " + window.localStorage.getItem("access_token"),
+          // "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json"
+        }
+      }
+    ).then(res => {
+      const json = res.json();
+      json.then(res => {});
+    });
     const newItem = {
       ...itemObj,
       keyId
     };
+    // console.log(cartItems);
     setCartItems([...cartItems, newItem]);
   };
 

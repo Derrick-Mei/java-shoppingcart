@@ -6,7 +6,7 @@ import SignupForm from "../components/SignupForm";
 const AuthenticationPage = () => {
   const SIGNUP = "signup";
   const LOGIN = "login";
-  const [tab, setTab] = useState(SIGNUP);
+  const [tab, setTab] = useState(LOGIN);
 
   const [signupInfo, setSignupInfo] = useState({ username: "", password: "" });
 
@@ -17,7 +17,12 @@ const AuthenticationPage = () => {
       {(() => {
         if (tab === SIGNUP) {
           return (
-            <SignupForm signupInfo={signupInfo} setSignupInfo={setSignupInfo} />
+            <SignupForm
+              signupInfo={signupInfo}
+              setSignupInfo={setSignupInfo}
+              LOGIN={LOGIN}
+              setTab={setTab}
+            />
           );
         } else {
           return (
