@@ -24,11 +24,20 @@ public class Cartcontroller
     @Autowired
     Orderrepository orderrepos;
 
-
+//    @PreAuthorize("#c = Object thing")
     @GetMapping("/user/{userid}")
     public User findUserByUserid(@PathVariable long userid)
     {
         return userrepos.findById(userid).get();
+
+//        Object id = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        if (!id.equals(userid))
+//        {
+//            return id;
+////        return userrepos.findById(userid).get();
+//
+//        }
+//        else return null;
     }
 
     @GetMapping("/user/username/{username}")
@@ -65,21 +74,19 @@ public class Cartcontroller
     @PostMapping("/addtocart/{userid}/{productid}/{quantity}")
     public String postItemToCart(@PathVariable long userid, @PathVariable long productid, @PathVariable int quantity)
     {
-//        userrepos.postItemToCart(userid, productid, quantity);
-//        return "You have added " + quantity + " of " + productid + " to " + userid + "'s cart";
         CartItems foundCartItems = userrepos.searchCart(userid, productid);
-        if (foundCartItems == null )
-        {
-            userrepos.postItemToCart(userid, productid, quantity);
-            return "You have added " + quantity + "quantity of " + foundCartItems.getProductname() + " to " + userid + "'s cart";
-        }
-        else
+        if (foundCartItems != null )
         {
             int previousQuantity = foundCartItems.getQuantityincart();
             int total = previousQuantity + quantity;
             userrepos.modifyQuantityInCart(userid, productid, total);
-            return "You have added " + quantity + " quantity of " + productid + " to " + userid + "'s cart. " +
+            return "You have added  " + quantity + "  quantity of " + productid + " to " + userid + "'s cart. " +
                     "There are now " + total + " of " + foundCartItems.getProductname() +  " in " + userid + "'s cart.";
+        }
+        else
+        {
+            userrepos.postItemToCart(userid, productid, quantity);
+            return "You have added " + quantity + "quantity of " + productid + " to " + userid + "'s cart";
         }
     }
 
@@ -88,15 +95,15 @@ public class Cartcontroller
                                        @PathVariable long productid,
                                        @PathVariable int quantity) {
         CartItems foundCartItems = userrepos.searchCart(userid, productid);
-        if (foundCartItems == null )
-        {
-            return userid + " does not have product: " + foundCartItems.getProductname() + "in their cart.";
-        }
-        else
+        if (foundCartItems != null )
         {
             int previousQuantity = foundCartItems.getQuantityincart();
             userrepos.modifyQuantityInCart(userid, productid, quantity);
             return "There were " + previousQuantity + ", but now there are " + quantity + " of " + foundCartItems.getProductname() +  " in " + userid + "'s cart.";
+        }
+        else
+        {
+            return userid + " does not have productid: " + productid + "in their cart.";
         }
     }
 
