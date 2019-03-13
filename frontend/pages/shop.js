@@ -61,7 +61,7 @@ const ShopPage = () => {
     <ShopWrapper>
       <MeanCoffeeHeader />
       <MainContent>
-        {useMemo(() => <ItemCardList>
+         <ItemCardList>
           {merchandise.map(item => {
             return (
               <ItemCard
@@ -82,7 +82,7 @@ const ShopPage = () => {
               />
             );
           })}
-        </ItemCardList>, [merchandise])}
+        </ItemCardList>
       </MainContent>
       <CartFooter
         cartItems={cartItems}
