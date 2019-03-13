@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import customFetch from "../lib/customFetch";
 import uuidv4 from "uuid/v4";
-
+import { baseAxios, createBearerAxios } from "../lib/axiosInstances";
 const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
   const {
@@ -20,25 +20,39 @@ const ShopPage = () => {
   const [userId, setUserId] = useState();
 
   useEffect(() => {
-    const { data } = customFetch("http://localhost:2019/shop", setMerchandise);
-    fetch(
-      `http://localhost:2019/cart/user/username/${window.localStorage.getItem(
-        "username"
-      )}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization:
-            "Bearer " + window.localStorage.getItem("access_token"),
-          "Content-Type": "application/json"
-        }
-      }
-    ).then(res => {
-      const json = res.json();
-      json.then(res => {
-        console.log(res);
-        setUserId(res.userid);
+    baseAxios.get("/shop").then(({data}) => {
+      setMerchandise(data);
+    }).catch(err => {
+      console.log(err, " - GET /shop error");
+    });
+    createBearerAxios()({
+      method: "get",
+      url: `/cart/user/username/${window.localStorage.getItem("username")}`,
+    }).then(({ data }) => {
+      setUserId(data.userid);
+      
+      createBearerAxios()({
+        method: "get",
+        url: `/cart/${data.userid}`
+      }).then(({ data }) => {
+        const productsData = data;
+      const cartItems = [];
+        for(let i = 0; i < productsData.length; i++) {
+          let product = productsData[i];
+          const quantity = product.quantityincart;
+
+          for(let j = 0; j < quantity; j++) {
+            delete product.quantityincart;
+        cartItems.push({
+              ...product,
+          keyId: uuidv4()
+            })
+          } // for j - used for adding the right amount of quantity in cart
+        } // for i - iterating through each product
+        setCartItems(cartItems);
       });
+    }).catch(err => {
+      console.log(err, " - GET cart items error")
     });
   }, []);
 
@@ -82,75 +96,50 @@ const useCartItem = () => {
   const [cartItems, setCartItems] = useState([]);
 
   const deleteCartItem = (currItem, userId) => {
+    
+    createBearerAxios()({
+      method: "get",
+      url: `/cart/${userId}`,
+      transformResponse: function (data) {
+        const specificProduct = JSON.parse(data)
+        .filter(product => {
+          return product.productid === currItem.productid;
+        });
+        return { newQuantityInCart: specificProduct[0].quantityincart - 1}
+      },
+    }).then(({data}) => {
+      createBearerAxios()({
+        method: "put",
+        url: `/cart/modifyquantityincart/${userId}/${currItem.productid}/${data.newQuantityInCart}`
+      }).then(({data}) => {
     const deleteIndex = cartItems.findIndex(item => {
       return item.keyId === currItem.keyId;
     });
-    fetch(`http://localhost:2019/cart/${userId}`, {
-      method: "GET",
-      headers: {
-        Authorization: "Bearer " + window.localStorage.getItem("access_token"),
-        // "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json"
-      }
-    }).then(res => {
-      const json = res.json();
-      json.then(res => {
-        const cartItem = res.find(
-          item => item.productid === currItem.productid
-        );
-        console.log(cartItem.quantityincart);
-        setTimeout(() => {
-          fetch(
-            `http://localhost:2019/cart/modifyquantityincart/${userId}/${
-              currItem.productid
-            }/${cartItem.quantityincart - 1}`,
-            {
-              method: "PUT",
-              headers: {
-                Authorization:
-                  "Bearer " + window.localStorage.getItem("access_token"),
-                // "Access-Control-Allow-Origin": "*",
-                "Content-Type": "application/json"
-              }
-            }
-          ).then(res => {
-            const json = res.json();
-            json.then(res => {});
-          });
-        });
-      }, 1000);
-    });
-
     setCartItems([
       ...cartItems.slice(0, deleteIndex),
       ...cartItems.slice(deleteIndex + 1)
     ]);
+      });
+    }).catch(err => {
+      console.log(err, " - GET /cart/${userid} error")
+    });
   };
 
   const addCartItem = (itemObj, userId) => {
     // console.log(itemObj);
-    const keyId = uuidv4();
-    const response = fetch(
-      `http://localhost:2019/cart/addtocart/${userId}/${itemObj.productid}/1`,
-      {
-        method: "POST",
-        headers: {
-          Authorization:
-            "Bearer " + window.localStorage.getItem("access_token"),
-          // "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json"
-        }
-      }
-    ).then(res => {
-      const json = res.json();
-      json.then(res => {});
-    });
+    createBearerAxios()({
+      method: "post",
+      url: `/cart/addtocart/${userId}/${itemObj.productid}/1`,
+    }).then(({ data }) => {
+      console.log(data);
     const newItem = {
       ...itemObj,
-      keyId
+        keyId: uuidv4()
     };
-    // console.log(cartItems);
     setCartItems([...cartItems, newItem]);
+    }).catch((err) => {
+      console.log(err, " POST to cart");
+    })
   };
 
   return {

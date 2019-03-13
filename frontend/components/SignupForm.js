@@ -3,7 +3,7 @@ import styled, { withTheme } from "styled-components";
 import { StyledAuthForm } from "./styles/StyledAuthForm";
 import axios from "axios";
 import Router from "next/router";
-
+import { baseAxios } from "../lib/axiosInstances";
 const SignUpForm = ({
   form,
   theme,
@@ -21,8 +21,7 @@ const SignUpForm = ({
       if (!err) {
         console.log("Received values of form: ", values);
       }
-      axios
-        .post("http://localhost:2019/signup", {
+      baseAxios.post("/signup", {
           username: values.username,
           password: values.password
         })

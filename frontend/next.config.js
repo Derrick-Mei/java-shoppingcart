@@ -1,5 +1,5 @@
 // next.config.js
-require('dotenv').config()
+const { parsed: localEnv } = require('dotenv').config()
 const webpack = require('webpack')
 const withCSS = require("@zeit/next-css");
 const withTypescript = require("@zeit/next-typescript");
@@ -17,7 +17,7 @@ module.exports = compose([
     {
       webpack: (config) => {
         config.plugins.push(
-            new webpack.EnvironmentPlugin(process.env)
+            new webpack.EnvironmentPlugin(localEnv)
           )
         return config
       }

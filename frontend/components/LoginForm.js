@@ -3,7 +3,7 @@ import styled, { withTheme } from "styled-components";
 import { StyledAuthForm } from "./styles/StyledAuthForm";
 import axios from "axios";
 import Router from "next/router";
-
+import qs from 'qs';
 const LoginForm = ({ form, theme, loginInfo, setLoginInfo }) => {
   const { getFieldDecorator } = form;
   function handleSubmit(e) {
@@ -13,26 +13,28 @@ const LoginForm = ({ form, theme, loginInfo, setLoginInfo }) => {
         if (!err) {
           console.log("Received values of form: ", values);
         }
-        fetch("http://localhost:2019/oauth/token", {
-          method: "POST",
-          body: `grant_type=password&username=${values.username}&password=${
-            values.password
-          }`,
-          headers: {
-            Authorization: "Basic bGFtYmRhLWNsaWVudDpsYW1iZGEtc2VjcmV0",
-            "Access-Control-Allow-Origin": "*",
-            "Content-Type": "application/x-www-form-urlencoded"
+        const data = {
+          "grant_type": process.env.GRANT_TYPE_PASSWORD,
+          "username": values.username,
+          "password": values.password
+        }
+        axios({
+          method: "post",
+          url: `${process.env.BACKEND_URL}/oauth/token`,
+          headers: { 'content-type': 'application/x-www-form-urlencoded' },
+          data: qs.stringify(data),
+          auth: {
+            username: process.env.CLIENT_ID,
+            password: process.env.CLIENT_SECRET
           }
-        }).then(res => {
-          const json = res.json();
-          json.then(res => {
-            console.log(res);
-            window.localStorage.setItem("access_token", res.access_token);
+        }).then(({ data }) => {
+            // console.log(data);
+            window.localStorage.setItem("access_token", data.access_token);
             window.localStorage.setItem("username", values.username);
             Router.push({
               pathname: "/shop"
             });
-          });
+          
         });
       })
       .catch(err => {
