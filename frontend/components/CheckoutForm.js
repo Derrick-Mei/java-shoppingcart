@@ -16,38 +16,11 @@ const CheckoutForm = ({ form, theme }) => {
   });
   const [totalPrice, setTotalPrice] = useState(0);
   useEffect(() => {
-    fetch(
-      `http://localhost:2019/cart/${window.localStorage.getItem("user-id")}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization:
-            "Bearer " + window.localStorage.getItem("access_token"),
-          // "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json"
-        }
-      }
-    ).then(res => {
-      const json = res.json();
-      json.then(res => {
-        console.log(res);
-        const productsInCart = res;
-        let total = 0;
-        for (let i = 0; i < productsInCart.length; i++) {
-          const product = productsInCart[i];
-          total += product.price * product.quantityincart;
-        }
-
-        setTotalPrice(total);
-      });
-    });
+  //TODO: get all cart items for the user
+  //so that they can review their cart and have the total price of all products
   }, []);
   const changeInputHandler = e => {
     console.log(orderInfo);
-    // need this to add to order price
-    // if(e.target.shipMethod) {
-
-    // }
     setOrderInfo({ ...orderInfo, [e.target.name]: e.target.value });
   };
 
