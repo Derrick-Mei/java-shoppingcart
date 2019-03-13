@@ -29,18 +29,28 @@ const ShopPage = () => {
       method: "get",
       url: `/cart/user/username/${window.localStorage.getItem("username")}`,
     }).then(({ data }) => {
-      const { productsincart } = data;
-      const cartItems = [];
-      productsincart.forEach(item => {
-        cartItems.push({
-          ...item,
-          keyId: uuidv4()
-        });
-      });
       setUserId(data.userid);
-      setCartItems(cartItems);
-    }).catch(err => {
-      console.log(err);
+      
+      createBearerAxios()({
+        method: "get",
+        url: `/cart/${data.userid}`
+      }).then(({ data }) => {
+        const productsData = data;
+      const cartItems = [];
+        for(let i = 0; i < productsData.length; i++) {
+          let product = productsData[i];
+          const quantity = product.quantityincart;
+
+          for(let j = 0; j < quantity; j++) {
+            delete product.quantityincart;
+        cartItems.push({
+              ...product,
+          keyId: uuidv4()
+            })
+          } // for j - used for adding the right amount of quantity in cart
+        } // for i - iterating through each product
+        setCartItems(cartItems);
+      });
     });
   }, []);
 
