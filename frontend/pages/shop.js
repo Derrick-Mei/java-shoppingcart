@@ -4,7 +4,7 @@ import CartFooter from "../components/shop-components/CartFooter";
 import ItemCardList from "../components/shop-components/ItemCardList";
 import ItemCard from "../components/shop-components/ItemCard";
 import { Button } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import customFetch from "../lib/customFetch";
 import uuidv4 from "uuid/v4";
@@ -61,7 +61,7 @@ const ShopPage = () => {
     <ShopWrapper>
       <MeanCoffeeHeader />
       <MainContent>
-        <ItemCardList>
+        {useMemo(() => <ItemCardList>
           {merchandise.map(item => {
             return (
               <ItemCard
@@ -82,7 +82,7 @@ const ShopPage = () => {
               />
             );
           })}
-        </ItemCardList>
+        </ItemCardList>, [merchandise])}
       </MainContent>
       <CartFooter
         cartItems={cartItems}
