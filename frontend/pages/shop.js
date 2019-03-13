@@ -84,49 +84,31 @@ const useCartItem = () => {
   const [cartItems, setCartItems] = useState([]);
 
   const deleteCartItem = (currItem, userId) => {
+    
+    createBearerAxios()({
+      method: "get",
+      url: `/cart/${userId}`,
+      transformResponse: function (data) {
+        const specificProduct = JSON.parse(data)
+        .filter(product => {
+          return product.productid === currItem.productid;
+        });
+        return { newQuantityInCart: specificProduct[0].quantityincart - 1}
+      },
+    }).then(({data}) => {
+      createBearerAxios()({
+        method: "put",
+        url: `/cart/modifyquantityincart/${userId}/${currItem.productid}/${data.newQuantityInCart}`
+      }).then(({data}) => {
     const deleteIndex = cartItems.findIndex(item => {
       return item.keyId === currItem.keyId;
     });
-    fetch(`http://localhost:2019/cart/${userId}`, {
-      method: "GET",
-      headers: {
-        Authorization: "Bearer " + window.localStorage.getItem("access_token"),
-        // "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json"
-      }
-    }).then(res => {
-      const json = res.json();
-      json.then(res => {
-        const cartItem = res.find(
-          item => item.productid === currItem.productid
-        );
-        console.log(cartItem.quantityincart);
-        setTimeout(() => {
-          fetch(
-            `http://localhost:2019/cart/modifyquantityincart/${userId}/${
-              currItem.productid
-            }/${cartItem.quantityincart - 1}`,
-            {
-              method: "PUT",
-              headers: {
-                Authorization:
-                  "Bearer " + window.localStorage.getItem("access_token"),
-                // "Access-Control-Allow-Origin": "*",
-                "Content-Type": "application/json"
-              }
-            }
-          ).then(res => {
-            const json = res.json();
-            json.then(res => {});
-          });
-        });
-      }, 1000);
-    });
-
     setCartItems([
       ...cartItems.slice(0, deleteIndex),
       ...cartItems.slice(deleteIndex + 1)
     ]);
+      });
+    });
   };
 
   const addCartItem = (itemObj, userId) => {
