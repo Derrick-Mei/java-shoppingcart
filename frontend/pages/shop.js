@@ -23,7 +23,7 @@ const ShopPage = () => {
     baseAxios.get("/shop").then(({data}) => {
       setMerchandise(data);
     }).catch(err => {
-      console.log(err);
+      console.log(err, " - GET /shop error");
     });
     createBearerAxios()({
       method: "get",
@@ -51,6 +51,8 @@ const ShopPage = () => {
         } // for i - iterating through each product
         setCartItems(cartItems);
       });
+    }).catch(err => {
+      console.log(err, " - GET cart items error")
     });
   }, []);
 
@@ -118,6 +120,8 @@ const useCartItem = () => {
       ...cartItems.slice(deleteIndex + 1)
     ]);
       });
+    }).catch(err => {
+      console.log(err, " - GET /cart/${userid} error")
     });
   };
 
@@ -133,6 +137,8 @@ const useCartItem = () => {
         keyId: uuidv4()
     };
     setCartItems([...cartItems, newItem]);
+    }).catch((err) => {
+      console.log(err, " POST to cart");
     })
   };
 
