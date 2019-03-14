@@ -1,7 +1,12 @@
 import styled from "styled-components";
-import ItemCard from "./ItemCard";
 
-const ItemCardList = props => {
+export interface Props {
+    props: {
+      children: React.SFC
+    }
+}
+ 
+const ItemCardList: React.SFC<Props> = props => {
   return <ItemsWrapper>{props.children}</ItemsWrapper>;
 };
 const ItemsWrapper = styled.div`

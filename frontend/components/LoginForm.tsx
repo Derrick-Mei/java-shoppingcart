@@ -1,15 +1,43 @@
 import { Form, Icon, Input, Button, Card } from "antd";
-import styled, { withTheme } from "styled-components";
+import { withTheme } from "styled-components";
 import { StyledAuthForm } from "./styles/StyledAuthForm";
 import axios from "axios";
 import Router from "next/router";
 import qs from 'qs';
-const LoginForm = ({ form, theme, loginInfo, setLoginInfo }) => {
+import { Theme as ITheme } from "../interfaces/index";
+
+interface LoginValues {
+  username: string,
+  password: string
+}
+
+interface LoginData {
+  data: {
+    access_token: string,
+    expires_in: number
+    refresh_token: string,
+    scope: string,
+    token_type: string,
+  }
+}
+
+interface SyntheticEvent {
+  target: { name: string, value: string}
+}
+
+interface Props {
+  form: any,
+  theme: ITheme,
+  loginInfo: LoginValues,
+  setLoginInfo: Function,
+}
+
+const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) => {
   const { getFieldDecorator } = form;
-  function handleSubmit(e) {
+  function handleSubmit(e: React.FormEvent<HTMLInputElement>) {
     e.preventDefault();
     form
-      .validateFields((err, values) => {
+      .validateFields((err: object, values: LoginValues) => {
         if (!err) {
           console.log("Received values of form: ", values);
         }
@@ -27,8 +55,8 @@ const LoginForm = ({ form, theme, loginInfo, setLoginInfo }) => {
             username: process.env.CLIENT_ID,
             password: process.env.CLIENT_SECRET
           }
-        }).then(({ data }) => {
-            // console.log(data);
+        }).then(({ data }:LoginData) => {
+            console.log(data);
             window.localStorage.setItem("access_token", data.access_token);
             window.localStorage.setItem("username", values.username);
             Router.push({
@@ -37,11 +65,11 @@ const LoginForm = ({ form, theme, loginInfo, setLoginInfo }) => {
           
         });
       })
-      .catch(err => {
+      .catch((err: string) => {
         console.log(err);
       });
   }
-  const changeInputHandler = e => {
+  const changeInputHandler = (e: SyntheticEvent) => {
     setLoginInfo({ ...loginInfo, [e.target.name]: e.target.value });
   };
 

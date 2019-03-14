@@ -9,6 +9,7 @@ const Home = () => {
       <MainContent>
         <Title>Mean! Mean! Coffee Beans</Title>
         <GetStartedBtn
+          size="large"
           type="primary"
           onClick={() => {
             Router.push({
@@ -36,14 +37,10 @@ const MainContent = styled.main`
   top: 30%;
 `;
 const GetStartedBtn = styled(Button)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: ${props => props.theme.orange};
   color: ${props => props.theme.white};
-  padding: 1em;
-  font-size: 2rem;
+  background: ${props => props.theme.orange};
   border: none;
+  font-size: 2rem;
 `;
 const Title = styled.h1`
   color: ${props => props.theme.white};

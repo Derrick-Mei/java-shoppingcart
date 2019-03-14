@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Menu, Dropdown, Button, Icon, Drawer } from "antd";
+import { Button,  Drawer } from "antd";
 import { useState } from "react";
 
 const MeanCoffeeHeader = () => {
