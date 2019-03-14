@@ -5,7 +5,7 @@ export interface Props {
     title: string,
     description: string,
     price?: number,
-    actionBtn: any
+    actionBtn: React.ReactElement
 }
  
 const ItemCard: React.SFC<Props> = ({ image, title, description, price, actionBtn }) => {
