@@ -1,19 +1,24 @@
 import styled from "styled-components";
 import {
-  Menu,
-  Dropdown,
   Button,
-  Icon,
   Badge,
   Avatar,
   Drawer,
-  message
 } from "antd";
 import { useState } from "react";
 import ItemCardList from "./ItemCardList";
 import ItemCard from "./ItemCard";
 import Router from "next/router";
-const CartFooter = ({ cartItems, deleteCartItem, userId }) => {
+import { CartItem as ICartItem } from "../../interfaces/index";
+
+interface Props {
+  cartItems: [ICartItem]
+  deleteCartItem: Function,
+  userId: number,
+}
+ 
+
+const CartFooter: React.SFC<Props> = ({ cartItems, deleteCartItem, userId }) => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   return (
     <CartFooterWrapper>
@@ -111,8 +116,8 @@ const ItemsQueueContainer = styled.div`
 `;
 
 const CartBtn = styled(Button)`
-  color: ${props => props.theme.white};
-  background: ${props => props.theme.black};
+  color: ${(props: any) => props.theme.white};
+  background: ${(props:any) => props.theme.black};
   padding: 0.5em;
   padding-right: 2em;
   border: none;
