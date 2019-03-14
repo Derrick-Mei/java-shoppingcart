@@ -5,6 +5,7 @@ import axios from "axios";
 import Router from "next/router";
 import qs from 'qs';
 import { Theme as ITheme, InputEventTarget } from "../interfaces/index";
+import { message } from "antd";
 
 interface LoginValues {
   username: string,
@@ -48,6 +49,12 @@ const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) =>
           auth: {
             username: process.env.CLIENT_ID,
             password: process.env.CLIENT_SECRET
+          },
+          validateStatus: function (status: number) {
+            if(status === 400) {
+              message.error("Wrong username or password, try again!");
+            }
+            return status === 200;
           }
         }).then(({ data }:LoginData) => {
             console.log(data);
