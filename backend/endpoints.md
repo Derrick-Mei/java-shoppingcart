@@ -56,7 +56,7 @@
 ## Shop Controller
 1. GET - /shop - get all items without sensitive relational data
 2. GET - /shop/{pagenumber} - get 10 items of page number without sensitive relational data
-
+3. GET - /shop/{itemname}/{pagenumber} - get 10 items of page number of item's with name like itemname.
 
 Triple join example
 SELECT p.productid, p.productname, p.description, p.image, p.price, c.quantityincart, u.username, u.userid FROM cart c INNER JOIN products p ON c.productid=p.productid INNER JOIN user u ON u.userid=c.userid WHERE u.userid = 3;

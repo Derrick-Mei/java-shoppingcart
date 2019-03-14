@@ -6,7 +6,6 @@ import ItemCard from "../components/shop-components/ItemCard";
 import { Button } from "antd";
 import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
-import customFetch from "../lib/customFetch";
 import uuidv4 from "uuid/v4";
 import { baseAxios, createBearerAxios } from "../lib/axiosInstances";
 const ShopPage = () => {
@@ -61,7 +60,7 @@ const ShopPage = () => {
     <ShopWrapper>
       <MeanCoffeeHeader />
       <MainContent>
-         <ItemCardList>
+         {useMemo (() => <ItemCardList>
           {merchandise.map(item => {
             return (
               <ItemCard
@@ -82,7 +81,7 @@ const ShopPage = () => {
               />
             );
           })}
-        </ItemCardList>
+        </ItemCardList>, [merchandise])}
       </MainContent>
       <CartFooter
         cartItems={cartItems}
@@ -126,7 +125,7 @@ const useCartItem = () => {
   };
 
   const addCartItem = (itemObj, userId) => {
-    // console.log(itemObj);
+    console.log(cartItems)
     createBearerAxios()({
       method: "post",
       url: `/cart/addtocart/${userId}/${itemObj.productid}/1`,
@@ -136,7 +135,7 @@ const useCartItem = () => {
       ...itemObj,
         keyId: uuidv4()
     };
-    setCartItems([...cartItems, newItem]);
+    setCartItems(prevState => [...prevState, newItem]);
     }).catch((err) => {
       console.log(err, " POST to cart");
     })

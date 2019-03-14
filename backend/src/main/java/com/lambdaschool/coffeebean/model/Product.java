@@ -24,10 +24,10 @@ public class Product
     private String description;
 
     @JsonView(View.UserOnly.class)
-    private double price;
+    private Double price;
 
     @JsonView(View.UserOnly.class)
-    private int quantity;
+    private Integer quantity;
 
 
     //MySQL uses yyyy-mm-dd format for storing a date value
@@ -95,22 +95,22 @@ public class Product
         this.description = description;
     }
 
-    public double getPrice()
+    public Double getPrice()
     {
         return price;
     }
 
-    public void setPrice(double price)
+    public void setPrice(Double price)
     {
         this.price = price;
     }
 
-    public int getQuantity()
+    public Integer getQuantity()
     {
         return quantity;
     }
 
-    public void setQuantity(int quantity)
+    public void setQuantity(Integer quantity)
     {
         this.quantity = quantity;
     }
