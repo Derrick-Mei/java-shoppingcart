@@ -61,7 +61,7 @@ const ShopPage = () => {
     <ShopWrapper>
       <MeanCoffeeHeader />
       <MainContent>
-         <ItemCardList>
+         {useMemo (() => <ItemCardList>
           {merchandise.map(item => {
             return (
               <ItemCard
@@ -82,7 +82,7 @@ const ShopPage = () => {
               />
             );
           })}
-        </ItemCardList>
+        </ItemCardList>, [merchandise])}
       </MainContent>
       <CartFooter
         cartItems={cartItems}
@@ -126,7 +126,7 @@ const useCartItem = () => {
   };
 
   const addCartItem = (itemObj, userId) => {
-    // console.log(itemObj);
+    console.log(cartItems)
     createBearerAxios()({
       method: "post",
       url: `/cart/addtocart/${userId}/${itemObj.productid}/1`,
@@ -136,7 +136,7 @@ const useCartItem = () => {
       ...itemObj,
         keyId: uuidv4()
     };
-    setCartItems([...cartItems, newItem]);
+    setCartItems(prevState => [...prevState, newItem]);
     }).catch((err) => {
       console.log(err, " POST to cart");
     })
