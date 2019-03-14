@@ -66,7 +66,7 @@ const SignUpForm : React.SFC<Props> = ({
           );
           setTab(LOGIN);
         })
-        .catch(function(error: string) {
+        .catch(function(error: object) {
           console.error(error, "we have an error");
         });
     });
