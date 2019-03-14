@@ -1,10 +1,17 @@
 import styled from "styled-components";
-import { Card, Button } from "antd";
-
-const ItemCard = ({ image, title, description, price, actionBtn }) => {
+import React from 'react';
+export interface Props {
+    image: string,
+    title: string,
+    description: string,
+    price: number,
+    actionBtn: any
+}
+ 
+const ItemCard: React.SFC<Props> = ({ image, title, description, price, actionBtn }) => {
   return (
     <StyledCard>
-      <ItemImage src={{ image }} />
+      <ItemImage src={image} alt={title} />
       <ItemTextContainer>
         <ItemTitle>{title}</ItemTitle>
         <ItemDescription>{description}</ItemDescription>
@@ -43,5 +50,4 @@ const ActionsContainer = styled.div`
   /* display: flex;
   justify-content: space-around; */
 `;
-const BuyBtn = styled(Button)``;
 export default ItemCard;
