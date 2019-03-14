@@ -57,14 +57,19 @@ const SignUpForm : React.SFC<Props> = ({
           password: values.password
         })
         .then(function({ data }: SignupSubmitData) {
-
-          message.success(
-            `Hi ${
-              data.username
-            }! You have successfully signed up and are ready to login!`,
-            3
-          );
-          setTab(LOGIN);
+          if(data.username === undefined) {
+            message.error(`${values.username} has already been taken, try agian`)
+          }
+          else {
+            message.success(
+              `Hi ${
+                data.username
+              }! You have successfully signed up and are ready to login!`,
+              3
+            );
+            setTab(LOGIN);
+          }
+       
         })
         .catch(function(error: object) {
           console.error(error, "we have an error");
