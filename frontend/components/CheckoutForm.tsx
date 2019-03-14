@@ -3,7 +3,8 @@ import { Form, Radio, Button, Icon, Input, Card } from "antd";
 import { withTheme } from "styled-components";
 import { useState, useEffect } from "react";
 import Router from "next/router";
-import { Theme as ITheme } from "../interfaces/index";
+import { Theme as ITheme, InputEventTarget } from "../interfaces/index";
+
 
 interface Props {
   form: any,
@@ -18,9 +19,6 @@ interface CheckoutValues {
     payMethodNumber: string
 }
 
-interface InputEventTarget {
-  target: { name: string, value: string}
-}
 
 const CheckoutForm : React.SFC<Props> = ({ form, theme }) => {
   const { getFieldDecorator } = form;

@@ -4,7 +4,7 @@ import { StyledAuthForm } from "./styles/StyledAuthForm";
 import axios from "axios";
 import Router from "next/router";
 import qs from 'qs';
-import { Theme as ITheme } from "../interfaces/index";
+import { Theme as ITheme, InputEventTarget } from "../interfaces/index";
 
 interface LoginValues {
   username: string,
@@ -19,11 +19,6 @@ interface LoginData {
     token_type: string,
   }
 }
-
-interface InputEventTarget {
-  target: { name: string, value: string}
-}
-
 interface Props {
   form: any,
   theme: ITheme,
