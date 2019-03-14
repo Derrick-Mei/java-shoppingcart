@@ -1,10 +1,28 @@
 import { StyledAuthForm } from "./styles/StyledAuthForm";
 import { Form, Radio, Button, Icon, Input, Card } from "antd";
-import styled, { withTheme } from "styled-components";
+import { withTheme } from "styled-components";
 import { useState, useEffect } from "react";
 import Router from "next/router";
+import { Theme as ITheme } from "../interfaces/index";
 
-const CheckoutForm = ({ form, theme }) => {
+interface Props {
+  form: any,
+  theme: ITheme  
+}
+
+interface CheckoutValues {
+    shippingAddress: string,
+    billingAddress: string,
+    shipMethod: string,
+    payMethod: string,
+    payMethodNumber: string
+}
+
+interface InputEventTarget {
+  target: { name: string, value: string}
+}
+
+const CheckoutForm : React.SFC<Props> = ({ form, theme }) => {
   const { getFieldDecorator } = form;
 
   const [orderInfo, setOrderInfo] = useState({
@@ -19,17 +37,20 @@ const CheckoutForm = ({ form, theme }) => {
   //TODO: get all cart items for the user
   //so that they can review their cart and have the total price of all products
   }, []);
-  const changeInputHandler = e => {
+  const changeInputHandler = (e:InputEventTarget) => {
     console.log(orderInfo);
     setOrderInfo({ ...orderInfo, [e.target.name]: e.target.value });
   };
 
-  function handleSubmit(e) {
+  function handleSubmit(e: React.FormEvent<HTMLInputElement>) {
     e.preventDefault();
-    form.validateFields((err, values) => {
+    form.validateFields((err: object, values: CheckoutValues) => {
       if (!err) {
         console.log("Received values of form: ", values);
       }
+      Router.push({
+        pathname: "/order-completed"
+      })
     });
   }
   return (
