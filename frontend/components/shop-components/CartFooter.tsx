@@ -125,9 +125,6 @@ const CartBtn = styled(Button)`
   margin: 0;
   height: 100%;
 `;
-const CartBadge = styled(Badge)`
-  background: ${props => props.theme.orange};
-`;
 
 const FinishBtn = styled(Button)``;
 
