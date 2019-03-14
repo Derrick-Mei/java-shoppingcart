@@ -10,7 +10,6 @@ interface LoginValues {
   username: string,
   password: string
 }
-
 interface LoginData {
   data: {
     access_token: string,
@@ -21,7 +20,7 @@ interface LoginData {
   }
 }
 
-interface SyntheticEvent {
+interface InputEventTarget {
   target: { name: string, value: string}
 }
 
@@ -69,7 +68,7 @@ const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) =>
         console.log(err);
       });
   }
-  const changeInputHandler = (e: SyntheticEvent) => {
+  const changeInputHandler = (e: InputEventTarget) => {
     setLoginInfo({ ...loginInfo, [e.target.name]: e.target.value });
   };
 
