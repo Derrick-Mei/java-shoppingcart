@@ -6,7 +6,6 @@ import ItemCard from "../components/shop-components/ItemCard";
 import { Button } from "antd";
 import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
-import customFetch from "../lib/customFetch";
 import uuidv4 from "uuid/v4";
 import { baseAxios, createBearerAxios } from "../lib/axiosInstances";
 const ShopPage = () => {
