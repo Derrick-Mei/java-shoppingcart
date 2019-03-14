@@ -42,7 +42,7 @@ public class Suppliercontroller
     }
 
     @PutMapping("/{supplierid}")
-    public Supplier updateSupplierBySupplierID(@PathVariable long supplierid, @RequestBody Supplier updatedSupplier)
+    public Object updateSupplierBySupplierID(@PathVariable long supplierid, @RequestBody Supplier updatedSupplier)
     {
         Optional<Supplier> foundSupplier = suppplierrepos.findById(supplierid);
 
@@ -56,7 +56,7 @@ public class Suppliercontroller
         }
         else
         {
-            return null;
+            return "Supplier with id: " + supplierid + " is not found.";
         }
     }
 
@@ -71,9 +71,8 @@ public class Suppliercontroller
         }
         else
         {
-            return "Supplier with id: " + supplierid + " not found.";
+            return "Supplier with id: " + supplierid + " is not found.";
         }
     }
 
-//    @PostMapping
 }
