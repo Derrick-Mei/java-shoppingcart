@@ -4,13 +4,13 @@ import { StyledAuthForm } from "./styles/StyledAuthForm";
 import axios from "axios";
 import Router from "next/router";
 import qs from 'qs';
-import { Theme as ITheme } from "../interfaces/index";
+import { Theme as ITheme, InputEventTarget } from "../interfaces/index";
+import { message } from "antd";
 
 interface LoginValues {
   username: string,
   password: string
 }
-
 interface LoginData {
   data: {
     access_token: string,
@@ -20,11 +20,6 @@ interface LoginData {
     token_type: string,
   }
 }
-
-interface SyntheticEvent {
-  target: { name: string, value: string}
-}
-
 interface Props {
   form: any,
   theme: ITheme,
@@ -54,6 +49,12 @@ const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) =>
           auth: {
             username: process.env.CLIENT_ID,
             password: process.env.CLIENT_SECRET
+          },
+          validateStatus: function (status: number) {
+            if(status === 400) {
+              message.error("Wrong username or password, try again!");
+            }
+            return status === 200;
           }
         }).then(({ data }:LoginData) => {
             console.log(data);
@@ -65,11 +66,11 @@ const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) =>
           
         });
       })
-      .catch((err: string) => {
+      .catch((err: object) => {
         console.log(err);
       });
   }
-  const changeInputHandler = (e: SyntheticEvent) => {
+  const changeInputHandler = (e: InputEventTarget) => {
     setLoginInfo({ ...loginInfo, [e.target.name]: e.target.value });
   };
 

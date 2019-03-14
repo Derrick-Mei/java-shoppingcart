@@ -1,10 +1,41 @@
 import { Form, Icon, Input, Button, Card, message } from "antd";
-import styled, { withTheme } from "styled-components";
+import { withTheme } from "styled-components";
 import { StyledAuthForm } from "./styles/StyledAuthForm";
-import axios from "axios";
-import Router from "next/router";
 import { baseAxios } from "../lib/axiosInstances";
-const SignUpForm = ({
+import { Theme as ITheme, InputEventTarget } from "../interfaces/index";
+
+interface Props {
+  form: any,
+  theme: ITheme,
+  signupInfo: SignupValues,
+  setSignupInfo: Function,
+  setTab: Function,
+  LOGIN: string
+}
+
+interface SignupValues {
+  username: string,
+  password: string
+}
+interface SignupSubmitData {
+  data: {
+    authority: string,
+    billingaddress: null,
+    customername: null,
+    customerphone: null,
+    email: null,
+    orderhistory: null,
+    paymentmethod: null,
+    productsincart: null,
+    role: string,
+    shippingaddress: null,
+    totalorderhistory: null,
+    userid: number,
+    username: string,
+  }
+}
+
+const SignUpForm : React.SFC<Props> = ({
   form,
   theme,
   signupInfo,
@@ -14,10 +45,10 @@ const SignUpForm = ({
 }) => {
   const { getFieldDecorator } = form;
 
-  function handleSubmit(e) {
+  function handleSubmit(e: React.FormEvent<HTMLInputElement>) {
     e.preventDefault();
 
-    form.validateFields((err, values) => {
+    form.validateFields((err: object, values: SignupValues) => {
       if (!err) {
         console.log("Received values of form: ", values);
       }
@@ -25,23 +56,27 @@ const SignUpForm = ({
           username: values.username,
           password: values.password
         })
-        .then(function(response) {
-          console.log(response);
-          const { data } = response;
-          message.success(
-            `Hi ${
-              data.username
-            }! You have successfully signed up and are ready to login!`,
-            3
-          );
-          setTab(LOGIN);
+        .then(function({ data }: SignupSubmitData) {
+          if(data.username === undefined) {
+            message.error(`${values.username} has already been taken, try agian`)
+          }
+          else {
+            message.success(
+              `Hi ${
+                data.username
+              }! You have successfully signed up and are ready to login!`,
+              3
+            );
+            setTab(LOGIN);
+          }
+       
         })
-        .catch(function(error) {
+        .catch(function(error: object) {
           console.error(error, "we have an error");
         });
     });
   }
-  const changeInputHandler = e => {
+  const changeInputHandler = (e: InputEventTarget) => {
     setSignupInfo({ ...signupInfo, [e.target.name]: e.target.value });
   };
 
