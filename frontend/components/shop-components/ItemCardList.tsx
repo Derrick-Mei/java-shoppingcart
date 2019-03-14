@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export interface Props {
     props: {
-      children: React.SFC
+      children: React.ReactNode
     }
 }
  
