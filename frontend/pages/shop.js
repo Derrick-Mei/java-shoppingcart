@@ -44,7 +44,7 @@ const ShopPage = () => {
         url: `/cart/user/username/${window.localStorage.getItem("username")}`,
       });
       setUserId(userData.userid);
-
+      window.localStorage.setItem("userid", userData.userid);
       const { data: cartData } = await createBearerAxios()({
         method: "get",
         url: `/cart/${userData.userid}`
