@@ -8,8 +8,10 @@ import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import uuidv4 from "uuid/v4";
 import { baseAxios, createBearerAxios } from "../lib/axiosInstances";
+import { Spin } from "antd";
 const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
+  const [isItemsLoading, setItemsLoading] = useState(false);
   const {
     cartItems,
     setCartItems,
@@ -19,11 +21,21 @@ const ShopPage = () => {
   const [userId, setUserId] = useState();
 
   useEffect(() => {
-    baseAxios.get("/shop").then(({data}) => {
+    const fetchItems = async () => {
+      try {
+      setItemsLoading(true);
+      const { data } = await baseAxios({method: "get", url: "/shop"});
       setMerchandise(data);
-    }).catch(err => {
-      console.log(err, " - GET /shop error");
-    });
+      setItemsLoading(false);
+      }
+      catch(err) {
+        console.log(err);
+      }
+    }
+    fetchItems();
+  }, []);
+
+  useEffect(() => {
     createBearerAxios()({
       method: "get",
       url: `/cart/user/username/${window.localStorage.getItem("username")}`,
@@ -60,7 +72,7 @@ const ShopPage = () => {
     <ShopWrapper>
       <MeanCoffeeHeader />
       <MainContent>
-         {useMemo (() => <ItemCardList>
+         {useMemo (() => isItemsLoading ? <ItemsListSpinner size="large"/> : <ItemCardList>
           {merchandise.map(item => {
             return (
               <ItemCard
@@ -81,7 +93,7 @@ const ShopPage = () => {
               />
             );
           })}
-        </ItemCardList>, [merchandise])}
+        </ItemCardList>, [merchandise, isItemsLoading])}
       </MainContent>
       <CartFooter
         cartItems={cartItems}
@@ -152,4 +164,14 @@ const MainContent = styled.main`
   padding: 0.5em;
 `;
 const ShopWrapper = styled.div``;
+
+const ItemsListSpinner = styled(Spin)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateY(30%);
+  justify-content: center;
+`;
 export default ShopPage;
