@@ -49,6 +49,7 @@ const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) =>
           method: "post",
           url: `${process.env.BACKEND_URL}/oauth/token`,
           headers: { 'content-type': 'application/x-www-form-urlencoded' },
+          timeout: 1000 * 10,
           data: qs.stringify(data),
           auth: {
             username: process.env.CLIENT_ID,
