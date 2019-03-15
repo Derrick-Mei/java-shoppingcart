@@ -11,7 +11,7 @@ export interface Props {
 const ItemCard: React.SFC<Props> = ({ image, title, description, price, actionBtn }) => {
   return (
     <StyledCard>
-      <ItemImage src={image} alt={title} />
+      <ItemImage src={image} alt=""/>
       <ItemTextContainer>
         <ItemTitle>{title}</ItemTitle>
         <ItemDescription>{description}</ItemDescription>
