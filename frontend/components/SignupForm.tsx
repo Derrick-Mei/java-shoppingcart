@@ -54,7 +54,8 @@ const SignUpForm : React.SFC<Props> = ({
       setLoading(true);
       baseAxios.post("/signup", {
           username: values.username,
-          password: values.password
+          password: values.password,
+          timeout: 1000 * 10
         })
         .then(function({ data }: SignupSubmitData) {
           if(data.username === undefined) {

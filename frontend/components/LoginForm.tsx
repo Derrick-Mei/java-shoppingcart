@@ -31,7 +31,7 @@ interface Props {
 const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) => {
   const { getFieldDecorator } = form;
   const [ isLoading, setLoading ] = useState(false);
-
+  
   function handleSubmit(e: React.FormEvent<HTMLInputElement>) {
     e.preventDefault();
     form
@@ -49,6 +49,7 @@ const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) =>
           method: "post",
           url: `${process.env.BACKEND_URL}/oauth/token`,
           headers: { 'content-type': 'application/x-www-form-urlencoded' },
+          timeout: 1000 * 10,
           data: qs.stringify(data),
           auth: {
             username: process.env.CLIENT_ID,
@@ -98,7 +99,7 @@ const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) =>
             />
           )}
         </Form.Item> */}
-        <Form.Item label="Username">
+        <Form.Item label={process.env.BACKEND_URL}>
           {getFieldDecorator("username", {
             rules: [{ required: true, message: "Please input a username!" }]
           })(
