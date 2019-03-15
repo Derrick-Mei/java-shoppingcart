@@ -112,6 +112,7 @@ const TotalDisplay = styled.div`
 `;
 const ItemsQueueContainer = styled.div`
   display: flex;
+  justify-content: center;
   width: 100%;
 `;
 
