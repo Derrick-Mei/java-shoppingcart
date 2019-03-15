@@ -8,8 +8,11 @@ import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import uuidv4 from "uuid/v4";
 import { baseAxios, createBearerAxios } from "../lib/axiosInstances";
+import {formatMoney} from "../lib/formatMoney";
+import { Spin } from "antd";
 const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
+  const [isItemsLoading, setItemsLoading] = useState(false);
   const {
     cartItems,
     setCartItems,
@@ -19,22 +22,34 @@ const ShopPage = () => {
   const [userId, setUserId] = useState();
 
   useEffect(() => {
-    baseAxios.get("/shop").then(({data}) => {
+    const fetchItems = async () => {
+      try {
+      setItemsLoading(true);
+      const { data } = await baseAxios({method: "get", url: "/shop"});
       setMerchandise(data);
-    }).catch(err => {
-      console.log(err, " - GET /shop error");
-    });
-    createBearerAxios()({
-      method: "get",
-      url: `/cart/user/username/${window.localStorage.getItem("username")}`,
-    }).then(({ data }) => {
-      setUserId(data.userid);
-      
-      createBearerAxios()({
+      setItemsLoading(false);
+      }
+      catch(err) {
+        console.log(err);
+      }
+    }
+    fetchItems();
+  }, []);
+
+  useEffect(() => {
+    const fetchUserAndCart = async () => {
+      try {
+      const { data: userData } = await createBearerAxios()({
         method: "get",
-        url: `/cart/${data.userid}`
-      }).then(({ data }) => {
-        const productsData = data;
+        url: `/cart/user/username/${window.localStorage.getItem("username")}`,
+      });
+      setUserId(userData.userid);
+      window.localStorage.setItem("userid", userData.userid);
+      const { data: cartData } = await createBearerAxios()({
+        method: "get",
+        url: `/cart/${userData.userid}`
+      });
+      const productsData = cartData;
       const cartItems = [];
         for(let i = 0; i < productsData.length; i++) {
           let product = productsData[i];
@@ -49,10 +64,12 @@ const ShopPage = () => {
           } // for j - used for adding the right amount of quantity in cart
         } // for i - iterating through each product
         setCartItems(cartItems);
-      });
-    }).catch(err => {
-      console.log(err, " - GET cart items error")
-    });
+    }
+    catch(err) {
+      console.log(err);
+    }
+  }
+  fetchUserAndCart();
   }, []);
 
   // console.log(merchandise);
@@ -60,7 +77,7 @@ const ShopPage = () => {
     <ShopWrapper>
       <MeanCoffeeHeader />
       <MainContent>
-         {useMemo (() => <ItemCardList>
+         {useMemo (() => isItemsLoading ? <ItemsListSpinner size="large"/> : <ItemCardList>
           {merchandise.map(item => {
             return (
               <ItemCard
@@ -75,13 +92,13 @@ const ShopPage = () => {
                       addCartItem(item, userId);
                     }}
                   >
-                    Buy {`$${item.price}`}
+                    Buy {formatMoney(item.price)}
                   </Button>
                 }
               />
             );
           })}
-        </ItemCardList>, [merchandise])}
+        </ItemCardList>, [merchandise, isItemsLoading])}
       </MainContent>
       <CartFooter
         cartItems={cartItems}
@@ -149,7 +166,18 @@ const useCartItem = () => {
   };
 };
 const MainContent = styled.main`
-  padding: 0.5em;
+  padding: 5em 0.5em;
 `;
-const ShopWrapper = styled.div``;
+const ShopWrapper = styled.div`
+`;
+
+const ItemsListSpinner = styled(Spin)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateY(30%);
+  justify-content: center;
+`;
 export default ShopPage;

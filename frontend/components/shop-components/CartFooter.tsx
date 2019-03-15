@@ -10,7 +10,7 @@ import ItemCardList from "./ItemCardList";
 import ItemCard from "./ItemCard";
 import Router from "next/router";
 import { CartItem as ICartItem } from "../../interfaces/index";
-
+import { formatMoney } from "../../lib/formatMoney";
 interface Props {
   cartItems: [ICartItem]
   deleteCartItem: Function,
@@ -23,9 +23,9 @@ const CartFooter: React.SFC<Props> = ({ cartItems, deleteCartItem, userId }) => 
   return (
     <CartFooterWrapper>
       <TotalDisplay>
-        {cartItems.reduce((accumulator, item) => {
+        {formatMoney(cartItems.reduce((accumulator, item) => {
           return accumulator + item.price;
-        }, 0)}
+        }, 0))}
       </TotalDisplay>
       <ItemsQueueContainer>
         {/* returns the last three item indexes */}
@@ -74,7 +74,7 @@ const CartFooter: React.SFC<Props> = ({ cartItems, deleteCartItem, userId }) => 
               <ItemCard
                 key={item.keyId}
                 title={item.productname}
-                description={item.description}
+                description={formatMoney(item.price)}
                 image={item.image}
                 actionBtn={
                   <Button
@@ -112,6 +112,7 @@ const TotalDisplay = styled.div`
 `;
 const ItemsQueueContainer = styled.div`
   display: flex;
+  justify-content: center;
   width: 100%;
 `;
 
@@ -126,6 +127,8 @@ const CartBtn = styled(Button)`
   height: 100%;
 `;
 
-const FinishBtn = styled(Button)``;
+const FinishBtn = styled(Button)`
+  margin-bottom: 2rem;
+`;
 
 export default CartFooter;

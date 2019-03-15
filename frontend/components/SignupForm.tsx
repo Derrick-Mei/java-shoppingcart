@@ -1,9 +1,9 @@
-import { Form, Icon, Input, Button, Card, message } from "antd";
+import { Form, Icon, Input, Button, Card, message, Spin } from "antd";
 import { withTheme } from "styled-components";
 import { StyledAuthForm } from "./styles/StyledAuthForm";
 import { baseAxios } from "../lib/axiosInstances";
 import { Theme as ITheme, InputEventTarget } from "../interfaces/index";
-
+import { useState } from 'react';
 interface Props {
   form: any,
   theme: ITheme,
@@ -44,21 +44,24 @@ const SignUpForm : React.SFC<Props> = ({
   LOGIN
 }) => {
   const { getFieldDecorator } = form;
-
+  const [ isLoading, setLoading ] = useState(false);
   function handleSubmit(e: React.FormEvent<HTMLInputElement>) {
     e.preventDefault();
-
     form.validateFields((err: object, values: SignupValues) => {
-      if (!err) {
-        console.log("Received values of form: ", values);
+      if (err) {
+        return;
       }
+      setLoading(true);
       baseAxios.post("/signup", {
           username: values.username,
           password: values.password
         })
         .then(function({ data }: SignupSubmitData) {
           if(data.username === undefined) {
-            message.error(`${values.username} has already been taken, try agian`)
+            message.error(`${values.username} has already been taken, try again.`)
+            setTimeout(() => {
+              setLoading(false);
+            },1000)
           }
           else {
             message.success(
@@ -67,6 +70,7 @@ const SignUpForm : React.SFC<Props> = ({
               }! You have successfully signed up and are ready to login!`,
               3
             );
+            setLoading(false);
             setTab(LOGIN);
           }
        
@@ -122,9 +126,10 @@ const SignUpForm : React.SFC<Props> = ({
           )}
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Signup
+          <Button type="primary" htmlType="submit" icon = {"rest"} loading={isLoading} disabled={isLoading}>
+          Signup
           </Button>
+         
         </Form.Item>
       </Card>
     </StyledAuthForm>
