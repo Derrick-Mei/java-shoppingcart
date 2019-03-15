@@ -31,7 +31,7 @@ interface Props {
 const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) => {
   const { getFieldDecorator } = form;
   const [ isLoading, setLoading ] = useState(false);
-
+  
   function handleSubmit(e: React.FormEvent<HTMLInputElement>) {
     e.preventDefault();
     form
@@ -99,7 +99,7 @@ const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) =>
             />
           )}
         </Form.Item> */}
-        <Form.Item label="Username">
+        <Form.Item label={process.env.BACKEND_URL}>
           {getFieldDecorator("username", {
             rules: [{ required: true, message: "Please input a username!" }]
           })(
