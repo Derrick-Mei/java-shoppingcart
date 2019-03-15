@@ -36,17 +36,19 @@ const ShopPage = () => {
   }, []);
 
   useEffect(() => {
-    createBearerAxios()({
-      method: "get",
-      url: `/cart/user/username/${window.localStorage.getItem("username")}`,
-    }).then(({ data }) => {
-      setUserId(data.userid);
-      
-      createBearerAxios()({
+    const fetchUserAndCart = async () => {
+      try {
+      const { data: userData } = await createBearerAxios()({
         method: "get",
-        url: `/cart/${data.userid}`
-      }).then(({ data }) => {
-        const productsData = data;
+        url: `/cart/user/username/${window.localStorage.getItem("username")}`,
+      });
+      setUserId(userData.userid);
+
+      const { data: cartData } = await createBearerAxios()({
+        method: "get",
+        url: `/cart/${userData.userid}`
+      });
+      const productsData = cartData;
       const cartItems = [];
         for(let i = 0; i < productsData.length; i++) {
           let product = productsData[i];
@@ -61,10 +63,12 @@ const ShopPage = () => {
           } // for j - used for adding the right amount of quantity in cart
         } // for i - iterating through each product
         setCartItems(cartItems);
-      });
-    }).catch(err => {
-      console.log(err, " - GET cart items error")
-    });
+    }
+    catch(err) {
+      console.log(err);
+    }
+  }
+  fetchUserAndCart();
   }, []);
 
   // console.log(merchandise);
