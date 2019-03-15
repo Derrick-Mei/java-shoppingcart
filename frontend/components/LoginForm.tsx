@@ -99,7 +99,7 @@ const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) =>
             />
           )}
         </Form.Item> */}
-        <Form.Item label={process.env.BACKEND_URL}>
+        <Form.Item label="Username">
           {getFieldDecorator("username", {
             rules: [{ required: true, message: "Please input a username!" }]
           })(
