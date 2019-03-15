@@ -5,7 +5,7 @@ export interface Props {
     title: string,
     description: string,
     price?: number,
-    actionBtn: React.ReactElement
+    actionBtn?: React.ReactElement
 }
  
 const ItemCard: React.SFC<Props> = ({ image, title, description, price, actionBtn }) => {
@@ -15,7 +15,10 @@ const ItemCard: React.SFC<Props> = ({ image, title, description, price, actionBt
       <ItemTextContainer>
         <ItemTitle>{title}</ItemTitle>
         <ItemDescription>{description}</ItemDescription>
-        <ActionsContainer>{React.cloneElement(actionBtn)}</ActionsContainer>
+        {actionBtn ? 
+        <ActionsContainer>{React.cloneElement(actionBtn)}</ActionsContainer> :
+        ""
+         }
       </ItemTextContainer>
     </StyledCard>
   );
