@@ -1,6 +1,7 @@
 package com.lambdaschool.coffeebean.controller;
 
 import com.lambdaschool.coffeebean.model.CartItems;
+import com.lambdaschool.coffeebean.model.CurrentUser;
 import com.lambdaschool.coffeebean.model.Order;
 import com.lambdaschool.coffeebean.model.User;
 import com.lambdaschool.coffeebean.repository.Orderrepository;
@@ -8,6 +9,8 @@ import com.lambdaschool.coffeebean.repository.Userrepository;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,18 +29,27 @@ public class Cartcontroller
 
 //    @PreAuthorize("#c = Object thing")
     @GetMapping("/user/{userid}")
-    public User findUserByUserid(@PathVariable long userid)
+    public Object findUserByUserid(@PathVariable long userid)
     {
-        return userrepos.findById(userid).get();
+        CurrentUser currentuser = (CurrentUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long currentUserId = currentuser.getCurrentuserid();
+        
+        List<? extends SimpleGrantedAuthority> authorities = currentuser.getAuthorities2();
+        Boolean isAdmin = false;
 
-//        Object id = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        if (!id.equals(userid))
-//        {
-//            return id;
-////        return userrepos.findById(userid).get();
-//
-//        }
-//        else return null;
+        for ( SimpleGrantedAuthority authority : authorities)
+        {
+            if (authority.getAuthority().equalsIgnoreCase("ROLE_ADMIN")) isAdmin = true;
+        }
+        if (currentUserId == userid || isAdmin)
+        {
+            return userrepos.findById(userid).get();
+
+        }
+        else
+        {
+            return "Your userid does not match the id of the customer you are trying to search";
+        }
     }
 
     @GetMapping("/user/username/{username}")
