@@ -6,6 +6,7 @@ import Router from "next/router";
 import qs from 'qs';
 import { Theme as ITheme, InputEventTarget } from "../interfaces/index";
 import { message } from "antd";
+import { useState } from 'react';
 
 interface LoginValues {
   username: string,
@@ -29,13 +30,16 @@ interface Props {
 
 const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) => {
   const { getFieldDecorator } = form;
+  const [ isLoading, setLoading ] = useState(false);
+
   function handleSubmit(e: React.FormEvent<HTMLInputElement>) {
     e.preventDefault();
     form
       .validateFields((err: object, values: LoginValues) => {
-        if (!err) {
-          console.log("Received values of form: ", values);
+        if (err) {
+          return;
         }
+        setLoading(true);
         const data = {
           "grant_type": process.env.GRANT_TYPE_PASSWORD,
           "username": values.username,
@@ -53,13 +57,17 @@ const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) =>
           validateStatus: function (status: number) {
             if(status === 400) {
               message.error("Wrong username or password, try again!");
+              setTimeout(() => {
+                setLoading(false);
+              }, 1000);
             }
             return status === 200;
           }
         }).then(({ data }:LoginData) => {
-            console.log(data);
+            // console.log(data);
             window.localStorage.setItem("access_token", data.access_token);
             window.localStorage.setItem("username", values.username);
+            setLoading(false);
             Router.push({
               pathname: "/shop"
             });
@@ -75,7 +83,7 @@ const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) =>
   };
 
   return (
-    <StyledAuthForm onSubmit={handleSubmit}>
+    <StyledAuthForm onSubmit={handleSubmit} aria-busy={isLoading}>
       <Card
         title="Login"
         headStyle={{ background: theme.black, color: theme.white }}
@@ -116,7 +124,7 @@ const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) =>
           )}
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" disabled={isLoading}loading={isLoading}>
             Login
           </Button>
         </Form.Item>

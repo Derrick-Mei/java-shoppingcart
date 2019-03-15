@@ -5,17 +5,20 @@ export interface Props {
     title: string,
     description: string,
     price?: number,
-    actionBtn: React.ReactElement
+    actionBtn?: React.ReactElement
 }
  
 const ItemCard: React.SFC<Props> = ({ image, title, description, price, actionBtn }) => {
   return (
     <StyledCard>
-      <ItemImage src={image} alt={title} />
+      <ItemImage src={image} alt=""/>
       <ItemTextContainer>
         <ItemTitle>{title}</ItemTitle>
         <ItemDescription>{description}</ItemDescription>
-        <ActionsContainer>{React.cloneElement(actionBtn)}</ActionsContainer>
+        {actionBtn ? 
+        <ActionsContainer>{React.cloneElement(actionBtn)}</ActionsContainer> :
+        ""
+         }
       </ItemTextContainer>
     </StyledCard>
   );
@@ -30,7 +33,7 @@ const StyledCard = styled.div`
 const ItemTextContainer = styled.div`
   width: 100%;
   height: 100%;
-  padding-left: 14px;
+  padding-left: 1.4em;
 `;
 
 const ItemTitle = styled.h2`
