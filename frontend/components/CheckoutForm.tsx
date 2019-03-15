@@ -2,6 +2,7 @@ import { StyledAuthForm } from "./styles/StyledAuthForm";
 import { Form, Radio, Button, Icon, Input, Card, Drawer } from "antd";
 import { withTheme } from "styled-components";
 import { useState, useEffect } from "react";
+import uuidv4 from "uuid/v4";
 import Router from "next/router";
 import { Theme as ITheme, InputEventTarget, CartItem as ICartItem } from "../interfaces/index";
 import { formatMoney } from "../lib/formatMoney";
@@ -45,13 +46,24 @@ const CheckoutForm : React.SFC<Props> = ({ form, theme }) => {
       method: "get",
       url: `/cart/${window.localStorage.getItem("userid")}`
     });
-    setCartItems(cartData);
+    
+    const items = [];
     let totalPriceInCart = 0;
     for(let i = 0; i < cartData.length; i++) {
+      const quantity = cartData[i].quantityincart;
       totalPriceInCart += cartData[i].price * cartData[i].quantityincart;
+      for(let j = 0; j < quantity; j++) {
+        const newItem = {
+          ...cartData[i],
+          keyId: uuidv4()
+        }
+        items.push(newItem);
+      }
     }
     setTotalCartPrice(totalPriceInCart);
     setTotalPrice(totalPriceInCart);
+    //@ts-ignore
+    setCartItems(items);
   }
   catch(err) {
     console.log(err);
