@@ -8,6 +8,7 @@ import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import uuidv4 from "uuid/v4";
 import { baseAxios, createBearerAxios } from "../lib/axiosInstances";
+import {formatMoney} from "../lib/formatMoney";
 import { Spin } from "antd";
 const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
@@ -91,7 +92,7 @@ const ShopPage = () => {
                       addCartItem(item, userId);
                     }}
                   >
-                    Buy {`$${item.price}`}
+                    Buy {formatMoney(item.price)}
                   </Button>
                 }
               />
@@ -165,9 +166,10 @@ const useCartItem = () => {
   };
 };
 const MainContent = styled.main`
-  padding: 0.5em;
+  padding: 5em 0.5em;
 `;
-const ShopWrapper = styled.div``;
+const ShopWrapper = styled.div`
+`;
 
 const ItemsListSpinner = styled(Spin)`
   position: absolute;

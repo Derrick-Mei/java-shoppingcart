@@ -30,7 +30,7 @@ const StyledCard = styled.div`
 const ItemTextContainer = styled.div`
   width: 100%;
   height: 100%;
-  padding-left: 14px;
+  padding-left: 1.4em;
 `;
 
 const ItemTitle = styled.h2`
