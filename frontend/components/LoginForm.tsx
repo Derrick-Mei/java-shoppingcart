@@ -47,7 +47,7 @@ const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) =>
         }
         axios({
           method: "post",
-          url: `${process.env.BACKEND_URL}/oauth/token`,
+          url: `http://meanbeanmysql.herokuapp.com/oauth/token`,
           headers: { 'content-type': 'application/x-www-form-urlencoded' },
           timeout: 1000 * 10,
           data: qs.stringify(data),
