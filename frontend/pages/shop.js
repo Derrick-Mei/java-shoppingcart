@@ -70,7 +70,7 @@ const ShopPage = () => {
     }
   }
   fetchUserAndCart();
-  }, []);
+  }, [userId]);
 
   // console.log(merchandise);
   return (
@@ -98,7 +98,7 @@ const ShopPage = () => {
               />
             );
           })}
-        </ItemCardList>, [merchandise, isItemsLoading])}
+        </ItemCardList>, [merchandise, userId, isItemsLoading])}
       </MainContent>
       <CartFooter
         cartItems={cartItems}
