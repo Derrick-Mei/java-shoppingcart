@@ -79,6 +79,7 @@ const SignUpForm : React.SFC<Props> = ({
        
         })
         .catch(function(error: object) {
+          setLoading(false);
           console.error(error, "we have an error");
         });
     });

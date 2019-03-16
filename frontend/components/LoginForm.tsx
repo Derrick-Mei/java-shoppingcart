@@ -76,6 +76,7 @@ const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) =>
         });
       })
       .catch((err: object) => {
+        setLoading(false);
         console.log(err);
       });
   }
