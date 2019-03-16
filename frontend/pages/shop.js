@@ -25,7 +25,7 @@ const ShopPage = () => {
     const fetchItems = async () => {
       try {
       setItemsLoading(true);
-      const { data } = await baseAxios({method: "get", url: "/shop"});
+      const { data } = await createBaseAxios()({method: "get", url: "/shop"});
       setMerchandise(data);
       setItemsLoading(false);
       }
