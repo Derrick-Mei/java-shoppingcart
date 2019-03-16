@@ -1,8 +1,10 @@
 import axios from "axios";
-
-const baseAxios = axios.create({
+function createBaseAxios() {
+  return baseAxios = axios.create({
     baseURL: "https://meanbeanmysql.herokuapp.com",
   });
+}
+
 function createBearerAxios() {
   return axios.create({
     baseURL: `https://meanbeanmysql.herokuapp.com`,
@@ -14,4 +16,4 @@ function createBearerAxios() {
 }
 
 
-export { baseAxios, createBearerAxios };
+export { createBaseAxios, createBearerAxios };

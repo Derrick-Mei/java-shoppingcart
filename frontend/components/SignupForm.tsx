@@ -1,7 +1,7 @@
 import { Form, Icon, Input, Button, Card, message, Spin } from "antd";
 import { withTheme } from "styled-components";
 import { StyledAuthForm } from "./styles/StyledAuthForm";
-import { baseAxios } from "../lib/axiosInstances";
+import { createBaseAxios } from "../lib/axiosInstances";
 import { Theme as ITheme, InputEventTarget } from "../interfaces/index";
 import { useState } from 'react';
 interface Props {
@@ -52,7 +52,9 @@ const SignUpForm : React.SFC<Props> = ({
         return;
       }
       setLoading(true);
-      baseAxios.post("/signup", {
+      createBaseAxios()({
+          method: "post",
+          url: "/signup",
           username: values.username,
           password: values.password,
           timeout: 1000 * 10
