@@ -1,6 +1,6 @@
 import axios from "axios";
 function createBaseAxios() {
-  return baseAxios = axios.create({
+  return axios.create({
     baseURL: "https://meanbeanmysql.herokuapp.com",
   });
 }
