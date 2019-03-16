@@ -7,7 +7,7 @@ import { Button } from "antd";
 import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import uuidv4 from "uuid/v4";
-import { baseAxios, createBearerAxios } from "../lib/axiosInstances";
+import { createBaseAxios, createBearerAxios } from "../lib/axiosInstances";
 import {formatMoney} from "../lib/formatMoney";
 import { Spin } from "antd";
 const ShopPage = () => {
