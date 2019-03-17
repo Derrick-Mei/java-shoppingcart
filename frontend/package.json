@@ -45,6 +45,7 @@
     "waait": "^1.0.2"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.11",
     "babel-jest": "^23.6.0",
     "babel-plugin-module-resolver": "^3.1.1",
     "casual": "^1.5.19",
@@ -53,7 +54,8 @@
     "jest-transform-graphql": "^2.1.0",
     "next-compose": "0.0.2",
     "react-testing-library": "^6.0.0",
-    "ts-jest": "^24.0.0"
+    "ts-jest": "^24.0.0",
+    "typescript": "^3.3.3333"
   },
   "jest": {
     "setupTestFrameworkScriptFile": "<rootDir>/jest.setup.js",
