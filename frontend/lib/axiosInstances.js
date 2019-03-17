@@ -9,11 +9,11 @@ function createBearerAxios() {
   return axios.create({
     baseURL: `https://meanbeanmysql.herokuapp.com`,
     headers: {
-      Authorization: "Bearer " + window.localStorage.getItem("access_token"),
-      "Content-Type": "application/json"
+      Authorization:
+        "Bearer " + window.localStorage.getItem("access_token"),
+      "Content-Type": "application/json",
     },
   });
 }
 
-
-export { createBaseAxios, createBearerAxios };
+export {createBaseAxios, createBearerAxios};

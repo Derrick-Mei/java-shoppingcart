@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
 interface Props {
-    children: React.ReactNode,
+  children: React.ReactNode;
 }
- 
+
 const ItemCardList: React.SFC<Props> = props => {
   return <ItemsWrapper>{props.children}</ItemsWrapper>;
 };

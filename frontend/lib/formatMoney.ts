@@ -1,1 +1,3 @@
-export const formatMoney = (amount: number):string => `$${amount.toFixed(2)}`;
+export const formatMoney = (amount: number): string => {
+  return `$${amount.toFixed(2)}`;
+};
