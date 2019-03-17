@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Router from "next/router";
-import { Button } from "antd";
+import {Button} from "antd";
 
 const Home = () => {
   return (
@@ -13,7 +13,7 @@ const Home = () => {
           type="primary"
           onClick={() => {
             Router.push({
-              pathname: "/auth"
+              pathname: "/auth",
             });
           }}
         >

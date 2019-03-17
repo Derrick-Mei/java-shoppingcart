@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Form } from "antd";
+import {Form} from "antd";
 
 const StyledAuthForm = styled(Form)`
   display: flex;
@@ -10,4 +10,4 @@ const StyledAuthForm = styled(Form)`
   margin: 0 auto 24px auto;
 `;
 
-export { StyledAuthForm };
+export {StyledAuthForm};

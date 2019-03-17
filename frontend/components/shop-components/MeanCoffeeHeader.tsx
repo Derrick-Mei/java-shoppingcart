@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { Button,  Drawer } from "antd";
-import { useState } from "react";
+import {Button, Drawer} from "antd";
+import {useState} from "react";
 
 const MeanCoffeeHeader = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
@@ -61,7 +61,7 @@ const MenuBtn = styled(Button)`
 `;
 
 const DrawerBtn = styled(Button).attrs({
-  block: true
+  block: true,
 })`
   height: 5rem;
   margin-bottom: 2.4rem;
