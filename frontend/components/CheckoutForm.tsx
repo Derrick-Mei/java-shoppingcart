@@ -13,9 +13,13 @@ import {formatMoney} from "../lib/formatMoney";
 import {createBearerAxios} from "../lib/axiosInstances";
 import ItemCard from "./shop-components/ItemCard";
 import ItemCardList from "./shop-components/ItemCardList";
+import {injectStripe, CardElement} from "react-stripe-elements-universal";
+import {message} from "antd";
+
 interface Props {
   form: any;
   theme: ITheme;
+  stripe: any;
 }
 
 interface CheckoutValues {
@@ -25,8 +29,15 @@ interface CheckoutValues {
   payMethod: string;
   payMethodNumber: string;
 }
-
-const CheckoutForm: React.SFC<Props> = ({form, theme}) => {
+interface StripeCreditObject {
+  brand: string;
+  complete: boolean;
+  elementType: string;
+  empty: boolean;
+  error: undefined;
+  value: {postalCode: string};
+}
+const CheckoutForm: React.SFC<Props> = ({form, theme, stripe}) => {
   const {getFieldDecorator} = form;
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
@@ -39,7 +50,9 @@ const CheckoutForm: React.SFC<Props> = ({form, theme}) => {
   });
   const [totalCartPrice, setTotalCartPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
-
+  const [credit, setCredit] = useState();
+  const CREDIT_CARD = "CREDIT_CARD";
+  const GIFT_CARD = "GIFT_CARD";
   useEffect(() => {
     //TODO: get all cart items for the user
     //so that they can review their cart and have the total price of all products
@@ -73,7 +86,16 @@ const CheckoutForm: React.SFC<Props> = ({form, theme}) => {
       }
     };
     fetchCartItems();
+    paymentMethodHandler(CREDIT_CARD);
   }, []);
+
+  const paymentMethodHandler = (value: string) => {
+    console.log(value);
+    form.setFieldsValue({
+      "payment-group": value,
+    });
+  };
+
   const changeInputHandler = (e: InputEventTarget) => {
     setOrderInfo({...orderInfo, [e.target.name]: e.target.value});
   };
@@ -81,14 +103,26 @@ const CheckoutForm: React.SFC<Props> = ({form, theme}) => {
   function handleSubmit(e: React.FormEvent<HTMLInputElement>) {
     e.preventDefault();
     form.validateFields((err: object, values: CheckoutValues) => {
-      if (!err) {
-        console.log("Received values of form: ", values);
-      }
-      Router.push({
-        pathname: "/order-completed",
+      // if (err) {
+      //   console.log("Received values of form: ", values);
+      // }
+      stripe.createToken(credit).then((result: any) => {
+        if (result.error) {
+          message.error(result.error.message);
+        } else {
+          console.log("Received Stripe token:", result.token);
+          //TODO: Add a request to the server to finish payment
+          //Send a receipt to customer's email if they have one
+
+          //POST to server address information for next time
+          // Router.push({
+          //   pathname: "/order-completed",
+          // });
+        }
       });
     });
   }
+
   return (
     <StyledAuthForm onSubmit={handleSubmit}>
       <Card
@@ -200,32 +234,58 @@ const CheckoutForm: React.SFC<Props> = ({form, theme}) => {
               },
             ],
           })(
-            <Radio.Group name="payMethod" onChange={changeInputHandler}>
-              <Radio value="Credit Card">Credit Card</Radio>
-              <Radio value="Gift Card">Gift Card</Radio>
+            <Radio.Group
+              name="payMethod"
+              onChange={(e: {target: {value: string}}) => {
+                paymentMethodHandler(e.target.value);
+              }}
+            >
+              <Radio value={CREDIT_CARD}>Credit Card</Radio>
+              <Radio value={GIFT_CARD} disabled={true}>
+                Gift Card - Coming Soon
+              </Radio>
             </Radio.Group>,
           )}
         </Form.Item>
-        <Form.Item label="Add Number">
-          {getFieldDecorator("number", {
-            rules: [
-              {
-                required: true,
-                message: "Please input a card or gift card number",
-                pattern: /\d+/,
-              },
-            ],
-          })(
-            <Input
-              prefix={
-                <Icon type="home" style={{color: "rgba(0,0,0,.25)"}} />
-              }
-              placeholder="Enter Card or Gift card number"
-              name="payMethodNumber"
-              onChange={changeInputHandler}
-            />,
-          )}
-        </Form.Item>
+        {(() => {
+          if (form.getFieldValue("payment-group") === CREDIT_CARD) {
+            return (
+              <Form.Item label="Add Credit Card Number">
+                <CardElement
+                  onChange={(creditObj: StripeCreditObject) => {
+                    setCredit(creditObj);
+                  }}
+                />
+              </Form.Item>
+            );
+          } else if (form.getFieldValue("payment-group") === GIFT_CARD) {
+            return (
+              <Form.Item label="Add Gift Card Number">
+                {getFieldDecorator("number", {
+                  rules: [
+                    {
+                      required: true,
+                      message: "Please input your gift card number.",
+                      pattern: /\d+/,
+                    },
+                  ],
+                })(
+                  <Input
+                    prefix={
+                      <Icon
+                        type="home"
+                        style={{color: "rgba(0,0,0,.25)"}}
+                      />
+                    }
+                    placeholder="Enter Gift card number"
+                    name="payMethodNumber"
+                    onChange={changeInputHandler}
+                  />,
+                )}
+              </Form.Item>
+            );
+          }
+        })()}
         <Form.Item>
           <Button type="primary" htmlType="submit">
             Place Order - {formatMoney(totalPrice)}
@@ -239,4 +299,4 @@ const WrappedCheckoutForm = Form.create({name: "normal_checkout"})(
   CheckoutForm,
 );
 
-export default withTheme(WrappedCheckoutForm);
+export default injectStripe(withTheme(WrappedCheckoutForm));

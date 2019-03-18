@@ -55,8 +55,10 @@ const SignUpForm: React.SFC<Props> = ({
       createBaseAxios()({
         method: "post",
         url: "/signup",
-        username: values.username,
-        password: values.password,
+        data: {
+          username: values.username,
+          password: values.password,
+        },
         timeout: 1000 * 10,
       })
         .then(function({data}: SignupSubmitData) {
