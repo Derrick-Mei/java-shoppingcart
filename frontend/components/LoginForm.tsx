@@ -1,7 +1,6 @@
 import {Form, Icon, Input, Button, Card} from "antd";
 import {withTheme} from "styled-components";
 import {StyledAuthForm} from "./styles/StyledAuthForm";
-import axios from "axios";
 import Router from "next/router";
 import qs from "qs";
 import {Theme as ITheme, InputEventTarget} from "../interfaces/index";
