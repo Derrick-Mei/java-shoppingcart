@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import styled, {
   ThemeProvider,
   injectGlobal,
-  withTheme
+  withTheme,
 } from "styled-components";
 import Meta from "./Meta";
 
@@ -19,7 +19,7 @@ const theme = {
   lightred: "#FF8D8D",
   blue: "#00577D",
   lightblue: "#039ADA",
-  lightgreen: "#9DFF8D"
+  lightgreen: "#9DFF8D",
 };
 
 const StyledPage = styled.div`

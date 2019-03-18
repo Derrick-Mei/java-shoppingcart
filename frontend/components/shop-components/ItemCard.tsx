@@ -1,24 +1,33 @@
 import styled from "styled-components";
-import React from 'react';
+import React from "react";
 export interface Props {
-    image: string,
-    title: string,
-    description: string,
-    price?: number,
-    actionBtn?: React.ReactElement
+  image: string;
+  title: string;
+  description: string;
+  price?: number;
+  actionBtn?: React.ReactElement;
 }
- 
-const ItemCard: React.SFC<Props> = ({ image, title, description, price, actionBtn }) => {
+
+const ItemCard: React.SFC<Props> = ({
+  image,
+  title,
+  description,
+  price,
+  actionBtn,
+}) => {
   return (
     <StyledCard>
-      <ItemImage src={image} alt=""/>
+      <ItemImage src={image} alt="" />
       <ItemTextContainer>
         <ItemTitle>{title}</ItemTitle>
         <ItemDescription>{description}</ItemDescription>
-        {actionBtn ? 
-        <ActionsContainer>{React.cloneElement(actionBtn)}</ActionsContainer> :
-        ""
-         }
+        {actionBtn ? (
+          <ActionsContainer>
+            {React.cloneElement(actionBtn)}
+          </ActionsContainer>
+        ) : (
+          ""
+        )}
       </ItemTextContainer>
     </StyledCard>
   );
