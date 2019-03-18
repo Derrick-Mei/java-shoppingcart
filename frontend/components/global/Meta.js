@@ -12,6 +12,7 @@ const Meta = () => (
     <link rel="shortcut icon" href="/static/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="/static/style.css" />
     <title>Mean Coffee Bean</title>
+    <script src="https://js.stripe.com/v3/" />
   </Head>
 );
 
