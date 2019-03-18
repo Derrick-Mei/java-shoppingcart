@@ -14,11 +14,12 @@ import {createBearerAxios} from "../lib/axiosInstances";
 import ItemCard from "./shop-components/ItemCard";
 import ItemCardList from "./shop-components/ItemCardList";
 import {injectStripe, CardElement} from "react-stripe-elements-universal";
+import {message} from "antd";
 
 interface Props {
   form: any;
   theme: ITheme;
-  stripe: object;
+  stripe: any;
 }
 
 interface CheckoutValues {
@@ -102,16 +103,23 @@ const CheckoutForm: React.SFC<Props> = ({form, theme, stripe}) => {
   function handleSubmit(e: React.FormEvent<HTMLInputElement>) {
     e.preventDefault();
     form.validateFields((err: object, values: CheckoutValues) => {
-      stripe.createToken(credit).then(obj => {
-        console.log("Received Stripe token:", obj);
-      });
-      if (err) {
-        console.log("Received values of form: ", values);
-      }
+      // if (err) {
+      //   console.log("Received values of form: ", values);
+      // }
+      stripe.createToken(credit).then((result: any) => {
+        if (result.error) {
+          message.error(result.error.message);
+        } else {
+          console.log("Received Stripe token:", result.token);
+          //TODO: Add a request to the server to finish payment
+          //Send a receipt to customer's email if they have one
 
-      // Router.push({
-      //   pathname: "/order-completed",
-      // });
+          //POST to server address information for next time
+          // Router.push({
+          //   pathname: "/order-completed",
+          // });
+        }
+      });
     });
   }
 
