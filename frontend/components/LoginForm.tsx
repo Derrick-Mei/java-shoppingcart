@@ -7,7 +7,7 @@ import qs from "qs";
 import {Theme as ITheme, InputEventTarget} from "../interfaces/index";
 import {message} from "antd";
 import {useState} from "react";
-
+import {createBaseAxios} from "../lib/axiosInstances";
 interface LoginValues {
   username: string;
   password: string;
@@ -50,9 +50,9 @@ const LoginForm: React.SFC<Props> = ({
           username: values.username,
           password: values.password,
         };
-        axios({
+        createBaseAxios()({
           method: "post",
-          url: `http://meanbeanmysql.herokuapp.com/oauth/token`,
+          url: "/oauth/token",
           headers: {"content-type": "application/x-www-form-urlencoded"},
           timeout: 1000 * 10,
           data: qs.stringify(data),
