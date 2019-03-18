@@ -233,7 +233,9 @@ const CheckoutForm: React.SFC<Props> = ({form, theme, stripe}) => {
               }}
             >
               <Radio value={CREDIT_CARD}>Credit Card</Radio>
-              <Radio value={GIFT_CARD}>Gift Card</Radio>
+              <Radio value={GIFT_CARD} disabled={true}>
+                Gift Card - Coming Soon
+              </Radio>
             </Radio.Group>,
           )}
         </Form.Item>
