@@ -18,6 +18,7 @@ import {injectStripe, CardElement} from "react-stripe-elements-universal";
 interface Props {
   form: any;
   theme: ITheme;
+  stripe: object;
 }
 
 interface CheckoutValues {
@@ -27,7 +28,14 @@ interface CheckoutValues {
   payMethod: string;
   payMethodNumber: string;
 }
-
+interface StripeCreditObject {
+  brand: string;
+  complete: boolean;
+  elementType: string;
+  empty: boolean;
+  error: undefined;
+  value: {postalCode: string};
+}
 const CheckoutForm: React.SFC<Props> = ({form, theme, stripe}) => {
   const {getFieldDecorator} = form;
   const [isDrawerOpen, setDrawerOpen] = useState(false);
@@ -41,10 +49,9 @@ const CheckoutForm: React.SFC<Props> = ({form, theme, stripe}) => {
   });
   const [totalCartPrice, setTotalCartPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
-
+  const [credit, setCredit] = useState();
   const CREDIT_CARD = "CREDIT_CARD";
   const GIFT_CARD = "GIFT_CARD";
-
   useEffect(() => {
     //TODO: get all cart items for the user
     //so that they can review their cart and have the total price of all products
@@ -95,6 +102,9 @@ const CheckoutForm: React.SFC<Props> = ({form, theme, stripe}) => {
   function handleSubmit(e: React.FormEvent<HTMLInputElement>) {
     e.preventDefault();
     form.validateFields((err: object, values: CheckoutValues) => {
+      stripe.createToken(credit).then(obj => {
+        console.log("Received Stripe token:", obj);
+      });
       if (err) {
         console.log("Received values of form: ", values);
       }
@@ -231,7 +241,11 @@ const CheckoutForm: React.SFC<Props> = ({form, theme, stripe}) => {
           if (form.getFieldValue("payment-group") === CREDIT_CARD) {
             return (
               <Form.Item label="Add Credit Card Number">
-                <CardElement />
+                <CardElement
+                  onChange={(creditObj: StripeCreditObject) => {
+                    setCredit(creditObj);
+                  }}
+                />
               </Form.Item>
             );
           } else if (form.getFieldValue("payment-group") === GIFT_CARD) {
