@@ -35,7 +35,7 @@ const StripeBtn: React.SFC<Props> = ({headerImg, amount}) => {
   };
   return (
     <StripeCheckout
-      label="Add Credit Card" //Component button text
+      label="Start Payment Process" //Component button text
       name="Mean Coffee Bean" //Modal Header
       description="Finish your order."
       panelLabel="Submit Order" //Submit button in modal
@@ -43,7 +43,9 @@ const StripeBtn: React.SFC<Props> = ({headerImg, amount}) => {
       token={onToken}
       stripeKey={publishableKey}
       image={headerImg} //Pop-in header image
-      billingAddress={false}
+      billingAddress={true}
+      shippingAddress={true}
+      allowRememberMe={true}
     />
   );
 };
