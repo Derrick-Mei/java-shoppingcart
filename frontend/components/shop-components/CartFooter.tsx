@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, {withTheme} from "styled-components";
 import {Button, Badge, Avatar, Drawer} from "antd";
 import {useState} from "react";
 import ItemCardList from "./ItemCardList";
@@ -7,16 +7,19 @@ import Router from "next/router";
 import {CartItem as ICartItem} from "../../interfaces/index";
 import {formatMoney} from "../../lib/formatMoney";
 import {Image, Transformation} from "cloudinary-react";
+import {Theme as ITheme} from "../../interfaces/index";
 interface Props {
   cartItems: [ICartItem];
   deleteCartItem: Function;
   userId: number;
+  theme: ITheme;
 }
 
 const CartFooter: React.SFC<Props> = ({
   cartItems,
   deleteCartItem,
   userId,
+  theme,
 }) => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   return (
@@ -45,6 +48,7 @@ const CartFooter: React.SFC<Props> = ({
                   width="30"
                   radius="max"
                   crop="fill"
+                  background={theme.black}
                 />
               </Image>
             );
@@ -137,4 +141,4 @@ const FinishBtn = styled(Button)`
   margin-bottom: 2rem;
 `;
 
-export default CartFooter;
+export default withTheme(CartFooter);
