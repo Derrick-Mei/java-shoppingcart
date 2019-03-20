@@ -60,6 +60,15 @@ const SignUpForm: React.SFC<Props> = ({
           password: values.password,
         },
         timeout: 1000 * 10,
+        validateStatus: function(status: number) {
+          if (status === 404 || status === 401 || status === 400) {
+            message.error(
+              "There might be a server error, please try again later",
+            );
+            setLoading(false);
+          }
+          return status === 200;
+        },
       })
         .then(function({data}: SignupSubmitData) {
           if (data.username === undefined) {
