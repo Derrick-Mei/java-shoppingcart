@@ -41,4 +41,25 @@ public class CurrentUser extends User
         return email;
     }
 
+    // ========= Setters ==============
+
+    public void setCurrentuserid(long currentuserid)
+    {
+        this.currentuserid = currentuserid;
+    }
+
+    public void setCustomerName(String customerName)
+    {
+        this.customerName = customerName;
+    }
+
+    public void setEmail(String email)
+    {
+        this.email = email;
+    }
+
+    public void setAuthority(List<? extends SimpleGrantedAuthority> authority)
+    {
+        this.authority = authority;
+    }
 }
