@@ -141,10 +141,11 @@
 
         <!--==============================STRIPE DEPENDENCIES============================================-->
 
+        <!-- https://mvnrepository.com/artifact/com.stripe/stripe-java -->
         <dependency>
             <groupId>com.stripe</groupId>
             <artifactId>stripe-java</artifactId>
-            <version>4.2.0</version>
+            <version>7.28.0</version>
         </dependency>
 
 

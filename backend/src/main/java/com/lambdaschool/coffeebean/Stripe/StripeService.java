@@ -22,12 +22,13 @@ public class StripeService {
     }
 
     public Charge charge(ChargeRequest chargeRequest)
-            throws AuthenticationException, InvalidRequestException, APIConnectionException, CardException, APIException {
+            throws StripeException {
         Map<String, Object> chargeParams = new HashMap<>();
         chargeParams.put("amount", chargeRequest.getAmount());
         chargeParams.put("currency", chargeRequest.getCurrency());
         chargeParams.put("description", chargeRequest.getDescription());
         chargeParams.put("source", chargeRequest.getStripeToken());
+        chargeParams.put("receipt_email", chargeRequest.getStripeEmail());
         return Charge.create(chargeParams);
     }
 }
