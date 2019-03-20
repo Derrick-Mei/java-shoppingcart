@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import React from "react";
+import {Image, Transformation} from "cloudinary-react";
 export interface Props {
-  image: string;
+  imagePublicId: string;
   title: string;
   description: string;
   price?: number;
@@ -9,7 +10,7 @@ export interface Props {
 }
 
 const ItemCard: React.SFC<Props> = ({
-  image,
+  imagePublicId,
   title,
   description,
   price,
@@ -17,7 +18,9 @@ const ItemCard: React.SFC<Props> = ({
 }) => {
   return (
     <StyledCard>
-      <ItemImage src={image} alt="" />
+      <Image publicId={imagePublicId}>
+        <Transformation crop="fit" height={200} width={200} />
+      </Image>
       <ItemTextContainer>
         <ItemTitle>{title}</ItemTitle>
         <ItemDescription>{description}</ItemDescription>
@@ -53,10 +56,6 @@ const ItemDescription = styled.p`
   font-size: 1.2rem;
   margin-top: 0;
   line-height: 1.3;
-`;
-const ItemImage = styled.img`
-  height: 100%;
-  width: 35%;
 `;
 const ActionsContainer = styled.div`
   /* display: flex;

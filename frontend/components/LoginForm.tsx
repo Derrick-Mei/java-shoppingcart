@@ -66,6 +66,12 @@ const LoginForm: React.SFC<Props> = ({
                 setLoading(false);
               }, 1000);
             }
+            if (status === 404 || status === 401) {
+              message.error(
+                "There might be a server error, please try again later",
+              );
+              setLoading(false);
+            }
             return status === 200;
           },
         }).then(({data}: LoginData) => {

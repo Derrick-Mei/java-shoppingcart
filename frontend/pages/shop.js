@@ -92,7 +92,7 @@ const ShopPage = () => {
                       key={item.productid}
                       title={item.productname}
                       description={item.description}
-                      image={item.image}
+                      imagePublicId={item.image}
                       actionBtn={
                         <Button
                           type="primary"

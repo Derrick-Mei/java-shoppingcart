@@ -1,13 +1,18 @@
 import axios from "axios";
+const isDev = Boolean(process.env.IS_DEV);
 function createBaseAxios() {
   return axios.create({
-    baseURL: "https://meanbeanmysql.herokuapp.com",
+    baseURL: isDev
+      ? process.env.BACKEND_URL
+      : "https://meanbeanmysql.herokuapp.com",
   });
 }
 
 function createBearerAxios() {
   return axios.create({
-    baseURL: `https://meanbeanmysql.herokuapp.com`,
+    baseURL: isDev
+      ? process.env.BACKEND_URL
+      : "https://meanbeanmysql.herokuapp.com",
     headers: {
       Authorization:
         "Bearer " + window.localStorage.getItem("access_token"),
