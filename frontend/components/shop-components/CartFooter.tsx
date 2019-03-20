@@ -79,7 +79,9 @@ const CartFooter: React.SFC<Props> = ({
                 key={item.keyId}
                 title={item.productname}
                 description={formatMoney(item.price)}
-                image={item.image}
+                imagePublicId={item.image}
+                imageHeight={50}
+                imageWidth={75}
                 actionBtn={
                   <Button
                     type="danger"
