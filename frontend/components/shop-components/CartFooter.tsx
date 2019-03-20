@@ -6,6 +6,7 @@ import ItemCard from "./ItemCard";
 import Router from "next/router";
 import {CartItem as ICartItem} from "../../interfaces/index";
 import {formatMoney} from "../../lib/formatMoney";
+import {Image, Transformation} from "cloudinary-react";
 interface Props {
   cartItems: [ICartItem];
   deleteCartItem: Function;
@@ -34,15 +35,18 @@ const CartFooter: React.SFC<Props> = ({
           .reverse()
           .map(item => {
             return (
-              <Avatar
+              <Image
                 key={item.keyId}
-                shape="circle"
-                size="small"
-                src={item.src}
-                style={{marginLeft: "12px"}}
+                publicId={item.image}
+                style={{marginLeft: "15px"}}
               >
-                {item.productid}
-              </Avatar>
+                <Transformation
+                  height="30"
+                  width="30"
+                  radius="max"
+                  crop="fill"
+                />
+              </Image>
             );
           })}
       </ItemsQueueContainer>
