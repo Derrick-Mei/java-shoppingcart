@@ -1,5 +1,5 @@
-import { Card, Button, Radio } from "antd";
-import { useState } from "react";
+import {Card, Button, Radio} from "antd";
+import {useState} from "react";
 import styled from "styled-components";
 import LoginForm from "../components/LoginForm";
 import SignupForm from "../components/SignupForm";
@@ -8,9 +8,15 @@ const AuthenticationPage = () => {
   const LOGIN = "login";
   const [tab, setTab] = useState(LOGIN);
 
-  const [signupInfo, setSignupInfo] = useState({ username: "", password: "" });
+  const [signupInfo, setSignupInfo] = useState({
+    username: "",
+    password: "",
+  });
 
-  const [loginInfo, setLoginInfo] = useState({ username: "", password: "" });
+  const [loginInfo, setLoginInfo] = useState({
+    username: "",
+    password: "",
+  });
 
   return (
     <AuthWrapper>

@@ -1,37 +1,41 @@
-import { Form, Icon, Input, Button, Card } from "antd";
-import { withTheme } from "styled-components";
-import { StyledAuthForm } from "./styles/StyledAuthForm";
-import axios from "axios";
+import {Form, Icon, Input, Button, Card} from "antd";
+import {withTheme} from "styled-components";
+import {StyledAuthForm} from "./styles/StyledAuthForm";
 import Router from "next/router";
-import qs from 'qs';
-import { Theme as ITheme, InputEventTarget } from "../interfaces/index";
-import { message } from "antd";
-import { useState } from 'react';
-
+import qs from "qs";
+import {Theme as ITheme, InputEventTarget} from "../interfaces/index";
+import {message} from "antd";
+import {useState} from "react";
+import {createBaseAxios} from "../lib/axiosInstances";
 interface LoginValues {
-  username: string,
-  password: string
+  username: string;
+  password: string;
 }
 interface LoginData {
   data: {
-    access_token: string,
-    expires_in: number
-    refresh_token: string,
-    scope: string,
-    token_type: string,
-  }
+    access_token: string;
+    expires_in: number;
+    refresh_token: string;
+    scope: string;
+    token_type: string;
+  };
 }
 interface Props {
-  form: any,
-  theme: ITheme,
-  loginInfo: LoginValues,
-  setLoginInfo: Function,
+  form: any;
+  theme: ITheme;
+  loginInfo: LoginValues;
+  setLoginInfo: Function;
 }
 
-const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) => {
-  const { getFieldDecorator } = form;
-  const [ isLoading, setLoading ] = useState(false);
-  
+const LoginForm: React.SFC<Props> = ({
+  form,
+  theme,
+  loginInfo,
+  setLoginInfo,
+}) => {
+  const {getFieldDecorator} = form;
+  const [isLoading, setLoading] = useState(false);
+
   function handleSubmit(e: React.FormEvent<HTMLInputElement>) {
     e.preventDefault();
     form
@@ -41,38 +45,43 @@ const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) =>
         }
         setLoading(true);
         const data = {
-          "grant_type": process.env.GRANT_TYPE_PASSWORD,
-          "username": values.username,
-          "password": values.password
-        }
-        axios({
+          grant_type: process.env.GRANT_TYPE_PASSWORD,
+          username: values.username,
+          password: values.password,
+        };
+        createBaseAxios()({
           method: "post",
-          url: `http://meanbeanmysql.herokuapp.com/oauth/token`,
-          headers: { 'content-type': 'application/x-www-form-urlencoded' },
+          url: "/oauth/token",
+          headers: {"content-type": "application/x-www-form-urlencoded"},
           timeout: 1000 * 10,
           data: qs.stringify(data),
           auth: {
             username: process.env.CLIENT_ID,
-            password: process.env.CLIENT_SECRET
+            password: process.env.CLIENT_SECRET,
           },
-          validateStatus: function (status: number) {
-            if(status === 400) {
+          validateStatus: function(status: number) {
+            if (status === 400) {
               message.error("Wrong username or password, try again!");
               setTimeout(() => {
                 setLoading(false);
               }, 1000);
             }
+            if (status === 404 || status === 401) {
+              message.error(
+                "There might be a server error, please try again later",
+              );
+              setLoading(false);
+            }
             return status === 200;
-          }
-        }).then(({ data }:LoginData) => {
-            // console.log(data);
-            window.localStorage.setItem("access_token", data.access_token);
-            window.localStorage.setItem("username", values.username);
-            setLoading(false);
-            Router.push({
-              pathname: "/shop"
-            });
-          
+          },
+        }).then(({data}: LoginData) => {
+          // console.log(data);
+          window.localStorage.setItem("access_token", data.access_token);
+          window.localStorage.setItem("username", values.username);
+          setLoading(false);
+          Router.push({
+            pathname: "/shop",
+          });
         });
       })
       .catch((err: object) => {
@@ -81,14 +90,14 @@ const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) =>
       });
   }
   const changeInputHandler = (e: InputEventTarget) => {
-    setLoginInfo({ ...loginInfo, [e.target.name]: e.target.value });
+    setLoginInfo({...loginInfo, [e.target.name]: e.target.value});
   };
 
   return (
     <StyledAuthForm onSubmit={handleSubmit} aria-busy={isLoading}>
       <Card
         title="Login"
-        headStyle={{ background: theme.black, color: theme.white }}
+        headStyle={{background: theme.black, color: theme.white}}
       >
         {/* <Form.Item label="Email">
           {getFieldDecorator("email", {
@@ -102,31 +111,42 @@ const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) =>
         </Form.Item> */}
         <Form.Item label="Username">
           {getFieldDecorator("username", {
-            rules: [{ required: true, message: "Please input a username!" }]
+            rules: [{required: true, message: "Please input a username!"}],
           })(
             <Input
-              prefix={<Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />}
+              prefix={
+                <Icon type="user" style={{color: "rgba(0,0,0,.25)"}} />
+              }
               placeholder="Username"
               name="username"
               onChange={changeInputHandler}
-            />
+            />,
           )}
         </Form.Item>
         <Form.Item label="Password">
           {getFieldDecorator("password", {
-            rules: [{ required: true, message: "Please input your Password!" }]
+            rules: [
+              {required: true, message: "Please input your Password!"},
+            ],
           })(
             <Input
-              prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+              prefix={
+                <Icon type="lock" style={{color: "rgba(0,0,0,.25)"}} />
+              }
               type="password"
               placeholder="Password"
               name="password"
               onChange={changeInputHandler}
-            />
+            />,
           )}
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" disabled={isLoading}loading={isLoading}>
+          <Button
+            type="primary"
+            htmlType="submit"
+            disabled={isLoading}
+            loading={isLoading}
+          >
             Login
           </Button>
         </Form.Item>
@@ -135,6 +155,6 @@ const LoginForm: React.SFC<Props>= ({ form, theme, loginInfo, setLoginInfo }) =>
   );
 };
 
-const WrappedLoginForm = Form.create({ name: "normal_login" })(LoginForm);
+const WrappedLoginForm = Form.create({name: "normal_login"})(LoginForm);
 
 export default withTheme(WrappedLoginForm);

@@ -1,11 +1,11 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import styled, {
   ThemeProvider,
   injectGlobal,
-  withTheme
+  withTheme,
 } from "styled-components";
 import Meta from "./Meta";
-
+import {CloudinaryContext} from "cloudinary-react";
 const theme = {
   black: "#393939",
   grey: "#E7E7E7",
@@ -19,7 +19,7 @@ const theme = {
   lightred: "#FF8D8D",
   blue: "#00577D",
   lightblue: "#039ADA",
-  lightgreen: "#9DFF8D"
+  lightgreen: "#9DFF8D",
 };
 
 const StyledPage = styled.div`
@@ -56,12 +56,14 @@ const StyledPageWithTheme = withTheme(StyledPage);
 class Page extends Component {
   render() {
     return (
-      <ThemeProvider theme={theme}>
-        <StyledPageWithTheme>
-          <Meta />
-          {this.props.children}
-        </StyledPageWithTheme>
-      </ThemeProvider>
+      <CloudinaryContext cloudName={"meanbeancoffeebean"}>
+        <ThemeProvider theme={theme}>
+          <StyledPageWithTheme>
+            <Meta />
+            {this.props.children}
+          </StyledPageWithTheme>
+        </ThemeProvider>
+      </CloudinaryContext>
     );
   }
 }
