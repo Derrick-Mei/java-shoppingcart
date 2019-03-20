@@ -1,31 +1,32 @@
 import styled from "styled-components";
-import {
-  Button,
-  Badge,
-  Avatar,
-  Drawer,
-} from "antd";
-import { useState } from "react";
+import {Button, Badge, Avatar, Drawer} from "antd";
+import {useState} from "react";
 import ItemCardList from "./ItemCardList";
 import ItemCard from "./ItemCard";
 import Router from "next/router";
-import { CartItem as ICartItem } from "../../interfaces/index";
-import { formatMoney } from "../../lib/formatMoney";
+import {CartItem as ICartItem} from "../../interfaces/index";
+import {formatMoney} from "../../lib/formatMoney";
+import {Image, Transformation} from "cloudinary-react";
 interface Props {
-  cartItems: [ICartItem]
-  deleteCartItem: Function,
-  userId: number,
+  cartItems: [ICartItem];
+  deleteCartItem: Function;
+  userId: number;
 }
- 
 
-const CartFooter: React.SFC<Props> = ({ cartItems, deleteCartItem, userId }) => {
+const CartFooter: React.SFC<Props> = ({
+  cartItems,
+  deleteCartItem,
+  userId,
+}) => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   return (
     <CartFooterWrapper>
       <TotalDisplay>
-        {formatMoney(cartItems.reduce((accumulator, item) => {
-          return accumulator + item.price;
-        }, 0))}
+        {formatMoney(
+          cartItems.reduce((accumulator, item) => {
+            return accumulator + item.price;
+          }, 0),
+        )}
       </TotalDisplay>
       <ItemsQueueContainer>
         {/* returns the last three item indexes */}
@@ -34,15 +35,18 @@ const CartFooter: React.SFC<Props> = ({ cartItems, deleteCartItem, userId }) => 
           .reverse()
           .map(item => {
             return (
-              <Avatar
+              <Image
                 key={item.keyId}
-                shape="circle"
-                size="small"
-                src={item.src}
-                style={{ marginLeft: "12px" }}
+                publicId={item.image}
+                style={{marginLeft: "15px"}}
               >
-                {item.productid}
-              </Avatar>
+                <Transformation
+                  height="30"
+                  width="30"
+                  radius="max"
+                  crop="fill"
+                />
+              </Image>
             );
           })}
       </ItemsQueueContainer>
@@ -62,7 +66,7 @@ const CartFooter: React.SFC<Props> = ({ cartItems, deleteCartItem, userId }) => 
           type="primary"
           onClick={() =>
             Router.push({
-              pathname: "/checkout"
+              pathname: "/checkout",
             })
           }
         >
@@ -118,7 +122,7 @@ const ItemsQueueContainer = styled.div`
 
 const CartBtn = styled(Button)`
   color: ${(props: any) => props.theme.white};
-  background: ${(props:any) => props.theme.black};
+  background: ${(props: any) => props.theme.black};
   padding: 0.5em;
   padding-right: 2em;
   border: none;

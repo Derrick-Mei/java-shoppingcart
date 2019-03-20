@@ -1,6 +1,6 @@
 import Reward from "react-rewards";
-import { Button } from "antd";
-import { useRef, useEffect } from "react";
+import {Button} from "antd";
+import {useRef, useEffect} from "react";
 import styled from "styled-components";
 import Router from "next/router";
 
@@ -16,7 +16,7 @@ const OrderCompletedPage = () => {
         <Button
           onClick={() => {
             Router.push({
-              pathname: "/shop"
+              pathname: "/shop",
             });
           }}
         >
