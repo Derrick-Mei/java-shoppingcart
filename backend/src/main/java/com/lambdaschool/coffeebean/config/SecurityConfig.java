@@ -85,6 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .antMatchers("/api-docs/**").permitAll()
 //                .antMatchers("/users/**").permitAll()
 //                .antMatchers("/console/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/charge").permitAll()
                 .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
                 .antMatchers(HttpMethod.GET, SHOP_URL).permitAll();
         http.csrf().disable();
