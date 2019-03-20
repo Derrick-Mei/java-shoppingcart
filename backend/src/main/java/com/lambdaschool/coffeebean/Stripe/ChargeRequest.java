@@ -9,7 +9,7 @@ public class ChargeRequest {
         EUR, USD;
     }
     private String description;
-    private int amount; // cents
+    private int amount; // in cents
     private Currency currency;
     private String stripeEmail;
     private String stripeToken;
