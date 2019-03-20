@@ -1,6 +1,5 @@
 import StripeCheckout from "react-stripe-checkout";
-import axios from "axios";
-
+import {createBearerAxios, createBaseAxios} from "../lib/axiosInstances";
 export interface Props {
   headerImg: string;
   amount: number;
@@ -10,28 +9,28 @@ const StripeBtn: React.SFC<Props> = ({headerImg, amount}) => {
   const publishableKey = "pk_test_fbmMQVyluBRGwx3QN5yo0Bi8";
 
   const onToken = (token: any) => {
-    const body = {
-      amount: amount,
-      token: token,
-    };
-    console.log(token);
-    // axios
-    //     .post("http://localhost:8000/payment", body)
-    //     .then(response => {
-    //       console.log(response);
-    //       alert("Payment Success");
-    //     })
-    //     .catch(error => {
-    //       console.log("Payment Error: ", error);
-    //       alert("Payment Error");
-    //     });
-    //TODO: Add a request to the server to finish payment
-    //Send a receipt to customer's email if they have one
+    // console.log(token);
+    createBearerAxios()({
+      method: "post",
+      url: "/charge",
+      data: {
+        amount: amount,
+        stripeEmail: token.email,
+        stripeToken: token.id,
+      },
+    })
+      .then(({data}: any) => {
+        console.log(data);
+        //POST to server address information for next time
+        //Send a receipt to customer's email if they have one
 
-    //POST to server address information for next time
-    // Router.push({
-    //   pathname: "/order-completed",
-    // });
+        // Router.push({
+        //   pathname: "/order-completed",
+        // });
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
   };
   return (
     <StripeCheckout
