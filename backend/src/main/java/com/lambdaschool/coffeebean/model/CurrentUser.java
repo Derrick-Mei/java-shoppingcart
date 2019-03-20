@@ -9,15 +9,16 @@ import java.util.List;
 public class CurrentUser extends User
 {
     private long currentuserid;
-    private String customerName;
+    private String customerName, email;
     List<? extends SimpleGrantedAuthority> authority;
 
-    public CurrentUser(String username, String password, List<? extends SimpleGrantedAuthority> authority, String customerName, long currentuserid)
+    public CurrentUser(String username, String password, List<? extends SimpleGrantedAuthority> authority, String customerName, long currentuserid, String email)
     {
         super(username, password, authority);
         this.customerName = customerName;
         this.currentuserid = currentuserid;
         this.authority = authority;
+        this.email = email;
     }
 
     public long getCurrentuserid()
@@ -25,19 +26,9 @@ public class CurrentUser extends User
         return currentuserid;
     }
 
-    public void setCurrentuserid(long currentuserid)
-    {
-        this.currentuserid = currentuserid;
-    }
-
     public String getCustomerName()
     {
         return customerName;
-    }
-
-    public void setCustomerName(String customerName)
-    {
-        this.customerName = customerName;
     }
 
     public List<? extends SimpleGrantedAuthority> getAuthorities2()
@@ -45,8 +36,9 @@ public class CurrentUser extends User
         return authority;
     }
 
-    public void setAuthorities(List<? extends SimpleGrantedAuthority> authority)
+    public String getEmail()
     {
-        this.authority = authority;
+        return email;
     }
+
 }
