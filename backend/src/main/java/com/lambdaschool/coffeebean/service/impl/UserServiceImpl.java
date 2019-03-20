@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserDetailsService, UserService
 
         User u = userrepository.findByUsername(s);
 
-        return new CurrentUser(u.getUsername(), u.getPassword(), u.getAuthority(), u.getCustomername(), u.getUserid()
+        return new CurrentUser(u.getUsername(), u.getPassword(), u.getAuthority(), u.getCustomername(), u.getUserid(), u.getEmail()
         );
     }
 
