@@ -47,52 +47,47 @@ const SignUpForm: React.SFC<Props> = ({
   const [isLoading, setLoading] = useState(false);
   function handleSubmit(e: React.FormEvent<HTMLInputElement>) {
     e.preventDefault();
-    form.validateFields((err: object, values: SignupValues) => {
+    form.validateFields(async (err: object, values: SignupValues) => {
       if (err) {
         return;
       }
       setLoading(true);
-      createBaseAxios()({
-        method: "post",
-        url: "/signup",
-        data: {
-          username: values.username,
-          password: values.password,
-        },
-        timeout: 1000 * 10,
-        validateStatus: function(status: number) {
-          if (status === 404 || status === 401 || status === 400) {
-            message.error(
-              "There might be a server error, please try again later",
-            );
-            setLoading(false);
-          }
-          return status === 200;
-        },
-      })
-        .then(function({data}: SignupSubmitData) {
-          if (data.username === undefined) {
-            message.error(
-              `${values.username} has already been taken, try again.`,
-            );
-            setTimeout(() => {
-              setLoading(false);
-            }, 1000);
-          } else {
-            message.success(
-              `Hi ${
-                data.username
-              }! You have successfully signed up and are ready to login!`,
-              3,
-            );
-            setLoading(false);
-            setTab(LOGIN);
-          }
-        })
-        .catch(function(error: object) {
-          setLoading(false);
-          console.error(error, "we have an error");
+      try {
+        const {data} = await createBaseAxios()({
+          method: "post",
+          url: "/signup",
+          data: {
+            username: values.username,
+            password: values.password,
+          },
+          timeout: 1000 * 10,
+          validateStatus: function(status: number) {
+            if (status === 404 || status === 401 || status === 400) {
+              message.error(
+                "There might be a server error, please try again later",
+              );
+            }
+            return status === 200;
+          },
         });
+        if (data.username === undefined) {
+          message.error(
+            `${values.username} has already been taken, try again.`,
+          );
+        } else {
+          message.success(
+            `Hi ${
+              data.username
+            }! You have successfully signed up and are ready to login!`,
+            3,
+          );
+          setTab(LOGIN);
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
     });
   }
   const changeInputHandler = (e: InputEventTarget) => {
