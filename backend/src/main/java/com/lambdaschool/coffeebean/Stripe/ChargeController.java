@@ -20,7 +20,7 @@ public class ChargeController {
 
     @PostMapping("")
     public Map<String, String> charge(@RequestBody ChargeRequest chargeRequest) throws StripeException {
-        chargeRequest.setDescription("Mean Mean Coffee Bean's");
+        chargeRequest.setDescription("Mean Mean Coffee Beans");
         chargeRequest.setCurrency(Currency.USD);
         Charge charge = paymentsService.charge(chargeRequest);
 
@@ -30,21 +30,15 @@ public class ChargeController {
         map.put("chargeId", charge.getId());
         map.put("balance_transaction", charge.getBalanceTransaction());
         return map;
-
-//
-//        model.addAttribute("id", charge.getId());
-//        model.addAttribute("status", charge.getStatus());
-//        model.addAttribute("chargeId", charge.getId());
-//        model.addAttribute("balance_transaction", charge.getBalanceTransaction());
-//        return String.valueOf(model);
     }
 
     @ExceptionHandler(StripeException.class)
-    public Map<String, String> handleError(StripeException ex) {
-        HashMap<String, String> errormap = new HashMap<>();
-        errormap.put("statusCode", ex.getStatusCode().toString());
+    public Map<String, Object> handleError(StripeException ex) {
+        HashMap<String, Object> errormap = new HashMap<>();
+        errormap.put("statusCode", ex.getStatusCode());
         errormap.put("error", ex.getMessage());
-//        model.addAttribute("error", ex.getMessage());
+        errormap.put("stripeError", ex.getStripeError());
+        errormap.put("requestId", ex.getRequestId());
         return errormap;
     }
 }
