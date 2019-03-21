@@ -120,7 +120,9 @@ const CheckoutForm: React.SFC<Props> = ({form, theme}) => {
                     key={item.keyId}
                     title={item.productname}
                     description={formatMoney(item.price)}
-                    image={item.image}
+                    imagePublicId={item.image}
+                    imageHeight={50}
+                    imageWidth={75}
                   />
                 );
               })}
