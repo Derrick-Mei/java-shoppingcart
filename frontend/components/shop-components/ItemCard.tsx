@@ -3,6 +3,8 @@ import React from "react";
 import {Image, Transformation} from "cloudinary-react";
 export interface Props {
   imagePublicId: string;
+  imageHeight: number;
+  imageWidth: number;
   title: string;
   description: string;
   price?: number;
@@ -11,6 +13,8 @@ export interface Props {
 
 const ItemCard: React.SFC<Props> = ({
   imagePublicId,
+  imageHeight,
+  imageWidth,
   title,
   description,
   price,
@@ -19,7 +23,11 @@ const ItemCard: React.SFC<Props> = ({
   return (
     <StyledCard>
       <Image publicId={imagePublicId}>
-        <Transformation crop="fit" height={200} width={200} />
+        <Transformation
+          crop="fit"
+          height={imageHeight}
+          width={imageWidth}
+        />
       </Image>
       <ItemTextContainer>
         <ItemTitle>{title}</ItemTitle>

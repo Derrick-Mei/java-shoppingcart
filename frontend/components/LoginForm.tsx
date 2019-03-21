@@ -36,25 +36,25 @@ const LoginForm: React.SFC<Props> = ({
   const {getFieldDecorator} = form;
   const [isLoading, setLoading] = useState(false);
 
-  function handleSubmit(e: React.FormEvent<HTMLInputElement>) {
+  const handleSubmit = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault();
-    form
-      .validateFields((err: object, values: LoginValues) => {
-        if (err) {
-          return;
-        }
-        setLoading(true);
-        const data = {
+    form.validateFields(async (err: object, values: LoginValues) => {
+      if (err) {
+        return;
+      }
+      setLoading(true);
+      try {
+        const bodyData = {
           grant_type: process.env.GRANT_TYPE_PASSWORD,
           username: values.username,
           password: values.password,
         };
-        createBaseAxios()({
+        const {data}: LoginData = await createBaseAxios()({
           method: "post",
           url: "/oauth/token",
           headers: {"content-type": "application/x-www-form-urlencoded"},
           timeout: 1000 * 10,
-          data: qs.stringify(data),
+          data: qs.stringify(bodyData),
           auth: {
             username: process.env.CLIENT_ID,
             password: process.env.CLIENT_SECRET,
@@ -62,33 +62,23 @@ const LoginForm: React.SFC<Props> = ({
           validateStatus: function(status: number) {
             if (status === 400) {
               message.error("Wrong username or password, try again!");
-              setTimeout(() => {
-                setLoading(false);
-              }, 1000);
-            }
-            if (status === 404 || status === 401) {
-              message.error(
-                "There might be a server error, please try again later",
-              );
-              setLoading(false);
             }
             return status === 200;
           },
-        }).then(({data}: LoginData) => {
-          // console.log(data);
-          window.localStorage.setItem("access_token", data.access_token);
-          window.localStorage.setItem("username", values.username);
-          setLoading(false);
-          Router.push({
-            pathname: "/shop",
-          });
         });
-      })
-      .catch((err: object) => {
+        window.localStorage.setItem("access_token", data.access_token);
+        window.localStorage.setItem("username", values.username);
+        Router.push({
+          pathname: "/shop",
+        });
+      } catch (err) {
+        console.error(err);
+      } finally {
         setLoading(false);
-        console.log(err);
-      });
-  }
+      }
+    });
+  };
+
   const changeInputHandler = (e: InputEventTarget) => {
     setLoginInfo({...loginInfo, [e.target.name]: e.target.value});
   };
