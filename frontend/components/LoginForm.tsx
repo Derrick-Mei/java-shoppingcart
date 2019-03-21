@@ -49,7 +49,7 @@ const LoginForm: React.SFC<Props> = ({
           username: values.username,
           password: values.password,
         };
-        const {data} = await createBaseAxios()({
+        const {data}: LoginData = await createBaseAxios()({
           method: "post",
           url: "/oauth/token",
           headers: {"content-type": "application/x-www-form-urlencoded"},

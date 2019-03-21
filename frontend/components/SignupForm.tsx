@@ -35,7 +35,7 @@ interface SignupSubmitData {
   };
 }
 
-const SignUpForm: React.SFC<Props> = ({
+const SignupForm: React.SFC<Props> = ({
   form,
   theme,
   signupInfo,
@@ -53,7 +53,7 @@ const SignUpForm: React.SFC<Props> = ({
       }
       setLoading(true);
       try {
-        const {data} = await createBaseAxios()({
+        const {data}: SignupSubmitData = await createBaseAxios()({
           method: "post",
           url: "/signup",
           data: {
@@ -157,6 +157,6 @@ const SignUpForm: React.SFC<Props> = ({
   );
 };
 
-const WrappedSignUpForm = Form.create({name: "normal_login"})(SignUpForm);
+const WrappedSignupForm = Form.create({name: "normal_login"})(SignupForm);
 
-export default withTheme(WrappedSignUpForm);
+export default withTheme(WrappedSignupForm);
