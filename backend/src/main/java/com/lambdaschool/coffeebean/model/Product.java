@@ -65,6 +65,16 @@ public class Product
     {
     }
 
+    public Product(String productname, String description, Double price, Integer quantity, Date expiration, String image)
+    {
+        this.productname = productname;
+        this.description = description;
+        this.price = price;
+        this.quantity = quantity;
+        this.expiration = expiration;
+        this.image = image;
+    }
+
     public long getProductid()
     {
         return productid;
