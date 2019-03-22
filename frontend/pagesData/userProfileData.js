@@ -23,8 +23,8 @@ const [USER_PROFILE_NAME, USER_PROFILE_VALUE] = [
 const profileSection = new Section(USER_PROFILE_NAME, USER_PROFILE_VALUE);
 
 const [SETTINGS_SECTION_NAME, SETTINGS_SECTION_VALUE] = [
-  "Settings Info",
-  "Settings Info",
+  "Settings",
+  "Settings",
 ];
 const settingsSection = new Section(
   SETTINGS_SECTION_NAME,
