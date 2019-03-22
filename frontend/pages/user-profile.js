@@ -39,5 +39,6 @@ const PageWrapper = styled.div`
   max-width: 800px;
   width: 100%;
   padding: 32px 0 0 0;
+  margin: 0 auto;
 `;
 export default UserProfilePage;
