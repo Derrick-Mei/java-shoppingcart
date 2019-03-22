@@ -16,8 +16,20 @@ class Section {
     return this._id;
   }
 }
-const [EDIT_SECTION_NAME, EDIT_SECTION_VALUE] = ["Edit Info", "Edit Info"];
-const editSection = new Section(EDIT_SECTION_NAME, EDIT_SECTION_VALUE);
+const [USER_PROFILE_NAME, USER_PROFILE_VALUE] = [
+  "User Profile",
+  "User Profile",
+];
+const profileSection = new Section(USER_PROFILE_NAME, USER_PROFILE_VALUE);
+
+const [SETTINGS_SECTION_NAME, SETTINGS_SECTION_VALUE] = [
+  "Settings Info",
+  "Settings Info",
+];
+const settingsSection = new Section(
+  SETTINGS_SECTION_NAME,
+  SETTINGS_SECTION_VALUE,
+);
 
 const [FRIENDS_SECTION_NAME, FRIENDS_SECTION_VALUE] = [
   "Friends",
@@ -27,7 +39,6 @@ const friendsSection = new Section(
   FRIENDS_SECTION_NAME,
   FRIENDS_SECTION_VALUE,
 );
+const sectionsData = [profileSection, settingsSection];
 
-const sectionsData = [editSection, friendsSection];
-
-export {sectionsData, EDIT_SECTION_NAME, FRIENDS_SECTION_NAME};
+export {sectionsData, USER_PROFILE_NAME, SETTINGS_SECTION_NAME};
