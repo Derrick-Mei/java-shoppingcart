@@ -46,4 +46,34 @@ public class Shopcontroller
         int start = (page -1) * 10;
         return productrepos.get10Products(start);
     }
+
+    @JsonView(View.UserOnly.class)
+    @GetMapping("/naturalsearch/{searchString}/page/{page}")
+    public List<Product> naturalSearchForProductByName(@PathVariable String searchString, @PathVariable int page)
+    {
+        int start = (page -1) * 10;
+        return productrepos.naturalSearchForProductByName(searchString, start);
+    }
+
+    @JsonView(View.UserOnly.class)
+    @GetMapping("/likesearch/{searchString}/page/{page}")
+    public List<Product> likeSearchForProductByName(@PathVariable String searchString, @PathVariable int page)
+    {
+        int start = (page -1) * 10;
+        String[] searchArray = searchString.split(" ");
+
+        String likeString = "`%" + searchArray[0] + "%`";
+
+        for (int i = 1; i < searchArray.length; i++)
+        {
+            likeString += " OR p.productname LIKE `%" + searchArray[i] + "%`";
+        }
+
+        searchString = "%" + searchString + "%";
+
+
+        return productrepos.likeSearchForProductByName(searchString, start);
+    }
+
+
 }
