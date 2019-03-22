@@ -6,6 +6,8 @@ import styled, {
 } from "styled-components";
 import Meta from "./Meta";
 import {CloudinaryContext} from "cloudinary-react";
+import cloudinary from "cloudinary-core";
+import Context from "../context/Context";
 const theme = {
   black: "#393939",
   grey: "#E7E7E7",
@@ -53,16 +55,27 @@ injectGlobal`
 
 // withTheme allows all pages to have access to theme prop
 const StyledPageWithTheme = withTheme(StyledPage);
+
+const cloudinaryCore = new cloudinary.Cloudinary({
+  cloud_name: "meanbeancoffeebean",
+  secure: true,
+});
 class Page extends Component {
   render() {
     return (
       <CloudinaryContext cloudName={"meanbeancoffeebean"}>
-        <ThemeProvider theme={theme}>
-          <StyledPageWithTheme>
-            <Meta />
-            {this.props.children}
-          </StyledPageWithTheme>
-        </ThemeProvider>
+        <Context.Provider
+          value={{
+            cloudinaryCore,
+          }}
+        >
+          <ThemeProvider theme={theme}>
+            <StyledPageWithTheme>
+              <Meta />
+              {this.props.children}
+            </StyledPageWithTheme>
+          </ThemeProvider>
+        </Context.Provider>
       </CloudinaryContext>
     );
   }
