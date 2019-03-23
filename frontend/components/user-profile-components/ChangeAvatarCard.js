@@ -25,20 +25,12 @@ const ChangeAvatarCard = ({username}) => {
   const [currFileIndex, setCurrFileIndex] = useState(0);
   const [fileList, setFileList] = useState([]);
 
-  const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const uploaderRef = useRef(null);
   useEffect(() => {
     setCurrFileIndex(fileList.length - 1);
   }, [fileList]);
-  const displayPreviewImage = file => {
-    setPreviewImage(file.url || file.thumbUrl);
-    setPreviewVisible(true);
-  };
 
-  const cancelPreview = () => {
-    setPreviewVisible(false);
-  };
   const checkFileRequirements = file => {
     const isJPG = file.type === "image/jpeg";
     const isPNG = file.type === "image/png";
@@ -93,12 +85,6 @@ const ChangeAvatarCard = ({username}) => {
         console.log(err);
       });
   };
-  const uploadButton = (
-    <div>
-      <Icon type={isLoading ? "loading" : "plus"} />
-      <div className="ant-upload-text">Upload</div>
-    </div>
-  );
   return (
     <>
       <Card
