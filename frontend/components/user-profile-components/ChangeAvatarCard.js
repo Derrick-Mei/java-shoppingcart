@@ -39,29 +39,33 @@ const ChangeAvatarCard = ({username}) => {
   const cancelPreview = () => {
     setPreviewVisible(false);
   };
-  const checkFileRequirements = e => {
-    const file = e.target.files[0];
+  const checkFileRequirements = file => {
     const isJPG = file.type === "image/jpeg";
     const isPNG = file.type === "image/png";
+    const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isJPG && !isPNG) {
       message.error("You can only upload JPG or a PNG file!");
+      return false;
+    } else if (!isLt2M) {
+      message.error("Image must be smaller than 2MB!");
+      return false;
+    } else {
+      return true;
     }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error("Image must smaller than 2MB!");
-    }
-    return isJPG && isLt2M;
   };
   const fileSelectedHandler = e => {
     const file = e.target.files[0];
-    setFileList([...fileList, file]);
-    // https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL
-    const reader = new FileReader();
-    const url = reader.readAsDataURL(file);
+    const doesFilePass = checkFileRequirements(file);
+    if (doesFilePass) {
+      setFileList([...fileList, file]);
+      // https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL
+      const reader = new FileReader();
+      const url = reader.readAsDataURL(file);
 
-    reader.onloadend = e => {
-      setPreviewImage(reader.result);
-    };
+      reader.onloadend = e => {
+        setPreviewImage(reader.result);
+      };
+    }
   };
 
   const submitUploadToCloud = () => {
