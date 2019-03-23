@@ -5,7 +5,7 @@ import {
   Card,
   Divider,
   Avatar,
-  message,
+  notification,
   Button,
   Modal,
   Radio,
@@ -81,7 +81,10 @@ const ChangeAvatarCard = ({username}) => {
       data: formData,
     })
       .then(res => {
-        message.success("Avatar has been successfully uploaded!");
+        notification.success({
+          message: "Avatar Updated!",
+          description: "The image has been saved into our database.",
+        });
         setImagePublicId(res.data.public_id);
       })
       .catch(err => {
