@@ -57,13 +57,13 @@ injectGlobal`
 const StyledPageWithTheme = withTheme(StyledPage);
 
 const cloudinaryCore = new cloudinary.Cloudinary({
-  cloud_name: "meanbeancoffeebean",
+  cloud_name: process.env.CLOUD_NAME,
   secure: true,
 });
 class Page extends Component {
   render() {
     return (
-      <CloudinaryContext cloudName={"meanbeancoffeebean"}>
+      <CloudinaryContext cloudName={process.env.CLOUD_NAME}>
         <Context.Provider
           value={{
             cloudinaryCore,
