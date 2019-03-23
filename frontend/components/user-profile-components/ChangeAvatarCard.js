@@ -8,24 +8,12 @@ import {
   message,
   Button,
   Modal,
+  Radio,
 } from "antd";
 import Context from "../context/Context";
 import {useState, useContext} from "react";
 import qs from "qs";
 import axios from "axios";
-
-// const checkFileRequirements = file => {
-//   const isJPG = file.type === "image/jpeg";
-//   const isPNG = file.type === "image/png";
-//   if (!isJPG && !isPNG) {
-//     message.error("You can only upload JPG or a PNG file!");
-//   }
-//   const isLt2M = file.size / 1024 / 1024 < 2;
-//   if (!isLt2M) {
-//     message.error("Image must smaller than 2MB!");
-//   }
-//   return isJPG && isLt2M;
-// };
 
 const ChangeAvatarCard = ({username}) => {
   const {cloudinaryCore} = useContext(Context);
@@ -43,11 +31,25 @@ const ChangeAvatarCard = ({username}) => {
     setPreviewImage(file.url || file.thumbUrl);
     setPreviewVisible(true);
   };
+  const triggerPreview = () => {
+    setPreviewImage(fileList[0] ? fileList[0].thumbUrl : "");
+  };
 
   const cancelPreview = () => {
     setPreviewVisible(false);
   };
-
+  const checkFileRequirements = file => {
+    const isJPG = file.type === "image/jpeg";
+    const isPNG = file.type === "image/png";
+    if (!isJPG && !isPNG) {
+      message.error("You can only upload JPG or a PNG file!");
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error("Image must smaller than 2MB!");
+    }
+    return isJPG && isLt2M;
+  };
   const fileSelectedHandler = ({fileList}) => {
     setFileList(fileList);
   };
@@ -70,7 +72,8 @@ const ChangeAvatarCard = ({username}) => {
       data: formData,
     })
       .then(res => {
-        console.log(res);
+        message.success("Avatar has been successfully uploaded!");
+        setImagePublicId(res.data.public_id);
       })
       .catch(err => {
         console.log(err);
@@ -100,8 +103,15 @@ const ChangeAvatarCard = ({username}) => {
         <Upload
           name="avatar"
           listType="picture-card"
-          onChange={fileSelectedHandler}
+          onChange={e => {
+            fileSelectedHandler(e);
+            triggerPreview();
+          }}
           onPreview={displayPreviewImage}
+          onRemove={() => {
+            setPreviewImage("");
+            setFileList([]);
+          }}
         >
           {fileList.length >= 1 ? null : uploadButton}
         </Upload>
@@ -118,9 +128,17 @@ const ChangeAvatarCard = ({username}) => {
           <img alt="example" style={{width: "100%"}} src={previewImage} />
         </Modal>
         <Divider />
+        <Button onClick={triggerPreview}>Trigger Preview</Button>
         <Comment
           avatar={
-            <Avatar src={cloudinaryCore.url(imagePublicId)} alt="" />
+            <Avatar
+              src={
+                previewImage
+                  ? previewImage
+                  : cloudinaryCore.url(imagePublicId)
+              }
+              alt=""
+            />
           }
           author={username}
           alt={username}
