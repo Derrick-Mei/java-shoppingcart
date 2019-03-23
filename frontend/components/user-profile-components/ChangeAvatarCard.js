@@ -48,7 +48,7 @@ const ChangeAvatarCard = ({username}) => {
     const cloudPreset = process.env.CLOUDINARY_UPLOAD_PRESET;
 
     const formData = new FormData();
-    formData.append("file", fileList[0]);
+    formData.append("file", fileList[0].originFileObj);
     formData.append("upload_preset", cloudPreset);
     formData.append("public_id", `users-avatars/profile-pic-${"id"}`);
     axios({
