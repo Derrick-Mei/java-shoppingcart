@@ -47,7 +47,10 @@ const ChangeAvatarCard = ({username}) => {
   };
   const fileSelectedHandler = e => {
     const file = e.target.files[0];
-    const doesFilePass = checkFileRequirements(file);
+    let doesFilePass = false;
+    if (file) {
+      doesFilePass = checkFileRequirements(file);
+    }
     if (doesFilePass) {
       setFileList([...fileList, file]);
       // https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL
