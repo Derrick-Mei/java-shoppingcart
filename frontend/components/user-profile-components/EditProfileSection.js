@@ -1,5 +1,11 @@
+import ChangeAvatarCard from "./ChangeAvatarCard";
+
 const EditProfileSection = () => {
-  return <div>edit</div>;
+  return (
+    <>
+      <ChangeAvatarCard />
+    </>
+  );
 };
 
 export default EditProfileSection;
