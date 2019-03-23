@@ -7,14 +7,12 @@ import {
   Avatar,
   message,
   Button,
+  Modal,
 } from "antd";
 import Context from "../context/Context";
 import {useState, useContext} from "react";
 import qs from "qs";
 import axios from "axios";
-
-// const [isPreviewVisible, setIsPreviewVisible] = useState(false);
-// const [previewImage, setPreviewImage] = useState("");
 
 // const checkFileRequirements = file => {
 //   const isJPG = file.type === "image/jpeg";
@@ -38,8 +36,20 @@ const ChangeAvatarCard = ({username}) => {
   const [currFileIndex, setCurrFileIndex] = useState(0);
   const [fileList, setFileList] = useState([]);
 
-  const fileSelectedHandler = e => {
-    setFileList([...fileList, e.target.files[0]]);
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+
+  const displayPreviewImage = file => {
+    setPreviewImage(file.url || file.thumbUrl);
+    setPreviewVisible(true);
+  };
+
+  const cancelPreview = () => {
+    setPreviewVisible(false);
+  };
+
+  const fileSelectedHandler = ({fileList}) => {
+    setFileList(fileList);
   };
 
   const submitUploadToCloud = () => {
@@ -66,7 +76,12 @@ const ChangeAvatarCard = ({username}) => {
         console.log(err);
       });
   };
-
+  const uploadButton = (
+    <div>
+      <Icon type={isLoading ? "loading" : "plus"} />
+      <div className="ant-upload-text">Upload</div>
+    </div>
+  );
   return (
     <>
       <Card
@@ -82,13 +97,26 @@ const ChangeAvatarCard = ({username}) => {
         }}
         title="Upload Avatar Picture"
       >
-        <input type="file" onChange={fileSelectedHandler} />
-        <Button.Group>
-          <Button>Undo</Button>
+        <Upload
+          name="avatar"
+          listType="picture-card"
+          onChange={fileSelectedHandler}
+          onPreview={displayPreviewImage}
+        >
+          {fileList.length >= 1 ? null : uploadButton}
+        </Upload>
+        <Button.Group style={{marginTop: "18px"}}>
           <Button type="primary" onClick={submitUploadToCloud}>
             Save Avatar
           </Button>
         </Button.Group>
+        <Modal
+          visible={previewVisible}
+          footer={null}
+          onCancel={cancelPreview}
+        >
+          <img alt="example" style={{width: "100%"}} src={previewImage} />
+        </Modal>
         <Divider />
         <Comment
           avatar={
