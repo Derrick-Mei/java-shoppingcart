@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Api(value = "Some value... by DKM", description = "Shop Controller by DKM")
 @RestController
@@ -55,24 +58,17 @@ public class Shopcontroller
         return productrepos.naturalSearchForProductByName(searchString, start);
     }
 
+
     @JsonView(View.UserOnly.class)
-    @GetMapping("/likesearch/{searchString}/page/{page}")
-    public List<Product> likeSearchForProductByName(@PathVariable String searchString, @PathVariable int page)
+    @GetMapping("/criteria/{searchString}/page/{page}")
+    public List<Product> dynamicQueryWithStringsLike(@PathVariable String searchString, @PathVariable int page)
     {
-        int start = (page -1) * 10;
         String[] searchArray = searchString.split(" ");
+        Set<String> searchSet = new HashSet<String>(Arrays.asList(searchArray));
 
-        String likeString = "`%" + searchArray[0] + "%`";
+        int start = (page -1) * 10;
 
-        for (int i = 1; i < searchArray.length; i++)
-        {
-            likeString += " OR p.productname LIKE `%" + searchArray[i] + "%`";
-        }
-
-        searchString = "%" + searchString + "%";
-
-
-        return productrepos.likeSearchForProductByName(searchString, start);
+        return productrepos.dynamicQueryWithStringsLike(searchSet, start);
     }
 
 

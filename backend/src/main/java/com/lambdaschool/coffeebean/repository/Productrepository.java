@@ -17,10 +17,4 @@ public interface Productrepository extends JpaRepository<Product, Long>, Product
     @Query(value = "SELECT * FROM products WHERE MATCH(productname) AGAINST(:searchString) LIMIT :start, 10;", nativeQuery = true)
     public List<Product> naturalSearchForProductByName(@PathVariable String searchString, @PathVariable int start);
 
-
-    @Query(value = "SELECT * FROM products p WHERE p.productname :searchString LIMIT :start, 10;", nativeQuery = true)
-    public List<Product> likeSearchForProductByName(@PathVariable String searchString, @PathVariable int start);
-
-
-
 }

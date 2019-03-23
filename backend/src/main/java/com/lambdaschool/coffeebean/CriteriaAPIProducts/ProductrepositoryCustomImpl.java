@@ -15,7 +15,7 @@ public class ProductrepositoryCustomImpl implements ProductrepositoryCustom
     private EntityManager entityManager;
 
     @Override
-    public List<Product> findProductsByStringsLike(Set<String> searchArray)
+    public List<Product> dynamicQueryWithStringsLike(Set<String> searchSet, int start)
     {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Product> query = cb.createQuery(Product.class);
@@ -24,8 +24,9 @@ public class ProductrepositoryCustomImpl implements ProductrepositoryCustom
         Path<String> productPath = product.get("productname");
 
         List<Predicate> predicates = new ArrayList<>();
-        for (String word : searchArray )
+        for (String word : searchSet )
         {
+            word = "%" + word + "%";
             predicates.add(cb.like(productPath, word));
         }
 
@@ -33,6 +34,8 @@ public class ProductrepositoryCustomImpl implements ProductrepositoryCustom
                 .where(cb.and(predicates.toArray(new Predicate[predicates.size()])));
 
         return entityManager.createQuery(query)
+                .setFirstResult(start)
+                .setMaxResults(10)
                 .getResultList();
     }
 }
