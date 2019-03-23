@@ -11,7 +11,7 @@ import {
   Radio,
 } from "antd";
 import Context from "../context/Context";
-import {useState, useContext, useRef} from "react";
+import {useState, useEffect, useContext, useRef} from "react";
 import qs from "qs";
 import axios from "axios";
 import styled from "styled-components";
@@ -28,6 +28,9 @@ const ChangeAvatarCard = ({username}) => {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const uploaderRef = useRef(null);
+  useEffect(() => {
+    setCurrFileIndex(fileList.length - 1);
+  }, [fileList]);
   const displayPreviewImage = file => {
     setPreviewImage(file.url || file.thumbUrl);
     setPreviewVisible(true);
@@ -52,8 +55,6 @@ const ChangeAvatarCard = ({username}) => {
   const fileSelectedHandler = e => {
     const file = e.target.files[0];
     setFileList([...fileList, file]);
-    setCurrFileIndex(fileList.length - 1);
-
     // https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL
     const reader = new FileReader();
     const url = reader.readAsDataURL(file);
@@ -69,7 +70,7 @@ const ChangeAvatarCard = ({username}) => {
     const cloudPreset = process.env.CLOUDINARY_UPLOAD_PRESET;
 
     const formData = new FormData();
-    formData.append("file", fileList[0].originFileObj);
+    formData.append("file", fileList[currFileIndex].originFileObj);
     formData.append("upload_preset", cloudPreset);
     formData.append("public_id", `users-avatars/profile-pic-${"id"}`);
     axios({
