@@ -25,6 +25,8 @@ const ChangeAvatarCard = ({username}) => {
   const [currFileIndex, setCurrFileIndex] = useState(0);
   const [fileList, setFileList] = useState([]);
 
+  const [readerResults, setReaderResults] = useState([]);
+  const [isFilesModalOpen, setFilesModalOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const uploaderRef = useRef(null);
   useEffect(() => {
@@ -52,13 +54,19 @@ const ChangeAvatarCard = ({username}) => {
       doesFilePass = checkFileRequirements(file);
     }
     if (doesFilePass) {
-      setFileList([...fileList, file]);
       // https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL
       const reader = new FileReader();
       const url = reader.readAsDataURL(file);
 
       reader.onloadend = e => {
         setPreviewImage(reader.result);
+        const isDuplicateImage = readerResults.some(imgData => {
+          return reader.result === imgData;
+        });
+        if (!isDuplicateImage) {
+          setFileList([...fileList, file]);
+          setReaderResults([...readerResults, reader.result]);
+        }
       };
     }
   };
@@ -91,6 +99,7 @@ const ChangeAvatarCard = ({username}) => {
         console.log(err);
       });
   };
+
   return (
     <>
       <Card
@@ -122,7 +131,9 @@ const ChangeAvatarCard = ({username}) => {
         <Button.Group style={{marginTop: "18px"}}>
           {fileList.length > 0 ? (
             <>
-              <Button>Files Uploaded</Button>
+              <Button onClick={() => setFilesModalOpen(true)}>
+                Files Uploaded
+              </Button>
               <Button type="primary" onClick={submitUploadToCloud}>
                 Save Avatar
               </Button>
@@ -150,6 +161,18 @@ const ChangeAvatarCard = ({username}) => {
             </p>
           }
         />
+        <Modal
+          title="Files uploaded this session"
+          visible={isFilesModalOpen}
+          onCancel={() => setFilesModalOpen(false)}
+          onOk={() => {
+            setFilesModalOpen(false);
+          }}
+        >
+          {readerResults.map(imgSrc => {
+            return <PreviewImage key={imgSrc} src={imgSrc} />;
+          })}
+        </Modal>
       </Card>
     </>
   );
