@@ -11,9 +11,10 @@ import {
   Radio,
 } from "antd";
 import Context from "../context/Context";
-import {useState, useContext} from "react";
+import {useState, useContext, useRef} from "react";
 import qs from "qs";
 import axios from "axios";
+import styled from "styled-components";
 
 const ChangeAvatarCard = ({username}) => {
   const {cloudinaryCore} = useContext(Context);
@@ -26,19 +27,17 @@ const ChangeAvatarCard = ({username}) => {
 
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
-
+  const uploaderRef = useRef(null);
   const displayPreviewImage = file => {
     setPreviewImage(file.url || file.thumbUrl);
     setPreviewVisible(true);
-  };
-  const triggerPreview = () => {
-    setPreviewImage(fileList[0] ? fileList[0].thumbUrl : "");
   };
 
   const cancelPreview = () => {
     setPreviewVisible(false);
   };
-  const checkFileRequirements = file => {
+  const checkFileRequirements = e => {
+    const file = e.target.files[0];
     const isJPG = file.type === "image/jpeg";
     const isPNG = file.type === "image/png";
     if (!isJPG && !isPNG) {
@@ -50,8 +49,18 @@ const ChangeAvatarCard = ({username}) => {
     }
     return isJPG && isLt2M;
   };
-  const fileSelectedHandler = ({fileList}) => {
-    setFileList(fileList);
+  const fileSelectedHandler = e => {
+    const file = e.target.files[0];
+    setFileList([...fileList, file]);
+    setCurrFileIndex(fileList.length - 1);
+
+    // https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL
+    const reader = new FileReader();
+    const url = reader.readAsDataURL(file);
+
+    reader.onloadend = e => {
+      setPreviewImage(reader.result);
+    };
   };
 
   const submitUploadToCloud = () => {
@@ -100,35 +109,30 @@ const ChangeAvatarCard = ({username}) => {
         }}
         title="Upload Avatar Picture"
       >
-        <Upload
-          name="avatar"
-          listType="picture-card"
-          onChange={e => {
-            fileSelectedHandler(e);
-            triggerPreview();
-          }}
-          onPreview={displayPreviewImage}
-          onRemove={() => {
-            setPreviewImage("");
-            setFileList([]);
-          }}
-        >
-          {fileList.length >= 1 ? null : uploadButton}
-        </Upload>
+        <PreviewImage
+          src={previewImage}
+          alt="A preview of your uploaded avatar image."
+        />
+        <input
+          type="file"
+          ref={ref => (uploaderRef.current = ref)}
+          onChange={fileSelectedHandler}
+          style={{display: "none"}}
+        />
+        <Button onClick={() => uploaderRef.current.click()}>
+          Upload File
+        </Button>
         <Button.Group style={{marginTop: "18px"}}>
-          <Button type="primary" onClick={submitUploadToCloud}>
-            Save Avatar
-          </Button>
+          {fileList.length > 0 ? (
+            <>
+              <Button>Files Uploaded</Button>
+              <Button type="primary" onClick={submitUploadToCloud}>
+                Save Avatar
+              </Button>
+            </>
+          ) : null}
         </Button.Group>
-        <Modal
-          visible={previewVisible}
-          footer={null}
-          onCancel={cancelPreview}
-        >
-          <img alt="example" style={{width: "100%"}} src={previewImage} />
-        </Modal>
         <Divider />
-        <Button onClick={triggerPreview}>Trigger Preview</Button>
         <Comment
           avatar={
             <Avatar
@@ -153,5 +157,8 @@ const ChangeAvatarCard = ({username}) => {
     </>
   );
 };
-
+const PreviewImage = styled.img`
+  display: ${props => (props.src === "" ? "none" : "flex")};
+  width: 100%;
+`;
 export default ChangeAvatarCard;
