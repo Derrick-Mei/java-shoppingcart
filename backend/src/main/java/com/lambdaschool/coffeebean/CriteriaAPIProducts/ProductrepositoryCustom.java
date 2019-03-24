@@ -7,5 +7,5 @@ import java.util.Set;
 
 public interface ProductrepositoryCustom
 {
-    List<Product> findProductsByStringsLike(Set<String> searchArray);
+    List<Product> dynamicQueryWithStringsLike(Set<String> searchArray, int start);
 }

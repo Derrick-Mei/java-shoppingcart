@@ -1,6 +1,7 @@
 package com.lambdaschool.coffeebean.repository;
 
 import com.lambdaschool.coffeebean.model.Order;
+import com.lambdaschool.coffeebean.model.OrderItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -25,4 +26,18 @@ public interface Orderrepository extends JpaRepository<Order, Long>
     @Modifying
     @Query(value = "INSERT INTO orderproducts (orderid, productid, quantityinorder) VALUES (:orderid, :productid, :quantity);", nativeQuery = true)
     void addToOrderProducts(long orderid, long productid, int quantity);
+
+    @Query(value =
+            "SELECT op.orderid, p.productname, p.description, p.image, p.price, op.quantityinorder " +
+            "FROM orderproducts op INNER JOIN products p ON op.productid=p.productid " +
+            "WHERE op.orderid=:orderid", nativeQuery = true)
+    List<OrderItem> getOrderItemsByOrderid(long orderid);
+
+    @Query(value =
+            "SELECT op.orderid, p.productname, p.description, p.image, p.price, op.quantityinorder " +
+                    "FROM orderproducts op " +
+                    "INNER JOIN products p ON op.productid=p.productid " +
+                    "INNER JOIN orders o ON o.orderid=op.orderid " +
+                    "WHERE o.userid=:userid", nativeQuery = true)
+    List<OrderItem> getOrderItemsByUserid(long userid);
 }
