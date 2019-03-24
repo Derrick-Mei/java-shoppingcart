@@ -1,13 +1,18 @@
 package com.lambdaschool.coffeebean.controller;
 
+import com.lambdaschool.coffeebean.model.CurrentUser;
 import com.lambdaschool.coffeebean.model.User;
 import com.lambdaschool.coffeebean.repository.Userrepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -65,6 +70,51 @@ public class Usercontroller
         {
             return null;
         }
+    }
+
+    @PutMapping("/update/{currentpassword}")
+    public Object updateUser(@RequestBody User updatedUser, @PathVariable String currentpassword)
+    {
+        CurrentUser currentuser = (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long currentUserId = currentuser.getCurrentuserid();
+
+        User foundUser = userrepos.findById(currentUserId).get();
+
+        String currentEncryptedPassword = foundUser.getPassword();
+        String unencryptedCurrentPassword = currentpassword;
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        Map returnObject = new HashMap();
+
+        if (passwordEncoder.matches(unencryptedCurrentPassword, currentEncryptedPassword))
+        {
+            if (updatedUser.getUsername()!=null && userrepos.findByUsername(updatedUser.getUsername())!=null) returnObject.put("usernameExists", true);
+            if (updatedUser.getEmail()!=null && userrepos.findByEmail(updatedUser.getEmail())!=null) returnObject.put("emailExists", true);
+            if (!returnObject.isEmpty()) return returnObject;
+
+            updatedUser.setUserid(currentUserId);
+            if (updatedUser.getTotalorderhistory()==null) updatedUser.setTotalorderhistory(foundUser.getTotalorderhistory());
+            if (updatedUser.getProductsincart()==null) updatedUser.setProductsincart(foundUser.getProductsincart());
+            if (updatedUser.getShippingaddress()==null) updatedUser.setShippingaddress(foundUser.getShippingaddress());
+            if (updatedUser.getBillingaddress()==null) updatedUser.setBillingaddress(foundUser.getBillingaddress());
+            if (updatedUser.getOrderhistory()==null) updatedUser.setOrderhistory(foundUser.getOrderhistory());
+            if (updatedUser.getCustomerphone()==null) updatedUser.setCustomerphone(foundUser.getCustomerphone());
+            if (updatedUser.getPaymentmethod()==null) updatedUser.setPaymentmethod(foundUser.getPaymentmethod());
+            if (updatedUser.getCustomername()==null) updatedUser.setCustomername(foundUser.getCustomername());
+            if (updatedUser.getUsername()==null) updatedUser.setUsername(foundUser.getUsername());
+            if (updatedUser.getPassword()==null) updatedUser.setPassword(foundUser.getPassword());
+            if (updatedUser.getEmail()==null) updatedUser.setEmail(foundUser.getEmail());
+            if (updatedUser.getRole()==null) updatedUser.setRole(foundUser.getRole());
+
+            return userrepos.save(updatedUser);
+        }
+        else
+        {
+            returnObject.put("passwordMatches",false);
+            return returnObject;
+        }
+
+//        return userrepos.save(updatedUser);
     }
 
 }
