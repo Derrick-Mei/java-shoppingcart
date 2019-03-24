@@ -1,6 +1,7 @@
 package com.lambdaschool.coffeebean.controller;
 
 import com.lambdaschool.coffeebean.model.Order;
+import com.lambdaschool.coffeebean.model.OrderItem;
 import com.lambdaschool.coffeebean.repository.Orderrepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -59,21 +60,17 @@ public class Ordercontroller {
 
     }
 
-    // @PutMapping("/updateshiptime/{orderid}")
-    // public Order updateShipTime(@PathVariable long orderid)
-    // {
-    // Optional<Order> foundOrder = orderrepos.findById(orderid);
-    //
-    // if (foundOrder.isPresent())
-    // {
-    // foundOrder.get().setShipdatetime(new Date());
-    // return orderrepos.save(foundOrder.get());
-    // }
-    // else
-    // {
-    // return null;
-    // }
-    // }
+    @GetMapping("/orderid/{orderid}")
+    public List<OrderItem> findOrderItemsByOrderid(@PathVariable long orderid)
+    {
+        return orderrepos.getOrderItemsByOrderid(orderid);
+    }
+
+    @GetMapping("/userid/{userid}")
+    public List<OrderItem> getOrderItemsByUserid(@PathVariable long userid)
+    {
+        return orderrepos.getOrderItemsByUserid(userid);
+    }
 
 
 }

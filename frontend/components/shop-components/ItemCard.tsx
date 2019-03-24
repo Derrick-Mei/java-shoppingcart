@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import React from "react";
 import {Image, Transformation} from "cloudinary-react";
 export interface Props {
   imagePublicId: string;

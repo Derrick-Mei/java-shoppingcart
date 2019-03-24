@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Api(value = "Some value... by DKM", description = "Shop Controller by DKM")
 @RestController
@@ -46,4 +49,27 @@ public class Shopcontroller
         int start = (page -1) * 10;
         return productrepos.get10Products(start);
     }
+
+    @JsonView(View.UserOnly.class)
+    @GetMapping("/naturalsearch/{searchString}/page/{page}")
+    public List<Product> naturalSearchForProductByName(@PathVariable String searchString, @PathVariable int page)
+    {
+        int start = (page -1) * 10;
+        return productrepos.naturalSearchForProductByName(searchString, start);
+    }
+
+
+    @JsonView(View.UserOnly.class)
+    @GetMapping("/criteria/{searchString}/page/{page}")
+    public List<Product> dynamicQueryWithStringsLike(@PathVariable String searchString, @PathVariable int page)
+    {
+        String[] searchArray = searchString.split(" ");
+        Set<String> searchSet = new HashSet<String>(Arrays.asList(searchArray));
+
+        int start = (page -1) * 10;
+
+        return productrepos.dynamicQueryWithStringsLike(searchSet, start);
+    }
+
+
 }
