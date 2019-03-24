@@ -27,7 +27,6 @@ public class Cartcontroller
     @Autowired
     Orderrepository orderrepos;
 
-//    @PreAuthorize("#c = Object thing")
     @GetMapping("/user/{userid}")
     public Object findUserByUserid(@PathVariable long userid)
     {
@@ -72,15 +71,6 @@ public class Cartcontroller
     {
         return userrepos.getCartItemsInCartById(userid);
     }
-
-
-
-//    @GetMapping("/cartbyusername/{username}")
-//    public List<CartItems> getCartItemsInCartByUsername(@PathVariable String username)
-//    {
-//        return userrepos.getCartItemsInCartByUsername(username);
-//    }
-
 
 
     @PostMapping("/addtocart/{userid}/{productid}/{quantity}")

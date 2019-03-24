@@ -1,14 +1,8 @@
--- ALTER TABLE `coffeebean`.`user`
--- CHANGE COLUMN `email` `email` VARCHAR(250) NULL DEFAULT NULL ,
--- CHANGE COLUMN `username` `username` VARCHAR(250) NULL DEFAULT NULL ;
---
--- ALTER TABLE `coffeebean`.`user`
--- ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
--- ADD UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE;
-
 ALTER TABLE cart ADD COLUMN quantityincart INT NULL AFTER productid;
 
 ALTER TABLE orderproducts ADD COLUMN quantityinorder INT NULL AFTER productid;
+
+ALTER TABLE products ADD FULLTEXT(productname);
 
 -- totalorderhistory quantity is optional stretch goal
 
@@ -22,28 +16,28 @@ INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippi
 -- INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (5, 'Mastercard5', '2019-01-20 20:50:50', true, 'string address1', 3);
 -- INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (6, 'Mastercard6', '2019-01-20 20:50:50', false, 'string address1', 4);
 
-INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (1, 'description1', '2020-01-01', 'brazil-coffee-beans', 10.50, 'productname1', 10);
-INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (2, 'description2', '2020-01-01', 'assorted-bean-pack-1', 11.50, 'productname2', 10);
-INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (3, 'description3', '2020-01-01', 'black-bean', 12.50, 'productname3', 10);
--- INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (4, 'description4', '2020-01-01', 'imageurl4.com', 13.50, 'productname4', 10);
--- INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (5, 'description5', '2020-01-01', 'imageurl5.com', 14.50, 'productname5', 10);
--- INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (6, 'description6', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
--- INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (7, 'description7', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
--- INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (8, 'description8', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
--- INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (9, 'description9', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
--- INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (10, 'description10', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
--- INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (11, 'description11', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
--- INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (12, 'description12', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
--- INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (13, 'description13', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
--- INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (14, 'description14', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
--- INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (15, 'description15', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
--- INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (16, 'description16', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
--- INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (17, 'description16', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
--- INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (18, 'description18', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
--- INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (19, 'description19', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
--- INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (20, 'description20', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
--- INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (21, 'description21', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
--- INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (22, 'description22', '2020-01-01', 'imageurl6.com', 15.50, 'productname6', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (1, 'description1', '2020-01-01', 'brazil-coffee-beans', 10.50, 'brazil coffee', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (2, 'description2', '2020-01-01', 'assorted-bean-pack-1', 11.50, 'assorted bean pack', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (3, 'description3', '2020-01-01', 'black-bean', 12.50, 'black bean', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (4, 'description4', '2020-01-01', 'black-bean', 13.50, 'red coffee of hell', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (5, 'description5', '2020-01-01', 'black-bean', 14.50, 'Ethiopia Sidamo', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (6, 'description6', '2020-01-01', 'black-bean', 15.50, 'Sumatra', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (7, 'description7', '2020-01-01', 'black-bean', 15.50, 'Sulawesi', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (8, 'description8', '2020-01-01', 'black-bean', 15.50, 'Verona', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (9, 'description9', '2020-01-01', 'black-bean', 15.50, 'Veranda', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (10, 'description10', '2020-01-01', 'black-bean', 15.50, 'Lemonade Blueberry Beans', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (11, 'description11', '2020-01-01', 'black-bean', 15.50, 'French', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (12, 'description12', '2020-01-01', 'black-bean', 15.50, 'Italian', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (13, 'description13', '2020-01-01', 'black-bean', 15.50, 'Dark roast', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (14, 'description14', '2020-01-01', 'black-bean', 15.50, 'Very Dark Roast', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (15, 'description15', '2020-01-01', 'black-bean', 15.50, 'Black', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (16, 'description16', '2020-01-01', 'black-bean', 15.50, 'mediocre cheap beans', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (17, 'description16', '2020-01-01', 'black-bean', 150.50, 'Kopi Luwak', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (18, 'description18', '2020-01-01', 'black-bean', 15.50, 'Dark Matter name', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (19, 'description19', '2020-01-01', 'black-bean', 15.50, 'Unicorn blood', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (20, 'description20', '2020-01-01', 'black-bean', 15.50, 'Juice of Tree', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (21, 'description21', '2020-01-01', 'black-bean', 15.50, 'Death', 10);
+INSERT INTO products (productid, description, expiration, image, price, productname, quantity) VALUES (22, 'description22', '2020-01-01', 'black-bean', 15.50, 'Random name', 10);
 
 INSERT INTO suppliers (supplierid, suppliername, supplierphone) VALUES (1, 'supplier1', '111-111-1111');
 INSERT INTO suppliers (supplierid, suppliername, supplierphone) VALUES (2, 'supplier2', '111-111-1111');
@@ -64,13 +58,6 @@ INSERT INTO cart (userid, productid, quantityincart) VALUES (3, 4, 4);
 INSERT INTO cart (userid, productid, quantityincart) VALUES (4, 2, 5);
 INSERT INTO cart (userid, productid, quantityincart) VALUES (4, 5, 6);
 INSERT INTO cart (userid, productid, quantityincart) VALUES (4, 1, 7);
-
--- INSERT INTO cart (userid, productid) VALUES (('9bdce996-7588-4580-b8af-482ec8feb38a'), 1);
--- INSERT INTO cart (userid, productid) VALUES (('9bdce996-7588-4580-b8af-482ec8feb38a'), 2);
--- INSERT INTO cart (userid, productid) VALUES (('9bdce996-7588-4580-b8af-482ec8feb38a'), 3);
--- INSERT INTO cart (userid, productid) VALUES (('44ea5a37-b95f-4d6c-80cc-2cdbc7ab195d'), 2);
--- INSERT INTO cart (userid, productid) VALUES (('44ea5a37-b95f-4d6c-80cc-2cdbc7ab195d'), 5);
--- INSERT INTO cart (userid, productid) VALUES (('44ea5a37-b95f-4d6c-80cc-2cdbc7ab195d'), 1);
 
 -- INSERT INTO totalorderhistory (userid, productid) VALUES (3, 1);
 -- INSERT INTO totalorderhistory (userid, productid) VALUES (3, 2);
