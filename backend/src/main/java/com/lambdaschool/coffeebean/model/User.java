@@ -28,6 +28,8 @@ public class User
     // set default privilege to be user
     private String role = "user";
 
+    private String rawPassword;
+
     // ==================================================================
 
 //    @JsonIgnore
@@ -221,4 +223,13 @@ public class User
         this.totalorderhistory = totalorderhistory;
     }
 
+    public String getRawPassword()
+    {
+        return rawPassword;
+    }
+
+    public void setRawPassword(String rawPassword)
+    {
+        this.rawPassword = rawPassword;
+    }
 }

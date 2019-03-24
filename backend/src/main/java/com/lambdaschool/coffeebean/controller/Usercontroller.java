@@ -72,8 +72,8 @@ public class Usercontroller
         }
     }
 
-    @PutMapping("/update/{currentpassword}")
-    public Object updateUser(@RequestBody User updatedUser, @PathVariable String currentpassword)
+    @PutMapping("/update")
+    public Object updateUser(@RequestBody User updatedUser)
     {
         CurrentUser currentuser = (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long currentUserId = currentuser.getCurrentuserid();
@@ -81,7 +81,7 @@ public class Usercontroller
         User foundUser = userrepos.findById(currentUserId).get();
 
         String currentEncryptedPassword = foundUser.getPassword();
-        String unencryptedCurrentPassword = currentpassword;
+        String unencryptedCurrentPassword = updatedUser.getRawPassword();
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         Map returnObject = new HashMap();
@@ -92,12 +92,9 @@ public class Usercontroller
             if (updatedUser.getEmail()!=null && userrepos.findByEmail(updatedUser.getEmail())!=null) returnObject.put("emailExists", true);
             if (!returnObject.isEmpty()) return returnObject;
 
-            updatedUser.setUserid(currentUserId);
-            if (updatedUser.getTotalorderhistory()==null) updatedUser.setTotalorderhistory(foundUser.getTotalorderhistory());
-            if (updatedUser.getProductsincart()==null) updatedUser.setProductsincart(foundUser.getProductsincart());
+            // User - personal details field - can be user changed
             if (updatedUser.getShippingaddress()==null) updatedUser.setShippingaddress(foundUser.getShippingaddress());
             if (updatedUser.getBillingaddress()==null) updatedUser.setBillingaddress(foundUser.getBillingaddress());
-            if (updatedUser.getOrderhistory()==null) updatedUser.setOrderhistory(foundUser.getOrderhistory());
             if (updatedUser.getCustomerphone()==null) updatedUser.setCustomerphone(foundUser.getCustomerphone());
             if (updatedUser.getPaymentmethod()==null) updatedUser.setPaymentmethod(foundUser.getPaymentmethod());
             if (updatedUser.getCustomername()==null) updatedUser.setCustomername(foundUser.getCustomername());
@@ -105,6 +102,13 @@ public class Usercontroller
             if (updatedUser.getPassword()==null) updatedUser.setPassword(foundUser.getPassword());
             if (updatedUser.getEmail()==null) updatedUser.setEmail(foundUser.getEmail());
             if (updatedUser.getRole()==null) updatedUser.setRole(foundUser.getRole());
+
+            // fields user can't change
+            updatedUser.setUserid(currentUserId);
+            updatedUser.setOrderhistory(foundUser.getOrderhistory());
+            updatedUser.setProductsincart(foundUser.getProductsincart());
+            updatedUser.setTotalorderhistory(foundUser.getTotalorderhistory());
+            updatedUser.setRawPassword(null);
 
             return userrepos.save(updatedUser);
         }
@@ -114,7 +118,6 @@ public class Usercontroller
             return returnObject;
         }
 
-//        return userrepos.save(updatedUser);
     }
 
 }
