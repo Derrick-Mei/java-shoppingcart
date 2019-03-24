@@ -3,7 +3,9 @@ import {withTheme} from "styled-components";
 import {StyledAuthForm} from "./styles/StyledAuthForm";
 import {createBaseAxios} from "../lib/axiosInstances";
 import {Theme as ITheme, InputEventTarget} from "../interfaces/index";
-import {useState} from "react";
+import {useState, useContext} from "react";
+import Context from "./context/Context";
+import generateRandomAvatarURL from "../lib/generateRandomAvatarURL";
 interface Props {
   form: any;
   theme: ITheme;
@@ -45,6 +47,7 @@ const SignupForm: React.SFC<Props> = ({
 }) => {
   const {getFieldDecorator} = form;
   const [isLoading, setLoading] = useState(false);
+  const {cloudinaryCore} = useContext(Context);
   function handleSubmit(e: React.FormEvent<HTMLInputElement>) {
     e.preventDefault();
     form.validateFields(async (err: object, values: SignupValues) => {
@@ -75,6 +78,12 @@ const SignupForm: React.SFC<Props> = ({
             `${values.username} has already been taken, try again.`,
           );
         } else {
+          try {
+            const avatarURL = await generateRandomAvatarURL();
+          } catch (err) {
+            console.log(err);
+          }
+
           message.success(
             `Hi ${
               data.username

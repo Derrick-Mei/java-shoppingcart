@@ -56,10 +56,13 @@ injectGlobal`
 // withTheme allows all pages to have access to theme prop
 const StyledPageWithTheme = withTheme(StyledPage);
 
+const cloudUploadLink = process.env.CLOUDINARY_BASE_URL + "/image/upload";
 const cloudinaryCore = new cloudinary.Cloudinary({
   cloud_name: process.env.CLOUD_NAME,
   secure: true,
 });
+const cloudPreset = process.env.CLOUDINARY_UPLOAD_PRESET;
+
 class Page extends Component {
   render() {
     return (
@@ -67,6 +70,8 @@ class Page extends Component {
         <Context.Provider
           value={{
             cloudinaryCore,
+            cloudUploadLink,
+            cloudPreset,
           }}
         >
           <ThemeProvider theme={theme}>
