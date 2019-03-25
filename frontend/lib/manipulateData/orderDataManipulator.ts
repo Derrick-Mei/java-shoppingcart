@@ -1,10 +1,19 @@
-const exampleOrdersTable = {
-  1: {
-    "mean-bean": {
-      image: "",
-    },
-  },
-};
+// const exampleOrdersTable = {
+//   1: {
+//     "mean-bean": {
+//       image: "",
+//       price: 52,
+//       quantity: 3
+//     },
+//   },
+//   2: {
+//     "bean": {
+//       image: "",
+//       price: 22,
+//       quantity: 1
+//     },
+//   },
+// };
 
 export default (orderData: any[]) => {
   const ordersTable: any = {};
