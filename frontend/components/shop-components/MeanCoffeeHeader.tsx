@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import {Button, Drawer} from "antd";
 import {useState} from "react";
+import Router from "next/router";
 
 const MeanCoffeeHeader = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
@@ -18,9 +19,18 @@ const MeanCoffeeHeader = () => {
         onClose={() => setDrawerOpen(false)}
         visible={isDrawerOpen}
       >
-        <DrawerBtn block>User Profile</DrawerBtn>
+        <DrawerBtn
+          block
+          onClick={() =>
+            Router.push({
+              pathname: "/user-profile",
+            })
+          }
+        >
+          User Profile
+        </DrawerBtn>
         <DrawerBtn block>Order History</DrawerBtn>
-        <DrawerBtn block>Light / Dark</DrawerBtn>
+        {/* <DrawerBtn block>Light / Dark</DrawerBtn> */}
       </Drawer>
     </MeanCoffeeWrapper>
   );
