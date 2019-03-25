@@ -11,6 +11,7 @@ import {createBaseAxios, createBearerAxios} from "../lib/axiosInstances";
 import {formatMoney} from "../lib/formatMoney";
 import {Spin} from "antd";
 import ReviewDrawer from "../components/shop-components/ReviewDrawer";
+import Searcher from "../components/shop-components/Searcher";
 
 const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
@@ -143,6 +144,7 @@ const ShopPage = () => {
         deleteCartItem={deleteCartItem}
         userId={userId}
       />
+      <Searcher />
       <ReviewDrawer
         isVisible={isReviewsPaneVisible}
         commentsData={commentsData}
