@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import {Image, Transformation} from "cloudinary-react";
+import {Button} from "antd";
+import uuidv4 from "uuid/v4";
 export interface Props {
   imagePublicId: string;
   imageHeight: number;
@@ -7,7 +9,7 @@ export interface Props {
   title: string;
   description: string;
   price?: number;
-  actionBtn?: React.ReactElement;
+  actionBtns?: [React.ReactElement];
 }
 
 const ItemCard: React.SFC<Props> = ({
@@ -17,7 +19,7 @@ const ItemCard: React.SFC<Props> = ({
   title,
   description,
   price,
-  actionBtn,
+  actionBtns,
 }) => {
   return (
     <StyledCard>
@@ -31,10 +33,12 @@ const ItemCard: React.SFC<Props> = ({
       <ItemTextContainer>
         <ItemTitle>{title}</ItemTitle>
         <ItemDescription>{description}</ItemDescription>
-        {actionBtn ? (
-          <ActionsContainer>
-            {React.cloneElement(actionBtn)}
-          </ActionsContainer>
+        {actionBtns ? (
+          <Button.Group>
+            {actionBtns.map((btn, i) => {
+              return React.cloneElement(btn, {key: uuidv4()});
+            })}
+          </Button.Group>
         ) : (
           ""
         )}
