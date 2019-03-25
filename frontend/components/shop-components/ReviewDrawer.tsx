@@ -12,28 +12,20 @@ interface ReviewComment {
 export interface ReviewDrawerProps {
   isVisible: boolean;
   commentsData: [ReviewComment];
+  setVisible: Function;
 }
-const data = [
-  {
-    title: "Ant Design Title 1",
-  },
-  {
-    title: "Ant Design Title 2",
-  },
-  {
-    title: "Ant Design Title 3",
-  },
-  {
-    title: "Ant Design Title 4",
-  },
-];
 
 const ReviewDrawer: React.SFC<ReviewDrawerProps> = ({
   isVisible,
   commentsData,
+  setVisible,
 }) => {
   return (
-    <Drawer visible={isVisible} placement={"right"}>
+    <Drawer
+      visible={isVisible}
+      placement={"left"}
+      onClose={() => setVisible(false)}
+    >
       <SpacingWrapper>
         <Button type="primary">Submit Review</Button>
         <Rate />
