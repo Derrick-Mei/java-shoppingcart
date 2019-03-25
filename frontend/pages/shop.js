@@ -10,9 +10,12 @@ import uuidv4 from "uuid/v4";
 import {createBaseAxios, createBearerAxios} from "../lib/axiosInstances";
 import {formatMoney} from "../lib/formatMoney";
 import {Spin} from "antd";
+import ReviewDrawer from "../components/shop-components/ReviewDrawer";
+
 const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
   const [isItemsLoading, setItemsLoading] = useState(false);
+  const [isReviewsPaneVisible, setReviewsPaneVisible] = useState(false);
   const {
     cartItems,
     setCartItems,
@@ -20,7 +23,22 @@ const ShopPage = () => {
     addCartItem,
   } = useCartItem();
   const [userId, setUserId] = useState();
-
+  const commentsData = [
+    {
+      avatar: "",
+      commentText: "This product is awesome!",
+      rating: 5,
+      keyId: 1,
+      author: "John",
+    },
+    {
+      avatar: "",
+      commentText: "This product is alright",
+      rating: 3,
+      keyId: 2,
+      author: "herald",
+    },
+  ];
   useEffect(() => {
     const fetchItems = async () => {
       try {
@@ -95,7 +113,7 @@ const ShopPage = () => {
                       imagePublicId={item.image}
                       imageHeight={200}
                       imageWidth={200}
-                      actionBtn={
+                      actionBtns={[
                         <Button
                           type="primary"
                           onClick={() => {
@@ -103,8 +121,15 @@ const ShopPage = () => {
                           }}
                         >
                           Buy {formatMoney(item.price)}
-                        </Button>
-                      }
+                        </Button>,
+                        <Button
+                          onClick={() => {
+                            setReviewsPaneVisible(prevState => !prevState);
+                          }}
+                        >
+                          Reviews
+                        </Button>,
+                      ]}
                     />
                   );
                 })}
@@ -117,6 +142,11 @@ const ShopPage = () => {
         cartItems={cartItems}
         deleteCartItem={deleteCartItem}
         userId={userId}
+      />
+      <ReviewDrawer
+        isVisible={isReviewsPaneVisible}
+        commentsData={commentsData}
+        setVisible={setReviewsPaneVisible}
       />
     </ShopWrapper>
   );
