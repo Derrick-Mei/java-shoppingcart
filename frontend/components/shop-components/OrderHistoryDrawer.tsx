@@ -30,16 +30,27 @@ const OrderHistoryDrawer: React.SFC<Props> = ({
         <Button type="primary" onClick={() => setIsMainVisible(false)}>
           Back
         </Button>
-        <CardsList>
+        <CardsList
+          onClick={() => {
+            setIsChildVisible(true);
+          }}
+        >
           {mainData.map((order: Order) => {
-            <Card key={order.id} title={`Order Date: ${order.date}`}>
-              {order.content}
-            </Card>;
+            return (
+              <Card key={order.id} title={`Order Date: ${order.date}`}>
+                {order.content}
+              </Card>
+            );
           })}
         </CardsList>
       </MainDrawer>
 
-      <ChildDrawer title={`Order`} visible={isChildVisible}>
+      <ChildDrawer
+        title={`Order`}
+        visible={isChildVisible}
+        placement={"left"}
+        onClose={() => setIsChildVisible(false)}
+      >
         {/* <ItemCard /> */}
       </ChildDrawer>
     </>
