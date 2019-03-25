@@ -13,15 +13,20 @@ export interface ReviewDrawerProps {
   isVisible: boolean;
   commentsData: [ReviewComment];
   setVisible: Function;
+  productTitle: string;
 }
 
 const ReviewDrawer: React.SFC<ReviewDrawerProps> = ({
   isVisible,
   commentsData,
   setVisible,
+  productTitle,
 }) => {
   return (
     <Drawer
+      title={`Reviews for ${
+        productTitle ? productTitle : "this product."
+      }`}
       visible={isVisible}
       placement={"left"}
       onClose={() => setVisible(false)}
@@ -53,7 +58,7 @@ const ReviewDrawer: React.SFC<ReviewDrawerProps> = ({
 
 const SpacingWrapper = styled.div`
   & > * {
-    margin-top: 20px;
+    margin-bottom: 20px;
   }
 `;
 
