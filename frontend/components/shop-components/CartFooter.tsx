@@ -86,14 +86,14 @@ const CartFooter: React.SFC<Props> = ({
                 imagePublicId={item.image}
                 imageHeight={50}
                 imageWidth={75}
-                actionBtn={
+                actionBtns={[
                   <Button
                     type="danger"
                     onClick={() => deleteCartItem(item, userId)}
                   >
                     Delete
-                  </Button>
-                }
+                  </Button>,
+                ]}
               />
             );
           })}
