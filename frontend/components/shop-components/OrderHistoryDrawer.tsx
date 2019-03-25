@@ -6,7 +6,7 @@ import ItemCard from "./ItemCard";
 interface Order {
   date: string;
   id: string;
-  content: string;
+  description: string;
 }
 interface Props {
   isMainVisible: boolean;
@@ -38,7 +38,7 @@ const OrderHistoryDrawer: React.SFC<Props> = ({
           {mainData.map((order: Order) => {
             return (
               <Card key={order.id} title={`Order Date: ${order.date}`}>
-                {order.content}
+                {order.description}
               </Card>
             );
           })}
