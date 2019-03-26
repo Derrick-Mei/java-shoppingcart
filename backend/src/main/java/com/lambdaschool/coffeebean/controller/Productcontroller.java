@@ -4,8 +4,6 @@ import com.lambdaschool.coffeebean.model.Product;
 import com.lambdaschool.coffeebean.repository.Productrepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -22,17 +20,16 @@ public class Productcontroller
     Productrepository productrepos;
 
     @ApiOperation(value = "find all orders - DKM", response = Product.class)
-    @ApiResponses(value =
-            {
-                    @ApiResponse(code = 200, message = "Successfully received customer - DKM"),
-                    @ApiResponse(code = 401, message = "You are not authorized to the view the resource - DKM"),
-                    @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden - DKM"),
-                    @ApiResponse(code = 404, message = "The resource you were trying to reach is not found - DKM")
-            })
     @GetMapping("")
     public List<Product> findAllOrders()
     {
         return productrepos.findAll();
+    }
+
+    @GetMapping("/{productid}")
+    public Product findProductByProductId(@PathVariable long productid)
+    {
+        return productrepos.findById(productid).get();
     }
 
     @PostMapping("")
