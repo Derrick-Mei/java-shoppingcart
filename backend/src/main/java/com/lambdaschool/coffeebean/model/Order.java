@@ -30,7 +30,7 @@ public class Order
     private User user;
 
     // *** ManyToMany with product - orderproducts - owner ***
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "orderproducts",
             joinColumns = {@JoinColumn(name = "orderid")},
             inverseJoinColumns = {@JoinColumn(name = "productid")})

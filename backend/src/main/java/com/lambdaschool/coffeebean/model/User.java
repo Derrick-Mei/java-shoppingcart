@@ -59,7 +59,7 @@ public class User
 
     //*** ManyToMany with Product - cart - owner of table ***
 //    @JsonIgnore
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "cart",
             joinColumns = {@JoinColumn(name = "userid")},
             inverseJoinColumns = {@JoinColumn(name = "productid")})
@@ -69,7 +69,7 @@ public class User
 
     //*** ManyToMany with Product - totalorderhistory - owner of table ***
 //    @JsonIgnore
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "totalorderhistory",
             joinColumns = {@JoinColumn(name = "userid")},
             inverseJoinColumns = {@JoinColumn(name = "productid")})

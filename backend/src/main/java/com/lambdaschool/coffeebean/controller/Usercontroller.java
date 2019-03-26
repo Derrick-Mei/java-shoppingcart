@@ -50,10 +50,19 @@ public class Usercontroller extends CheckIsAdmin
         {
             userrepos.deleteById(id);
 
-            return new HashMap<String, Object>();
+            return new HashMap<>()
+            {{
+                put("username", foundUser.get().getUsername());
+                put("userid", foundUser.get().getUserid());
+                put("deleted", true);
+            }};
         } else
         {
-            return new HashMap<String, Object>();
+            return new HashMap<>()
+            {{
+                put("error", "user not found");
+                put("deleted", false);
+            }};
         }
     }
 }

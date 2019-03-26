@@ -3,7 +3,7 @@
 ## User Controller - Protected
 1. GET -    /users - find all users
 2. GET -    /users/{userid} - get user by userid
-3. GET -    /users/addadmin - add admin user
+3. POST -   /users/addadmin - add admin user
 4. DELETE - /users/{userid} - delete a user by userid
 
 ## Order Controller
@@ -12,7 +12,6 @@
 3. GET - /orders/unshipped - get all unshipped orders
 4. GET - /orders/shipped - get all shipped orders
 5. PUT - /orders/updatshippingstatus/{orderid}/{status} - update shipping status
-6.  order product needs 3rd column
 
 ## Supplier Controller
 1. GET -    /suppliers - get all suppliers

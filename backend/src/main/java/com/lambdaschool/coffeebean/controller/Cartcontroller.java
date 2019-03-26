@@ -64,7 +64,6 @@ public class Cartcontroller extends CheckIsAdmin
         if (currentUserId == userid || isAdmin)
         {
             CartItems foundCartItems = userrepos.searchCart(userid, productid);
-            String productName = foundCartItems.getProductname();
             if (foundCartItems != null)
             {
                 int previousQuantity = foundCartItems.getQuantityincart();
@@ -73,7 +72,7 @@ public class Cartcontroller extends CheckIsAdmin
 
                 returnObject.put("userId", userid);
                 returnObject.put("previouslyExisted", true);
-                returnObject.put("productName", productName);
+                returnObject.put("productName", foundCartItems.getProductname());
                 returnObject.put("previousQuantity", previousQuantity);
                 returnObject.put("quantityToBeAdded", quantity);
                 returnObject.put("totalQuantity", total);
@@ -83,7 +82,6 @@ public class Cartcontroller extends CheckIsAdmin
                 returnObject.put("userId", userid);
                 returnObject.put("prevouslyExisted", false);
                 returnObject.put("quantityToBeAdded", quantity);
-                returnObject.put("productName", productName);
             }
             return returnObject;
         } else
@@ -133,7 +131,7 @@ public class Cartcontroller extends CheckIsAdmin
         if (currentUserId == userid || isAdmin)
         {
             userrepos.deleteOneItemFromCart(userid, productid);
-            return "You have deleted " + productid + " from " + userid;
+            return "You have deleted product: " + productid + " from user: " + userid;
 
         } else
         {

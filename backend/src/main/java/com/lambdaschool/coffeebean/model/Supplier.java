@@ -18,7 +18,7 @@ public class Supplier
     private String supplierphone;
 
     // *** ManyToMany with product - supplierproduct - owner ***
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "supplierproduct",
             joinColumns = {@JoinColumn(name = "supplierid")},
             inverseJoinColumns = {@JoinColumn(name = "productid")})
