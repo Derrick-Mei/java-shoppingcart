@@ -12,6 +12,12 @@ import {formatMoney} from "../lib/formatMoney";
 import {Spin} from "antd";
 import ReviewDrawer from "../components/shop-components/ReviewDrawer";
 import Searcher from "../components/shop-components/Searcher";
+import getCustomerByUserId from "../lib/requestsEndpoints/getCustomerByUserId";
+import {notification} from "antd";
+import getCustomerByUsername from "../lib/requestsEndpoints/getCustomerByUsername";
+import getCartByUserId from "../lib/requestsEndpoints/getCartByUserId";
+import getShopMerchandise from "../lib/requestsEndpoints/getShopMerchandise";
+import postAddCartItem from "../lib/requestsEndpoints/postAddCartItem";
 
 const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
@@ -44,14 +50,15 @@ const ShopPage = () => {
     const fetchItems = async () => {
       try {
         setItemsLoading(true);
-        const {data} = await createBaseAxios()({
-          method: "get",
-          url: "/shop",
-        });
-        setMerchandise(data);
+        const merchandiseData = await getShopMerchandise();
+        setMerchandise(merchandiseData);
         setItemsLoading(false);
       } catch (err) {
         console.log(err);
+        notification.error({
+          message:
+            "Failed to fetch merchandise, it might be a server error try again.",
+        });
       }
     };
     fetchItems();
@@ -60,28 +67,23 @@ const ShopPage = () => {
   useEffect(() => {
     const fetchUserAndCart = async () => {
       try {
-        const {data: userData} = await createBearerAxios()({
-          method: "get",
-          url: `/cart/user/username/${window.localStorage.getItem(
-            "username",
-          )}`,
-        });
-        setUserId(userData.userid);
-        window.localStorage.setItem("userid", userData.userid);
-        const {data: cartData} = await createBearerAxios()({
-          method: "get",
-          url: `/cart/${userData.userid}`,
-        });
-        const productsData = cartData;
+        const username = window.localStorage.getItem("username");
+        const customerData = await getCustomerByUsername(username);
+
+        setUserId(customerData.userid);
+
+        window.localStorage.setItem("userid", customerData.userid);
+
+        const cartData = await getCartByUserId(customerData.userid);
         const cartItems = [];
-        for (let i = 0; i < productsData.length; i++) {
-          let product = productsData[i];
-          const quantity = product.quantityincart;
+        for (let i = 0; i < cartData.length; i++) {
+          let item = cartData[i];
+          const quantity = item.quantityincart;
 
           for (let j = 0; j < quantity; j++) {
-            delete product.quantityincart;
+            delete item.quantityincart;
             cartItems.push({
-              ...product,
+              ...item,
               keyId: uuidv4(),
             });
           } // for j - used for adding the right amount of quantity in cart
@@ -190,23 +192,24 @@ const useCartItem = () => {
       });
   };
 
-  const addCartItem = (itemObj, userId) => {
-    console.log(cartItems);
-    createBearerAxios()({
-      method: "post",
-      url: `/cart/addtocart/${userId}/${itemObj.productid}/1`,
-    })
-      .then(({data}) => {
-        console.log(data);
-        const newItem = {
-          ...itemObj,
-          keyId: uuidv4(),
-        };
-        setCartItems(prevState => [...prevState, newItem]);
-      })
-      .catch(err => {
-        console.log(err, " POST to cart");
-      });
+  const addCartItem = async (itemObj, userId) => {
+    const displaySuccessMsg = notification.success.bind(null, {
+      message: `${itemObj.productname} has been added!`,
+    });
+    const displayFailedMsg = notification.error.bind(null, {
+      message: `${itemObj.productname} has failed to be added to cart.`,
+    });
+    const data = await postAddCartItem(
+      userId,
+      itemObj.productid,
+      displaySuccessMsg,
+      displayFailedMsg,
+    );
+    const newItem = {
+      ...itemObj,
+      keyId: uuidv4(),
+    };
+    setCartItems(prevState => [...prevState, newItem]);
   };
 
   return {
