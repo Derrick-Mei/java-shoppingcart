@@ -23,38 +23,41 @@ const StripeBtn: React.SFC<Props> = ({headerImg, amount}) => {
     })
       .then(({data}: any) => {
         console.log(data);
-        // if (data.status === "succeeded") {
-        //   authAxios({
-        //     method: "post",
-        //     url: `/buy/${window.localStorage.getItem("userid")}`,
-        //     data: {
-        //       shippingaddress: "string address1",
-        //       paymentdetails: "Mastercard1",
-        //       user: {
-        //         userid: window.localStorage.getItem("userid"),
-        //       },
-        //       orderproducts: [
-        //         {
-        //           productid: 2,
-        //         },
-        //         {
-        //           productid: 4,
-        //         },
-        //         {
-        //           productid: 1,
-        //         },
-        //       ],
-        //     },
-        //   })
-        //     .then(({data}: any) => {
-        //       console.log("POST /buy ", data);
-        //     })
-        //     .catch((err: any) => {
-        //       console.log(err);
-        //     });
-        // } else {
-        //   notification.error("The payment process has failed");
-        // }
+        if (data.status === "succeeded") {
+          authAxios({
+            method: "post",
+            url: `/cart/buy/${window.localStorage.getItem("userid")}`,
+            data: {
+              shippingaddress: "string address1",
+              paymentdetails: "Mastercard1",
+              user: {
+                userid: window.localStorage.getItem("userid"),
+              },
+              orderproducts: [
+                {
+                  productid: 2,
+                },
+                {
+                  productid: 2,
+                },
+                {
+                  productid: 4,
+                },
+                {
+                  productid: 1,
+                },
+              ],
+            },
+          })
+            .then(({data}: any) => {
+              console.log("POST /buy ", data);
+            })
+            .catch((err: any) => {
+              console.log(err);
+            });
+        } else {
+          notification.error("The payment process has failed");
+        }
 
         //POST to server address information for next time
         //Send a receipt to customer's email if they have one
