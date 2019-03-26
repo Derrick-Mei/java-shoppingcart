@@ -24,9 +24,22 @@ const ChangePasswordForm: React.SFC<Props> = ({form, theme}) => {
     newPasswordAgain: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-
   const changeInputHandler = (e: InputEventTarget) => {
     setPasswords({...passwords, [e.target.name]: e.target.value});
+  };
+  const compareToFirstPassword = (rule, value, callback) => {
+    if (value && value !== form.getFieldValue("new-password")) {
+      callback("Your new passwords don't match!");
+    } else {
+      callback();
+    }
+  };
+
+  const validateToNextPassword = (rule, value, callback) => {
+    if (value) {
+      form.validateFields(["new-password-again"], {force: true});
+    }
+    callback();
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLInputElement>) => {
@@ -69,6 +82,7 @@ const ChangePasswordForm: React.SFC<Props> = ({form, theme}) => {
           {getFieldDecorator("new-password", {
             rules: [
               {required: true, message: "Please input your New Password!"},
+              {validator: validateToNextPassword},
             ],
           })(
             <Input
@@ -82,13 +96,14 @@ const ChangePasswordForm: React.SFC<Props> = ({form, theme}) => {
             />,
           )}
         </Form.Item>
-        <Form.Item label="Password">
+        <Form.Item label="New Password Again">
           {getFieldDecorator("new-password-again", {
             rules: [
               {
                 required: true,
                 message: "Please input your New Password Again!",
               },
+              {validator: compareToFirstPassword},
             ],
           })(
             <Input
