@@ -8,6 +8,7 @@ interface Props {
   form: {
     getFieldDecorator: Function;
     validateFields: Function;
+    getFieldValue: Function;
   };
   theme: ITheme;
 }
