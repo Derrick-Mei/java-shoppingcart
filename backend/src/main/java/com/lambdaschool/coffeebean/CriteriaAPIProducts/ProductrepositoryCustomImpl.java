@@ -24,7 +24,7 @@ public class ProductrepositoryCustomImpl implements ProductrepositoryCustom
         Path<String> productPath = product.get("productname");
 
         List<Predicate> predicates = new ArrayList<>();
-        for (String word : searchSet )
+        for (String word : searchSet)
         {
             word = "%" + word + "%";
             predicates.add(cb.like(productPath, word));

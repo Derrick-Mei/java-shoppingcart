@@ -11,18 +11,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class StripeService {
+public class StripeService
+{
 
     @Value("${STRIPE_SECRET_KEY}")
     String secretKey;
 
     @PostConstruct
-    public void init() {
+    public void init()
+    {
         Stripe.apiKey = secretKey;
     }
 
     public Charge charge(ChargeRequest chargeRequest)
-            throws StripeException {
+            throws StripeException
+    {
         Map<String, Object> chargeParams = new HashMap<>();
         chargeParams.put("amount", chargeRequest.getAmount());
         chargeParams.put("currency", chargeRequest.getCurrency());

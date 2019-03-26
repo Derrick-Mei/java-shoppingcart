@@ -9,8 +9,8 @@ ALTER TABLE products ADD FULLTEXT(productname);
 -- order products need quantity
 
 
-INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (1, 'Mastercard1', '2019-01-20 20:50:50', true, 'string address1', 3);
-INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (2, 'Mastercard2', '2019-01-20 20:50:50', false, 'string address1', 3);
+INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid, orderdatetime) VALUES (1, 'Mastercard1', '2019-01-20 20:50:50', true, 'string address1', 3, '2019-01-20 20:50:50');
+INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid, orderdatetime) VALUES (2, 'Mastercard2', '2019-01-20 20:50:50', false, 'string address1', 3, '2019-01-20 20:50:50');
 -- INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (3, 'Mastercard3', '2019-01-20 20:50:50', true, 'string address1', 4);
 -- INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (4, 'Mastercard4', '2019-01-20 20:50:50', false, 'string address1', 3);
 -- INSERT INTO orders (orderid, paymentdetails, shipdatetime, shippedstatus, shippingaddress, userid) VALUES (5, 'Mastercard5', '2019-01-20 20:50:50', true, 'string address1', 3);
