@@ -2,6 +2,7 @@ package com.lambdaschool.coffeebean.controller;
 
 import com.lambdaschool.coffeebean.model.User;
 import com.lambdaschool.coffeebean.repository.Userrepository;
+import com.lambdaschool.coffeebean.service.CheckIsAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +14,8 @@ import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
-public class Signupcontroller {
+public class Signupcontroller extends CheckIsAdmin
+{
 
     @Autowired
     // private UserService userService;
@@ -21,22 +23,10 @@ public class Signupcontroller {
 
     @PostMapping("")
     public Object addNewUser(@RequestBody User newuser) throws URISyntaxException {
-        String email = newuser.getEmail();
+        Object returnObject = isUsernameAndEmailUnique(newuser, userrepos);
+        if (returnObject != null) return returnObject;
 
-        if (userrepos.findByUsername(newuser.getUsername()) != null) {
-            if (email != null && userrepos.findByEmail(email) != null) {
-                return "{ username unique constraint : " + newuser.getUsername()
-                        + " already exists,\nemail unique constraint : " + newuser.getEmail() + " already exists }";
-            }
-            return "{username unique constraint : " + newuser.getUsername() + " already exists}";
-        } else if (email != null && userrepos.findByEmail(email) != null) {
-            return "{ email unique constraint : " + newuser.getEmail() + " already exists }";
-        } else {
-            // set role to user for security concern. Just in case a new user wants to set
-            // their own role to admin.
-            newuser.setRole("user");
-            return userrepos.save(newuser);
-        }
+        newuser.setRole("user");
+        return userrepos.save(newuser);
     }
-
 }
