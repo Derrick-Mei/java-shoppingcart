@@ -31,7 +31,7 @@ public class ProductcontrollerTests
     @MockBean
     private Productrepository productrepos;
 
-    Product mockProduct = new Product("productname4", "description4", 12.50, 10, new Date(System.currentTimeMillis()), "asdf");
+    private final Product mockProduct = new Product("productname4", "description4", 12.50, 10, new Date(System.currentTimeMillis()), "asdf");
 
     @Test
     public void canGetProduct() throws Exception {

@@ -29,8 +29,8 @@ import javax.annotation.Resource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
     // testing signup url
-    public static final String SIGN_UP_URL = "/signup";
-    public static final String SHOP_URL = "/shop";
+    private static final String SIGN_UP_URL = "/signup";
+    private static final String SHOP_URL = "/shop";
 
     @Resource(name = "userService")
     private UserDetailsService userDetailsService;
@@ -49,33 +49,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .passwordEncoder(encoder());
     }
 
-    // Original with no access without token and no bcrypt
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception
-//    {
-//        http
-//                .csrf().disable()
-//                .anonymous().disable()
-//                .authorizeRequests()
-//                .antMatchers(HttpMethod.OPTIONS).permitAll()
-//                .antMatchers("/api-docs/**").permitAll()
-//                ;
-//    }
-
-    // access with token but no bcrypt
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .csrf().disable()
-//                .authorizeRequests()
-//                .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
-//                .antMatchers(HttpMethod.GET, SHOP_URL).permitAll()
-//                // What do the below 2 do?
-//                .antMatchers(HttpMethod.OPTIONS).permitAll()
-//                .antMatchers("/api-docs/**").permitAll()
-//                .anyRequest().authenticated();
-//    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception
     {
@@ -83,9 +56,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .authorizeRequests()
                 .antMatchers("/swagger-ui.html").permitAll()
                 .antMatchers("/api-docs/**").permitAll()
-//                .antMatchers("/users/**").permitAll()
-//                .antMatchers("/console/**").permitAll()
-              // .antMatchers(HttpMethod.POST, "/charge").permitAll()
                 .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
                 .antMatchers(HttpMethod.GET, SHOP_URL).permitAll();
         http.csrf().disable();
@@ -98,13 +68,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
         return new InMemoryTokenStore();
     }
 
-    // no bcrypt
-//    @Bean
-//    public NoOpPasswordEncoder encoder()
-//    {
-//        return new NoOpPasswordEncoder();
-//    }
-
     @Bean
     public PasswordEncoder encoder()
     {
@@ -112,7 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     }
 
     @Bean
-    public FilterRegistrationBean corsFilter2()
+    public FilterRegistrationBean corsFilter()
     {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();

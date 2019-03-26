@@ -6,7 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -18,10 +18,10 @@ public class User
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userid;
 
-    @Column(length = 250, unique = true )
+    @Column(length = 250, unique = true)
     private String username;
 
-//    @JsonIgnore
+    //    @JsonIgnore
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
@@ -32,23 +32,23 @@ public class User
 
     // ==================================================================
 
-//    @JsonIgnore
+    //    @JsonIgnore
     private String customername;
 
-//    @JsonIgnore
+    //    @JsonIgnore
     private String billingaddress;
 
-//    @JsonIgnore
+    //    @JsonIgnore
     private String shippingaddress;
 
-//    @JsonIgnore
-    private  String customerphone;
+    //    @JsonIgnore
+    private String customerphone;
 
-//    @JsonIgnore
+    //    @JsonIgnore
     @Column(length = 250, unique = true)
     private String email;
 
-//    @JsonIgnore
+    //    @JsonIgnore
     private String paymentmethod;
 
     // *** OneToMany with Order ***
@@ -59,7 +59,7 @@ public class User
 
     //*** ManyToMany with Product - cart - owner of table ***
 //    @JsonIgnore
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "cart",
             joinColumns = {@JoinColumn(name = "userid")},
             inverseJoinColumns = {@JoinColumn(name = "productid")})
@@ -69,7 +69,7 @@ public class User
 
     //*** ManyToMany with Product - totalorderhistory - owner of table ***
 //    @JsonIgnore
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "totalorderhistory",
             joinColumns = {@JoinColumn(name = "userid")},
             inverseJoinColumns = {@JoinColumn(name = "productid")})
@@ -127,7 +127,7 @@ public class User
     public List<SimpleGrantedAuthority> getAuthority()
     {
         String myRole = "ROLE_" + this.role.toUpperCase();
-        return Arrays.asList(new SimpleGrantedAuthority(myRole));
+        return Collections.singletonList(new SimpleGrantedAuthority(myRole));
     }
 
     // ====================================================================

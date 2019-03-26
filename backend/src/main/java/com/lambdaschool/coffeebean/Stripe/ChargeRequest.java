@@ -3,11 +3,14 @@ package com.lambdaschool.coffeebean.Stripe;
 import lombok.Data;
 
 @Data
-public class ChargeRequest {
+public class ChargeRequest
+{
 
-    public enum Currency {
-        EUR, USD;
+    public enum Currency
+    {
+        EUR, USD
     }
+
     private String description;
     private int amount; // in cents
     private Currency currency;

@@ -1,4 +1,5 @@
 package com.lambdaschool.coffeebean.config;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -32,7 +33,7 @@ public class Swagger2Config
                 .description("Our Courses")
                 .contact(new Contact("Derrick Mei", "http://www.derrickmei.com", "derrick.mei.168@gmail.com"))
                 .license("MIT")
-                .licenseUrl("https://github.com/LambdaSchool/java-crudysnacks/blob/master/LICENSE")
+                .licenseUrl("https://github.com/Derrick-Mei/java-shoppingcart/blob/master/LICENSE")
                 .version("1.0.0")
                 .build();
     }

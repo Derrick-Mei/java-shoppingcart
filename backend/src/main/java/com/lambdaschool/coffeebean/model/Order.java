@@ -30,10 +30,10 @@ public class Order
     private User user;
 
     // *** ManyToMany with product - orderproducts - owner ***
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "orderproducts",
-        joinColumns = {@JoinColumn(name = "orderid")},
-        inverseJoinColumns = {@JoinColumn(name = "productid")})
+            joinColumns = {@JoinColumn(name = "orderid")},
+            inverseJoinColumns = {@JoinColumn(name = "productid")})
     @JsonIgnoreProperties({"potentialusers", "productorders", "productusers", "suppliers"})
     private Set<Product> orderproducts;
 
@@ -55,6 +55,9 @@ public class Order
     {
         return shippingaddress;
     }
+
+    //yyyy-mm-dd HH:MM:SS
+    private Date orderdatetime = new Date();
 
     public void setShippingaddress(String shippingaddress)
     {
