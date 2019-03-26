@@ -4,6 +4,7 @@ import {Card, Form, Input, Icon} from "antd";
 import {withTheme} from "styled-components";
 import {InputEventTarget, Theme as ITheme} from "../../interfaces/index";
 import {Button} from "antd";
+import {createBearerAxios} from "../../lib/axiosInstances";
 interface Props {
   form: {
     getFieldDecorator: Function;
@@ -52,6 +53,21 @@ const ChangePasswordForm: React.SFC<Props> = ({form, theme}) => {
         return;
       }
       setIsLoading(true);
+      try {
+        const {data} = await createBearerAxios()({
+          method: "put",
+          url: "/users/update",
+          data: {
+            rawPassword: passwords.currentPassword,
+            password: passwords.newPassword,
+          },
+        });
+
+        console.log(data);
+      } catch (err) {
+      } finally {
+        setIsLoading(false);
+      }
     });
   };
 
