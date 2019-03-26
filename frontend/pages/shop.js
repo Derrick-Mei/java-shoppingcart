@@ -14,6 +14,7 @@ import ReviewDrawer from "../components/shop-components/ReviewDrawer";
 import Searcher from "../components/shop-components/Searcher";
 import getCustomerByUserId from "../lib/requestsEndpoints/getCustomerByUserId";
 import {notification} from "antd";
+import Router from "next/router";
 import getCustomerByUsername from "../lib/requestsEndpoints/getCustomerByUsername";
 import getCartByUserId from "../lib/requestsEndpoints/getCartByUserId";
 import getShopMerchandise from "../lib/requestsEndpoints/getShopMerchandise";
@@ -33,6 +34,7 @@ const ShopPage = () => {
     addCartItem,
   } = useCartItem();
   const [userId, setUserId] = useState();
+  const [accessToken, setAccessToken] = useState("");
   const commentsData = [
     {
       avatar: "",
@@ -65,6 +67,7 @@ const ShopPage = () => {
       }
     };
     fetchItems();
+    setAccessToken(window.localStorage.getItem("access_token"));
   }, []);
 
   useEffect(() => {
@@ -120,14 +123,26 @@ const ShopPage = () => {
                       imageHeight={200}
                       imageWidth={200}
                       actionBtns={[
-                        <Button
+                        <BuyBtn
                           type="primary"
                           onClick={() => {
                             addCartItem(item, userId);
                           }}
+                          accessToken={accessToken}
                         >
                           Buy {formatMoney(item.price)}
-                        </Button>,
+                        </BuyBtn>,
+                        <LoginBtn
+                          type="primary"
+                          onClick={() => {
+                            Router.push({
+                              pathname: "/auth",
+                            });
+                          }}
+                          accessToken={accessToken}
+                        >
+                          Login to buy.
+                        </LoginBtn>,
                         <Button
                           onClick={() => {
                             setReviewsPaneVisible(prevState => !prevState);
@@ -245,6 +260,8 @@ const useCartItem = () => {
   };
 };
 const MainContent = styled.main`
+  display: block;
+  margin: 0 auto;
   padding: 5em 0.5em;
 `;
 const ShopWrapper = styled.div``;
@@ -256,6 +273,14 @@ const ItemsListSpinner = styled(Spin)`
   bottom: 0;
   left: 0;
   transform: translateY(30%);
+  justify-content: center;
+`;
+const BuyBtn = styled(Button)`
+  display: ${props => (props.accessToken ? "flex" : "none")};
+  justify-content: center;
+`;
+const LoginBtn = styled(Button)`
+  display: ${props => (props.accessToken ? "none" : "flex")};
   justify-content: center;
 `;
 export default ShopPage;
