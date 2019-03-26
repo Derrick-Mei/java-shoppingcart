@@ -17,7 +17,7 @@ interface PasswordValues {
   newPasswordAgain: string;
 }
 const ChangePasswordForm: React.SFC<Props> = ({form, theme}) => {
-  const {getFieldDecorator} = form;
+  const {getFieldDecorator, getFieldValue} = form;
   const [passwords, setPasswords] = useState({
     currentPassword: "",
     newPassword: "",
@@ -27,14 +27,16 @@ const ChangePasswordForm: React.SFC<Props> = ({form, theme}) => {
   const changeInputHandler = (e: InputEventTarget) => {
     setPasswords({...passwords, [e.target.name]: e.target.value});
   };
+  //@ts-ignore
   const compareToFirstPassword = (rule, value, callback) => {
-    if (value && value !== form.getFieldValue("new-password")) {
+    if (value && value !== getFieldValue("new-password")) {
       callback("Your new passwords don't match!");
     } else {
       callback();
     }
   };
 
+  //@ts-ignore
   const validateToNextPassword = (rule, value, callback) => {
     if (value) {
       form.validateFields(["new-password-again"], {force: true});
