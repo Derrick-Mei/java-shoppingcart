@@ -18,6 +18,9 @@ import getCustomerByUsername from "../lib/requestsEndpoints/getCustomerByUsernam
 import getCartByUserId from "../lib/requestsEndpoints/getCartByUserId";
 import getShopMerchandise from "../lib/requestsEndpoints/getShopMerchandise";
 import postAddCartItem from "../lib/requestsEndpoints/postAddCartItem";
+import deleteCartItemByUserIdAndProductId from "../lib/requestsEndpoints/deleteCartItemRequest";
+import deleteCartItemRequest from "../lib/requestsEndpoints/deleteCartItemRequest";
+import putModifyCartQuantity from "../lib/requestsEndpoints/putModifyCartQuantity";
 
 const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
@@ -158,38 +161,58 @@ const ShopPage = () => {
 const useCartItem = () => {
   const [cartItems, setCartItems] = useState([]);
 
-  const deleteCartItem = (currItem, userId) => {
-    createBearerAxios()({
-      method: "get",
-      url: `/cart/${userId}`,
-      transformResponse: function(data) {
-        const specificProduct = JSON.parse(data).filter(product => {
-          return product.productid === currItem.productid;
-        });
-        return {
-          newQuantityInCart: specificProduct[0].quantityincart - 1,
-        };
-      },
-    })
-      .then(({data}) => {
-        createBearerAxios()({
-          method: "put",
-          url: `/cart/modifyquantityincart/${userId}/${
-            currItem.productid
-          }/${data.newQuantityInCart}`,
-        }).then(({data}) => {
-          const deleteIndex = cartItems.findIndex(item => {
-            return item.keyId === currItem.keyId;
-          });
-          setCartItems([
-            ...cartItems.slice(0, deleteIndex),
-            ...cartItems.slice(deleteIndex + 1),
-          ]);
-        });
-      })
-      .catch(err => {
-        console.log(err, " - GET /cart/${userid} error");
+  const deleteCartItem = async (currItem, userId, deleteIndex) => {
+    const cartData = await getCartByUserId(userId);
+
+    const cartItem = cartData.find(item => {
+      return item.productid === currItem.productid;
+    });
+    if (cartItem.quantityincart > 1) {
+      const modifySuccessMsg = notification.success.bind(null, {
+        message: `Deleted ${
+          cartItem.productname
+        }, there are ${cartItem.quantityincart - 1} left in cart.`,
       });
+      const modifyFailedMsg = notification.error.bind(null, {
+        message: `Deletion of ${cartItem} has failed, try again later...`,
+      });
+      const data = await putModifyCartQuantity(
+        userId,
+        cartItem.productid,
+        cartItem.quantityincart - 1,
+        modifySuccessMsg,
+        modifyFailedMsg,
+      );
+      if (data.status !== "error") {
+        setCartItems([
+          ...cartItems.slice(0, deleteIndex),
+          ...cartItems.slice(deleteIndex + 1),
+        ]);
+      }
+    } else if (cartItem.quantityincart <= 1) {
+      const deleteSuccessMsg = notification.success.bind(null, {
+        message: `${
+          cartItem.productname
+        } no longer exists in cart, delete successful!`,
+      });
+      const deleteFailedMsg = notification.error.bind(null, {
+        message: `${
+          cartItem.productname
+        } could not be deleted, try again later.`,
+      });
+      const data = await deleteCartItemRequest(
+        userId,
+        cartItem.productid,
+        deleteSuccessMsg,
+        deleteFailedMsg,
+      );
+      if (data.status !== "error") {
+        setCartItems([
+          ...cartItems.slice(0, deleteIndex),
+          ...cartItems.slice(deleteIndex + 1),
+        ]);
+      }
+    }
   };
 
   const addCartItem = async (itemObj, userId) => {
@@ -205,11 +228,13 @@ const useCartItem = () => {
       displaySuccessMsg,
       displayFailedMsg,
     );
-    const newItem = {
-      ...itemObj,
-      keyId: uuidv4(),
-    };
-    setCartItems(prevState => [...prevState, newItem]);
+    if (data.status !== "error") {
+      const newItem = {
+        ...itemObj,
+        keyId: uuidv4(),
+      };
+      setCartItems(prevState => [...prevState, newItem]);
+    }
   };
 
   return {
