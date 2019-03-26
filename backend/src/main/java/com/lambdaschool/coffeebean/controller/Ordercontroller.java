@@ -4,7 +4,6 @@ import com.lambdaschool.coffeebean.model.Order;
 import com.lambdaschool.coffeebean.repository.Orderrepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +17,13 @@ import java.util.Optional;
 @RequestMapping(path = "/orders", produces = MediaType.APPLICATION_JSON_VALUE)
 public class Ordercontroller
 {
-    @Autowired
+    private final
     Orderrepository orderrepos;
+
+    public Ordercontroller(Orderrepository orderrepos)
+    {
+        this.orderrepos = orderrepos;
+    }
 
     @ApiOperation(value = "find all orders - DKM", response = Order.class)
     @GetMapping("")
@@ -54,9 +58,9 @@ public class Ordercontroller
         if (foundOrder.isPresent())
         {
             foundOrder.get().setShippedstatus(status);
-            if (status == true)
+            if (status)
                 foundOrder.get().setShipdatetime(new Date());
-            if (status == false)
+            if (!status)
                 foundOrder.get().setShipdatetime(null);
             return orderrepos.save(foundOrder.get());
         } else

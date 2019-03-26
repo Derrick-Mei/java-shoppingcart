@@ -22,7 +22,8 @@ public class Signupcontroller extends CheckIsAdmin
     private Userrepository userrepos;
 
     @PostMapping("")
-    public Object addNewUser(@RequestBody User newuser) throws URISyntaxException {
+    public Object addNewUser(@RequestBody User newuser) throws URISyntaxException
+    {
         Object returnObject = isUsernameAndEmailUnique(newuser, userrepos);
         if (returnObject != null) return returnObject;
 

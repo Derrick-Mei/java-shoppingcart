@@ -10,7 +10,7 @@ public class CurrentUser extends User
 {
     private long currentuserid;
     private String customerName, email;
-    List<? extends SimpleGrantedAuthority> authority;
+    private List<? extends SimpleGrantedAuthority> authority;
 
     public CurrentUser(String username, String password, List<? extends SimpleGrantedAuthority> authority, String customerName, long currentuserid, String email)
     {

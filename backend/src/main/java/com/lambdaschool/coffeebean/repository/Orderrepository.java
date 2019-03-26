@@ -12,15 +12,15 @@ import java.util.List;
 public interface Orderrepository extends JpaRepository<Order, Long>
 {
     @Query(value = "SELECT * FROM orders WHERE shippedstatus = 0", nativeQuery = true)
-    public List<Order> findUnshippedOrders();
+    List<Order> findUnshippedOrders();
 
     @Query(value = "SELECT * FROM orders WHERE shippedstatus = 1", nativeQuery = true)
-    public List<Order> findShippedOrders();
+    List<Order> findShippedOrders();
 
     @Transactional
     @Modifying
     @Query(value = "UPDATE orders SET shipdatetime = NULL WHERE (orderid = :orderid)", nativeQuery = true)
-    public void setShipDateToNull(long orderid);
+    void setShipDateToNull(long orderid);
 
     @Transactional
     @Modifying

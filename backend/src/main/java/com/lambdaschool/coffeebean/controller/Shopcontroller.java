@@ -37,7 +37,7 @@ public class Shopcontroller
     @GetMapping("/{page}")
     public List<Product> get10Products(@PathVariable int page)
     {
-        int start = (page -1) * 10;
+        int start = (page - 1) * 10;
         return productrepos.get10Products(start);
     }
 
@@ -45,7 +45,7 @@ public class Shopcontroller
     @GetMapping("/naturalsearch/{searchString}/page/{page}")
     public List<Product> naturalSearchForProductByName(@PathVariable String searchString, @PathVariable int page)
     {
-        int start = (page -1) * 10;
+        int start = (page - 1) * 10;
         return productrepos.naturalSearchForProductByName(searchString, start);
     }
 
@@ -55,9 +55,9 @@ public class Shopcontroller
     public List<Product> dynamicQueryWithStringsLike(@PathVariable String searchString, @PathVariable int page)
     {
         String[] searchArray = searchString.split(" ");
-        Set<String> searchSet = new HashSet<String>(Arrays.asList(searchArray));
+        Set<String> searchSet = new HashSet<>(Arrays.asList(searchArray));
 
-        int start = (page -1) * 10;
+        int start = (page - 1) * 10;
 
         return productrepos.dynamicQueryWithStringsLike(searchSet, start);
     }

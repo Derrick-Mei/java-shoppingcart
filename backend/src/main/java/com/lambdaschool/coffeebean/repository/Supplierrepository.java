@@ -12,10 +12,10 @@ public interface Supplierrepository extends JpaRepository<Supplier, Long>
     @Transactional
     @Modifying
     @Query(value = "INSERT INTO supplierproduct (supplierid, productid) VALUES (:supplierid, :productid)", nativeQuery = true)
-    public void addSupplierToProduct(long supplierid, long productid);
+    void addSupplierToProduct(long supplierid, long productid);
 
     @Transactional
     @Modifying
     @Query(value = "DELETE FROM supplierproduct WHERE supplierid=:supplierid AND productid=:productid", nativeQuery = true)
-    public void deleteSupplierFromProduct(long supplierid, long productid);
+    void deleteSupplierFromProduct(long supplierid, long productid);
 }

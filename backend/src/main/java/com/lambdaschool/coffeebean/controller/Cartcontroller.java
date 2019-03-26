@@ -36,8 +36,8 @@ public class Cartcontroller extends CheckIsAdmin
     @GetMapping("/{userid}")
     public Object getCartItemsInCartById(@PathVariable long userid)
     {
-        CurrentUser currentuser = (CurrentUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long currentUserId = currentuser.getCurrentuserid();
+        CurrentUser currentuser = (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        long currentUserId = currentuser.getCurrentuserid();
 
         boolean isAdmin = testIsAdmin(currentuser);
 
@@ -45,8 +45,7 @@ public class Cartcontroller extends CheckIsAdmin
         {
             return userrepos.getCartItemsInCartById(userid);
 
-        }
-        else
+        } else
         {
             return doesUsernameMatch(currentUserId, userid, false);
         }
@@ -56,8 +55,8 @@ public class Cartcontroller extends CheckIsAdmin
     @PostMapping("/addtocart/{userid}/{productid}/{quantity}")
     public HashMap<String, Object> postItemToCart(@PathVariable long userid, @PathVariable long productid, @PathVariable int quantity)
     {
-        CurrentUser currentuser = (CurrentUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long currentUserId = currentuser.getCurrentuserid();
+        CurrentUser currentuser = (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        long currentUserId = currentuser.getCurrentuserid();
 
         boolean isAdmin = testIsAdmin(currentuser);
         HashMap<String, Object> returnObject = new HashMap<>();
@@ -66,7 +65,7 @@ public class Cartcontroller extends CheckIsAdmin
         {
             CartItems foundCartItems = userrepos.searchCart(userid, productid);
             String productName = foundCartItems.getProductname();
-            if (foundCartItems != null )
+            if (foundCartItems != null)
             {
                 int previousQuantity = foundCartItems.getQuantityincart();
                 int total = previousQuantity + quantity;
@@ -78,19 +77,16 @@ public class Cartcontroller extends CheckIsAdmin
                 returnObject.put("previousQuantity", previousQuantity);
                 returnObject.put("quantityToBeAdded", quantity);
                 returnObject.put("totalQuantity", total);
-            }
-            else
+            } else
             {
                 userrepos.postItemToCart(userid, productid, quantity);
                 returnObject.put("userId", userid);
                 returnObject.put("prevouslyExisted", false);
                 returnObject.put("quantityToBeAdded", quantity);
                 returnObject.put("productName", productName);
-//                return "You have added " + quantity + "quantity of " + productid + " to " + userid + "'s cart";
             }
             return returnObject;
-        }
-        else
+        } else
         {
             return doesUsernameMatch(currentUserId, userid, false);
         }
@@ -99,28 +95,27 @@ public class Cartcontroller extends CheckIsAdmin
     @PutMapping("/modifyquantityincart/{userid}/{productid}/{quantity}")
     public Object modifyQuantityInCart(@PathVariable long userid,
                                        @PathVariable long productid,
-                                       @PathVariable int quantity) {
-        CurrentUser currentuser = (CurrentUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long currentUserId = currentuser.getCurrentuserid();
+                                       @PathVariable int quantity)
+    {
+        CurrentUser currentuser = (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        long currentUserId = currentuser.getCurrentuserid();
 
         boolean isAdmin = testIsAdmin(currentuser);
 
         if (currentUserId == userid || isAdmin)
         {
             CartItems foundCartItems = userrepos.searchCart(userid, productid);
-            if (foundCartItems != null )
+            if (foundCartItems != null)
             {
                 int previousQuantity = foundCartItems.getQuantityincart();
                 userrepos.modifyQuantityInCart(userid, productid, quantity);
-                return "There were " + previousQuantity + ", but now there are " + quantity + " of " + foundCartItems.getProductname() +  " in " + userid + "'s cart.";
-            }
-            else
+                return "There were " + previousQuantity + ", but now there are " + quantity + " of " + foundCartItems.getProductname() + " in " + userid + "'s cart.";
+            } else
             {
                 return userid + " does not have productid: " + productid + "in their cart.";
             }
 
-        }
-        else
+        } else
         {
             return doesUsernameMatch(currentUserId, userid, false);
         }
@@ -130,8 +125,8 @@ public class Cartcontroller extends CheckIsAdmin
     @DeleteMapping("/remove/{userid}/{productid}")
     public Object deleteOneItemFromCart(@PathVariable long userid, @PathVariable long productid)
     {
-        CurrentUser currentuser = (CurrentUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long currentUserId = currentuser.getCurrentuserid();
+        CurrentUser currentuser = (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        long currentUserId = currentuser.getCurrentuserid();
 
         boolean isAdmin = testIsAdmin(currentuser);
 
@@ -140,8 +135,7 @@ public class Cartcontroller extends CheckIsAdmin
             userrepos.deleteOneItemFromCart(userid, productid);
             return "You have deleted " + productid + " from " + userid;
 
-        }
-        else
+        } else
         {
             return doesUsernameMatch(currentUserId, userid, false);
         }
@@ -151,18 +145,17 @@ public class Cartcontroller extends CheckIsAdmin
     @DeleteMapping("/modifytozero/{userid}/{productid}")
     public Object modifyToZero(@PathVariable long userid, @PathVariable long productid)
     {
-        CurrentUser currentuser = (CurrentUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long currentUserId = currentuser.getCurrentuserid();
+        CurrentUser currentuser = (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        long currentUserId = currentuser.getCurrentuserid();
 
         boolean isAdmin = testIsAdmin(currentuser);
 
         if (currentUserId == userid || isAdmin)
         {
             userrepos.modifyQuantityInCart(userid, productid, 0);
-            return "There are now 0 of " + productid +  " in " + userid + "'s cart.";
+            return "There are now 0 of " + productid + " in " + userid + "'s cart.";
 
-        }
-        else
+        } else
         {
             return doesUsernameMatch(currentUserId, userid, false);
         }
@@ -173,8 +166,8 @@ public class Cartcontroller extends CheckIsAdmin
     @DeleteMapping("/deleteall/{userid}")
     public Object deleteAllItemsFromCart(@PathVariable long userid)
     {
-        CurrentUser currentuser = (CurrentUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long currentUserId = currentuser.getCurrentuserid();
+        CurrentUser currentuser = (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        long currentUserId = currentuser.getCurrentuserid();
 
         boolean isAdmin = testIsAdmin(currentuser);
 
@@ -183,8 +176,7 @@ public class Cartcontroller extends CheckIsAdmin
             userrepos.deleteAllItemsFromCart(userid);
             return "You have deleted all items in cart from user " + userid;
 
-        }
-        else
+        } else
         {
             return doesUsernameMatch(currentUserId, userid, false);
         }
@@ -201,8 +193,8 @@ public class Cartcontroller extends CheckIsAdmin
     @PostMapping("/buy")
     public Order buyItemsInCart(@RequestBody Order newOrder)
     {
-        CurrentUser currentuser = (CurrentUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long currentUserId = currentuser.getCurrentuserid();
+        CurrentUser currentuser = (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        long currentUserId = currentuser.getCurrentuserid();
 
         List<CartItems> currentCart = userrepos.getCartItemsInCartById(currentUserId);
 
@@ -214,7 +206,8 @@ public class Cartcontroller extends CheckIsAdmin
 
         long currentOrderId = currentOrder.getOrderid();
 
-        currentCart.forEach( item -> {
+        currentCart.forEach(item ->
+        {
             orderrepos.addToOrderProducts(currentOrderId, item.getProductid(), item.getQuantityincart());
             productrepos.removeOrderedQtyFromInventory(item.getProductid(), item.getQuantityincart());
         });

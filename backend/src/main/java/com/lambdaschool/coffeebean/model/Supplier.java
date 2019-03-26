@@ -20,8 +20,8 @@ public class Supplier
     // *** ManyToMany with product - supplierproduct - owner ***
     @ManyToMany
     @JoinTable(name = "supplierproduct",
-        joinColumns = {@JoinColumn(name = "supplierid")},
-        inverseJoinColumns = {@JoinColumn(name = "productid")})
+            joinColumns = {@JoinColumn(name = "supplierid")},
+            inverseJoinColumns = {@JoinColumn(name = "productid")})
     @JsonIgnoreProperties({"potentialusers", "productorders", "productusers", "suppliers"})
     private Set<Product> productsfromsupplier;
 

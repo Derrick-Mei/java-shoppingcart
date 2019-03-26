@@ -53,12 +53,14 @@ public class Suppliercontroller
         if (foundSupplier.isPresent())
         {
             updatedSupplier.setSupplierid(supplierid);
-            if (updatedSupplier.getSuppliername() == null) updatedSupplier.setSuppliername(foundSupplier.get().getSuppliername());
-            if (updatedSupplier.getSupplierphone() == null) updatedSupplier.setSupplierphone(foundSupplier.get().getSupplierphone());
-            if (updatedSupplier.getProductsfromsupplier().isEmpty()) updatedSupplier.setProductsfromsupplier(foundSupplier.get().getProductsfromsupplier());
+            if (updatedSupplier.getSuppliername() == null)
+                updatedSupplier.setSuppliername(foundSupplier.get().getSuppliername());
+            if (updatedSupplier.getSupplierphone() == null)
+                updatedSupplier.setSupplierphone(foundSupplier.get().getSupplierphone());
+            if (updatedSupplier.getProductsfromsupplier().isEmpty())
+                updatedSupplier.setProductsfromsupplier(foundSupplier.get().getProductsfromsupplier());
             return suppplierrepos.save(updatedSupplier);
-        }
-        else
+        } else
         {
             return "Supplier with id: " + supplierid + " is not found.";
         }
@@ -80,8 +82,7 @@ public class Suppliercontroller
         {
             suppplierrepos.deleteById(supplierid);
             return foundSupplier.get();
-        }
-        else
+        } else
         {
             return "Supplier with id: " + supplierid + " is not found.";
         }

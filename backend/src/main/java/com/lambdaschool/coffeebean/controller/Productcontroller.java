@@ -39,26 +39,25 @@ public class Productcontroller
     }
 
     @PutMapping("/{productid}")
-    public Object modifyProductById(@RequestBody Product updatedProduct, @PathVariable long productid)
+    public Object modifyProductById(@RequestBody Product updatedP, @PathVariable long productid)
     {
         Optional<Product> foundProduct = productrepos.findById(productid);
         if (foundProduct.isPresent())
         {
-            if (updatedProduct.getPotentialusers() == null) updatedProduct.setPotentialusers(foundProduct.get().getPotentialusers());
-            if (updatedProduct.getProductorders() == null) updatedProduct.setProductorders(foundProduct.get().getProductorders());
-            if (updatedProduct.getProductusers() == null) updatedProduct.setProductusers(foundProduct.get().getProductusers());
-            if (updatedProduct.getProductname() == null) updatedProduct.setProductname(foundProduct.get().getProductname());
-            if (updatedProduct.getDescription() == null) updatedProduct.setDescription(foundProduct.get().getDescription());
-            if (updatedProduct.getExpiration() == null) updatedProduct.setExpiration(foundProduct.get().getExpiration());
-            if (updatedProduct.getSuppliers() == null) updatedProduct.setSuppliers(foundProduct.get().getSuppliers());
-            if (updatedProduct.getQuantity() == null) updatedProduct.setQuantity(foundProduct.get().getQuantity());
-            if (updatedProduct.getImage() == null) updatedProduct.setImage(foundProduct.get().getImage());
-            if (updatedProduct.getPrice() == null) updatedProduct.setPrice(foundProduct.get().getPrice());
+            if (updatedP.getPotentialusers() ==null) updatedP.setPotentialusers(foundProduct.get().getPotentialusers());
+            if (updatedP.getProductorders() == null) updatedP.setProductorders(foundProduct.get().getProductorders());
+            if (updatedP.getProductusers() == null) updatedP.setProductusers(foundProduct.get().getProductusers());
+            if (updatedP.getProductname() == null) updatedP.setProductname(foundProduct.get().getProductname());
+            if (updatedP.getDescription() == null) updatedP.setDescription(foundProduct.get().getDescription());
+            if (updatedP.getExpiration() == null) updatedP.setExpiration(foundProduct.get().getExpiration());
+            if (updatedP.getSuppliers() == null) updatedP.setSuppliers(foundProduct.get().getSuppliers());
+            if (updatedP.getQuantity() == null) updatedP.setQuantity(foundProduct.get().getQuantity());
+            if (updatedP.getImage() == null) updatedP.setImage(foundProduct.get().getImage());
+            if (updatedP.getPrice() == null) updatedP.setPrice(foundProduct.get().getPrice());
 
-            updatedProduct.setProductid(productid);
-            return productrepos.save(updatedProduct);
-        }
-        else
+            updatedP.setProductid(productid);
+            return productrepos.save(updatedP);
+        } else
         {
             return "Product with id: " + productid + " could not be found.";
         }
@@ -72,8 +71,7 @@ public class Productcontroller
         {
             productrepos.deleteById(productid);
             return foundProduct.get();
-        }
-        else
+        } else
         {
             return "Product with id: " + productid + " could not be found.";
         }

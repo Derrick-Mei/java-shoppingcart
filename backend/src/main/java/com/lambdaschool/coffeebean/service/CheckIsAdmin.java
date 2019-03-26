@@ -11,12 +11,12 @@ import java.util.List;
 
 public class CheckIsAdmin
 {
-    public boolean testIsAdmin(CurrentUser currentuser)
+    protected boolean testIsAdmin(CurrentUser currentuser)
     {
         List<? extends SimpleGrantedAuthority> authorities = currentuser.getAuthorities2();
-        Boolean isAdmin = false;
+        boolean isAdmin = false;
 
-        for ( SimpleGrantedAuthority authority : authorities)
+        for (SimpleGrantedAuthority authority : authorities)
         {
             if (authority.getAuthority().equalsIgnoreCase("ROLE_ADMIN")) isAdmin = true;
         }
@@ -24,18 +24,17 @@ public class CheckIsAdmin
         return isAdmin;
     }
 
-    public HashMap<String, Object> doesUsernameMatch(Long currentUserId, Long userId, boolean matches)
+    protected HashMap<String, Object> doesUsernameMatch(Long currentUserId, Long userId, boolean matches)
     {
-        HashMap<String, Object> returnObject = new HashMap<>()
+        return new HashMap<>()
         {{
             put("YourUserId", currentUserId);
             put("SearchedUserId", userId);
             put("UserIdMatches", matches);
         }};
-        return returnObject;
     }
 
-    public static Object isUsernameAndEmailUnique(@RequestBody User newuser, Userrepository userrepos)
+    protected static Object isUsernameAndEmailUnique(@RequestBody User newuser, Userrepository userrepos)
     {
         String email = newuser.getEmail();
         HashMap<String, Object> returnObject = new HashMap<>();

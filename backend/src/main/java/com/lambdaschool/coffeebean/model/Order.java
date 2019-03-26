@@ -32,8 +32,8 @@ public class Order
     // *** ManyToMany with product - orderproducts - owner ***
     @ManyToMany
     @JoinTable(name = "orderproducts",
-        joinColumns = {@JoinColumn(name = "orderid")},
-        inverseJoinColumns = {@JoinColumn(name = "productid")})
+            joinColumns = {@JoinColumn(name = "orderid")},
+            inverseJoinColumns = {@JoinColumn(name = "productid")})
     @JsonIgnoreProperties({"potentialusers", "productorders", "productusers", "suppliers"})
     private Set<Product> orderproducts;
 
