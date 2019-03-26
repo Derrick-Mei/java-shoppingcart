@@ -3,7 +3,7 @@ import {StyledAuthForm} from "../styles/StyledAuthForm";
 import {Card, Form, Input, Icon} from "antd";
 import {withTheme} from "styled-components";
 import {InputEventTarget, Theme as ITheme} from "../../interfaces/index";
-import {Button} from "antd";
+import {Button, notification} from "antd";
 import {createBearerAxios} from "../../lib/axiosInstances";
 interface Props {
   form: {
@@ -63,7 +63,16 @@ const ChangePasswordForm: React.SFC<Props> = ({form, theme}) => {
           },
         });
 
-        console.log(data);
+        if (data.passwordMatches === false) {
+          notification.error({
+            message:
+              "Sorry, either you entered in the wrong current password or your new passwords don't match up.",
+          });
+        } else {
+          notification.success({
+            message: "Passwords Updated!",
+          });
+        }
       } catch (err) {
       } finally {
         setIsLoading(false);
