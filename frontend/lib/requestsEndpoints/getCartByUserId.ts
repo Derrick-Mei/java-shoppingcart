@@ -2,8 +2,8 @@ import {createBearerAxios} from "../axiosInstances";
 
 export default async (
   userId: number,
-  onSuccess: Function,
-  onError: Function,
+  onSuccess?: Function,
+  onError?: Function,
 ) => {
   try {
     const {data} = await createBearerAxios()({
