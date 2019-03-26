@@ -56,6 +56,9 @@ public class Order
         return shippingaddress;
     }
 
+    //yyyy-mm-dd HH:MM:SS
+    private Date orderdatetime = new Date();
+
     public void setShippingaddress(String shippingaddress)
     {
         this.shippingaddress = shippingaddress;

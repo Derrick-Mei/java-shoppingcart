@@ -1,8 +1,12 @@
 package com.lambdaschool.coffeebean.model;
 
+import java.util.Date;
+
 public interface OrderItem
 {
     Long getOrderid();
+
+    Long getProductid();
 
     String getProductname();
 
@@ -14,4 +18,5 @@ public interface OrderItem
 
     int getQuantityinorder();
 
+    Date getOrderdatetime();
 }
