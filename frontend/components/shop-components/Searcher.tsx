@@ -16,7 +16,6 @@ const Searcher: React.SFC<Props> = () => {
         type="primary"
         shape="circle"
         icon="search"
-        size="medium"
         onClick={() => {
           if (searchActive === false) {
             setSearchActive(true);
@@ -36,14 +35,15 @@ const SearchWrapper = styled.div`
   position: fixed;
   bottom: 46px;
   padding: 1em;
-  background: ${props => props.theme.black};
-  opacity: ${props => (props.searchActive ? 0.9 : 0.4)};
+  background: ${(props: {searchActive: boolean}) =>
+    props.searchActive ? "rgba(57,57,57, .8)" : "rgba(57, 57, 57, .2)"};
 `;
 const SearchBtn = styled(Button)`
   opacity: 1;
 `;
 const SearchBox = styled(Input)`
-  display: ${props => (props.searchActive ? "flex" : "none")};
+  display: ${(props: {searchActive: boolean}) =>
+    props.searchActive ? "flex" : "none"};
   width: 60%;
 `;
 export default Searcher;
