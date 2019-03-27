@@ -173,27 +173,20 @@ const ShopPage = () => {
                     );
                   })}
                 </ItemCardList>
-                <PaginateBtn
-                  disabled={isPaginatorDisabled}
-                  type="primary"
-                  onClick={() => {
-                    getNextPageMerchandise();
-                  }}
-                  loading={isPaginatorLoading}
-                >
-                  Load Next Page
-                </PaginateBtn>
               </>
             ),
-          [
-            merchandise,
-            userId,
-            isItemsLoading,
-            merchandisePage,
-            isPaginatorDisabled,
-            isPaginatorLoading,
-          ],
+          [merchandise, userId, isItemsLoading],
         )}
+        <PaginateBtn
+          disabled={isPaginatorDisabled}
+          type="primary"
+          onClick={() => {
+            getNextPageMerchandise();
+          }}
+          loading={isPaginatorLoading}
+        >
+          Load Next Page
+        </PaginateBtn>
       </MainContent>
       <CartFooter
         cartItems={cartItems}
