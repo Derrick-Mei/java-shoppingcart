@@ -6,22 +6,21 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 @Entity
-//@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"username", "email"})})
 public class User
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userid;
 
-    @Column(length = 250, unique = true )
+    @Column(length = 250, unique = true)
     private String username;
 
-//    @JsonIgnore
+    //    @JsonIgnore
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
@@ -32,24 +31,27 @@ public class User
 
     // ==================================================================
 
-//    @JsonIgnore
+    //    @JsonIgnore
     private String customername;
 
-//    @JsonIgnore
+    //    @JsonIgnore
     private String billingaddress;
 
-//    @JsonIgnore
+    //    @JsonIgnore
     private String shippingaddress;
 
-//    @JsonIgnore
-    private  String customerphone;
+    //    @JsonIgnore
+    private String customerphone;
 
-//    @JsonIgnore
+    //    @JsonIgnore
     @Column(length = 250, unique = true)
     private String email;
 
-//    @JsonIgnore
+    //    @JsonIgnore
     private String paymentmethod;
+
+    // Used for SendGrid
+    private boolean receiveEmails = false;
 
     // *** OneToMany with Order ***
 //    @JsonIgnore
@@ -59,7 +61,7 @@ public class User
 
     //*** ManyToMany with Product - cart - owner of table ***
 //    @JsonIgnore
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "cart",
             joinColumns = {@JoinColumn(name = "userid")},
             inverseJoinColumns = {@JoinColumn(name = "productid")})
@@ -69,7 +71,7 @@ public class User
 
     //*** ManyToMany with Product - totalorderhistory - owner of table ***
 //    @JsonIgnore
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "totalorderhistory",
             joinColumns = {@JoinColumn(name = "userid")},
             inverseJoinColumns = {@JoinColumn(name = "productid")})
@@ -127,7 +129,7 @@ public class User
     public List<SimpleGrantedAuthority> getAuthority()
     {
         String myRole = "ROLE_" + this.role.toUpperCase();
-        return Arrays.asList(new SimpleGrantedAuthority(myRole));
+        return Collections.singletonList(new SimpleGrantedAuthority(myRole));
     }
 
     // ====================================================================
@@ -223,6 +225,7 @@ public class User
         this.totalorderhistory = totalorderhistory;
     }
 
+    // for changing password
     public String getRawPassword()
     {
         return rawPassword;
@@ -231,5 +234,17 @@ public class User
     public void setRawPassword(String rawPassword)
     {
         this.rawPassword = rawPassword;
+    }
+
+    //For SendGrid
+
+    public boolean isReceiveEmails()
+    {
+        return receiveEmails;
+    }
+
+    public void setReceiveEmails(boolean receiveEmails)
+    {
+        this.receiveEmails = receiveEmails;
     }
 }

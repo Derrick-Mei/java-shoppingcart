@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import {Image, Transformation} from "cloudinary-react";
+import {Button} from "antd";
+import uuidv4 from "uuid/v4";
 export interface Props {
   imagePublicId: string;
   imageHeight: number;
@@ -7,7 +9,7 @@ export interface Props {
   title: string;
   description: string;
   price?: number;
-  actionBtn?: React.ReactElement;
+  actionBtns?: [React.ReactElement];
 }
 
 const ItemCard: React.SFC<Props> = ({
@@ -17,7 +19,7 @@ const ItemCard: React.SFC<Props> = ({
   title,
   description,
   price,
-  actionBtn,
+  actionBtns,
 }) => {
   return (
     <StyledCard>
@@ -31,9 +33,11 @@ const ItemCard: React.SFC<Props> = ({
       <ItemTextContainer>
         <ItemTitle>{title}</ItemTitle>
         <ItemDescription>{description}</ItemDescription>
-        {actionBtn ? (
+        {actionBtns ? (
           <ActionsContainer>
-            {React.cloneElement(actionBtn)}
+            {actionBtns.map((btn, i) => {
+              return React.cloneElement(btn, {key: uuidv4()});
+            })}
           </ActionsContainer>
         ) : (
           ""
@@ -48,6 +52,7 @@ const StyledCard = styled.div`
   width: 100%;
   padding: 0;
   margin-bottom: 24px;
+  max-width: 400px;
 `;
 const ItemTextContainer = styled.div`
   width: 100%;
@@ -65,7 +70,11 @@ const ItemDescription = styled.p`
   line-height: 1.3;
 `;
 const ActionsContainer = styled.div`
-  /* display: flex;
-  justify-content: space-around; */
+  display: flex;
+  flex-direction: column;
+  padding: 0 1em 0 0;
+  & > * {
+    margin-bottom: 1em;
+  }
 `;
 export default ItemCard;

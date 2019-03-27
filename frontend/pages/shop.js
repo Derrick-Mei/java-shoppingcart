@@ -3,16 +3,33 @@ import MeanCoffeeHeader from "../components/shop-components/MeanCoffeeHeader";
 import CartFooter from "../components/shop-components/CartFooter";
 import ItemCardList from "../components/shop-components/ItemCardList";
 import ItemCard from "../components/shop-components/ItemCard";
-import {Button} from "antd";
+import {Button, Spin, notification} from "antd";
 import {useEffect, useState, useMemo} from "react";
 import axios from "axios";
 import uuidv4 from "uuid/v4";
 import {createBaseAxios, createBearerAxios} from "../lib/axiosInstances";
 import {formatMoney} from "../lib/formatMoney";
-import {Spin} from "antd";
+import ReviewDrawer from "../components/shop-components/ReviewDrawer";
+import Searcher from "../components/shop-components/Searcher";
+import getCustomerByUserId from "../lib/requestsEndpoints/getCustomerByUserId";
+import Router from "next/router";
+import getCustomerByUsername from "../lib/requestsEndpoints/getCustomerByUsername";
+import getCartByUserId from "../lib/requestsEndpoints/getCartByUserId";
+import getShopMerchandise from "../lib/requestsEndpoints/getShopMerchandise";
+import postAddCartItem from "../lib/requestsEndpoints/postAddCartItem";
+import deleteCartItemByUserIdAndProductId from "../lib/requestsEndpoints/deleteCartItemRequest";
+import deleteCartItemRequest from "../lib/requestsEndpoints/deleteCartItemRequest";
+import putModifyCartQuantity from "../lib/requestsEndpoints/putModifyCartQuantity";
+import getShopItemsByPage from "../lib/requestsEndpoints/getShopItemsByPage";
+
 const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
+  const [merchandiseFromSearch, setMerchandiseFromSearch] = useState([]);
   const [isItemsLoading, setItemsLoading] = useState(false);
+  const [isReviewsPaneVisible, setReviewsPaneVisible] = useState(false);
+  const [merchandisePage, setMerchandisePage] = useState(2);
+  const [isPaginatorLoading, setIsPaginatorLoading] = useState(false);
+  const [isPaginatorDisabled, setIsPaginatorDisabled] = useState(true);
   const {
     cartItems,
     setCartItems,
@@ -20,49 +37,80 @@ const ShopPage = () => {
     addCartItem,
   } = useCartItem();
   const [userId, setUserId] = useState();
-
+  const [accessToken, setAccessToken] = useState("");
+  const commentsData = [
+    {
+      avatar: "",
+      commentText: "This product is awesome!",
+      rating: 5,
+      keyId: 1,
+      author: "John",
+    },
+    {
+      avatar: "",
+      commentText: "This product is alright",
+      rating: 3,
+      keyId: 2,
+      author: "herald",
+    },
+  ];
+  const getNextPageMerchandise = async () => {
+    setIsPaginatorLoading(true);
+    const nextMerchandiseData = await getShopItemsByPage(merchandisePage);
+    setMerchandise([...merchandise, ...nextMerchandiseData]);
+    setMerchandisePage(merchandisePage + 1);
+    setIsPaginatorDisabled(
+      nextMerchandiseData.length === 0 ? true : false,
+    );
+    setIsPaginatorLoading(false);
+  };
+  const decideMerchandiseToShow = () => {
+    return merchandiseFromSearch.length > 0
+      ? merchandiseFromSearch
+      : merchandise;
+  };
   useEffect(() => {
     const fetchItems = async () => {
       try {
         setItemsLoading(true);
-        const {data} = await createBaseAxios()({
-          method: "get",
-          url: "/shop",
-        });
-        setMerchandise(data);
+        const merchandiseData = await getShopItemsByPage(1);
+        setMerchandise(merchandiseData);
+        setIsPaginatorDisabled(
+          merchandiseData.length === 0 ? true : false,
+        );
         setItemsLoading(false);
       } catch (err) {
         console.log(err);
+        notification.error({
+          message:
+            "Failed to fetch merchandise, it might be a server error try again.",
+        });
       }
     };
     fetchItems();
+    setAccessToken(window.localStorage.getItem("access_token"));
   }, []);
 
   useEffect(() => {
     const fetchUserAndCart = async () => {
       try {
-        const {data: userData} = await createBearerAxios()({
-          method: "get",
-          url: `/cart/user/username/${window.localStorage.getItem(
-            "username",
-          )}`,
-        });
-        setUserId(userData.userid);
-        window.localStorage.setItem("userid", userData.userid);
-        const {data: cartData} = await createBearerAxios()({
-          method: "get",
-          url: `/cart/${userData.userid}`,
-        });
-        const productsData = cartData;
+        const username = window.localStorage.getItem("username");
+        const customerData = await getCustomerByUsername(username);
+
+        setUserId(customerData.userid);
+
+        window.localStorage.setItem("userid", customerData.userid);
+
+        const cartData = await getCartByUserId(customerData.userid);
         const cartItems = [];
-        for (let i = 0; i < productsData.length; i++) {
-          let product = productsData[i];
-          const quantity = product.quantityincart;
+        for (let i = 0; i < cartData.length; i++) {
+          let item = cartData[i];
+          const quantity = item.quantityincart;
 
           for (let j = 0; j < quantity; j++) {
-            delete product.quantityincart;
+            delete item.quantityincart;
             cartItems.push({
-              ...product,
+              ...item,
               keyId: uuidv4(),
             });
           } // for j - used for adding the right amount of quantity in cart
@@ -85,38 +133,78 @@ const ShopPage = () => {
             isItemsLoading ? (
               <ItemsListSpinner size="large" />
             ) : (
-              <ItemCardList>
-                {merchandise.map(item => {
-                  return (
-                    <ItemCard
-                      key={item.productid}
-                      title={item.productname}
-                      description={item.description}
-                      imagePublicId={item.image}
-                      imageHeight={200}
-                      imageWidth={200}
-                      actionBtn={
-                        <Button
-                          type="primary"
-                          onClick={() => {
-                            addCartItem(item, userId);
-                          }}
-                        >
-                          Buy {formatMoney(item.price)}
-                        </Button>
-                      }
-                    />
-                  );
-                })}
-              </ItemCardList>
+              <>
+                <ItemCardList>
+                  {decideMerchandiseToShow().map(item => {
+                    return (
+                      <ItemCard
+                        key={item.productid}
+                        title={item.productname}
+                        description={item.description}
+                        imagePublicId={item.image}
+                        imageHeight={200}
+                        imageWidth={200}
+                        actionBtns={[
+                          <BuyBtn
+                            type="primary"
+                            onClick={() => {
+                              addCartItem(item, userId);
+                            }}
+                            access_token={accessToken}
+                          >
+                            Buy {formatMoney(item.price)}
+                          </BuyBtn>,
+                          <LoginBtn
+                            type="primary"
+                            onClick={() => {
+                              Router.push({
+                                pathname: "/auth",
+                              });
+                            }}
+                            access_token={accessToken}
+                          >
+                            Login to buy.
+                          </LoginBtn>,
+                          <Button
+                            onClick={() => {
+                              setReviewsPaneVisible(
+                                prevState => !prevState,
+                              );
+                            }}
+                          >
+                            Reviews
+                          </Button>,
+                        ]}
+                      />
+                    );
+                  })}
+                </ItemCardList>
+              </>
             ),
-          [merchandise, userId, isItemsLoading],
+          [merchandise, userId, isItemsLoading, merchandiseFromSearch],
         )}
+        <PaginateBtn
+          disabled={isPaginatorDisabled}
+          type="primary"
+          onClick={() => {
+            getNextPageMerchandise();
+          }}
+          loading={isPaginatorLoading}
+          search_merchandise={merchandiseFromSearch}
+        >
+          Load Next Page
+        </PaginateBtn>
       </MainContent>
       <CartFooter
         cartItems={cartItems}
         deleteCartItem={deleteCartItem}
         userId={userId}
+      />
+      <Searcher setMerchandiseFromSearch={setMerchandiseFromSearch} />
+      <ReviewDrawer
+        isVisible={isReviewsPaneVisible}
+        commentsData={commentsData}
+        setVisible={setReviewsPaneVisible}
       />
     </ShopWrapper>
   );
@@ -124,57 +212,80 @@ const ShopPage = () => {
 const useCartItem = () => {
   const [cartItems, setCartItems] = useState([]);
 
-  const deleteCartItem = (currItem, userId) => {
-    createBearerAxios()({
-      method: "get",
-      url: `/cart/${userId}`,
-      transformResponse: function(data) {
-        const specificProduct = JSON.parse(data).filter(product => {
-          return product.productid === currItem.productid;
-        });
-        return {
-          newQuantityInCart: specificProduct[0].quantityincart - 1,
-        };
-      },
-    })
-      .then(({data}) => {
-        createBearerAxios()({
-          method: "put",
-          url: `/cart/modifyquantityincart/${userId}/${
-            currItem.productid
-          }/${data.newQuantityInCart}`,
-        }).then(({data}) => {
-          const deleteIndex = cartItems.findIndex(item => {
-            return item.keyId === currItem.keyId;
-          });
-          setCartItems([
-            ...cartItems.slice(0, deleteIndex),
-            ...cartItems.slice(deleteIndex + 1),
-          ]);
-        });
-      })
-      .catch(err => {
-        console.log(err, " - GET /cart/${userid} error");
+  const deleteCartItem = async (currItem, userId, deleteIndex) => {
+    const cartData = await getCartByUserId(userId);
+
+    const cartItem = cartData.find(item => {
+      return item.productid === currItem.productid;
+    });
+    if (cartItem.quantityincart > 1) {
+      const modifySuccessMsg = notification.success.bind(null, {
+        message: `Deleted ${
+          cartItem.productname
+        }, there are ${cartItem.quantityincart - 1} left in cart.`,
       });
+      const modifyFailedMsg = notification.error.bind(null, {
+        message: `Deletion of ${cartItem} has failed, try again later...`,
+      });
+      const data = await putModifyCartQuantity(
+        userId,
+        cartItem.productid,
+        cartItem.quantityincart - 1,
+        modifySuccessMsg,
+        modifyFailedMsg,
+      );
+      if (data.status !== "error") {
+        setCartItems([
+          ...cartItems.slice(0, deleteIndex),
+          ...cartItems.slice(deleteIndex + 1),
+        ]);
+      }
+    } else if (cartItem.quantityincart <= 1) {
+      const deleteSuccessMsg = notification.success.bind(null, {
+        message: `${
+          cartItem.productname
+        } no longer exists in cart, delete successful!`,
+      });
+      const deleteFailedMsg = notification.error.bind(null, {
+        message: `${
+          cartItem.productname
+        } could not be deleted, try again later.`,
+      });
+      const data = await deleteCartItemRequest(
+        userId,
+        cartItem.productid,
+        deleteSuccessMsg,
+        deleteFailedMsg,
+      );
+      if (data.status !== "error") {
+        setCartItems([
+          ...cartItems.slice(0, deleteIndex),
+          ...cartItems.slice(deleteIndex + 1),
+        ]);
+      }
+    }
   };
 
-  const addCartItem = (itemObj, userId) => {
-    console.log(cartItems);
-    createBearerAxios()({
-      method: "post",
-      url: `/cart/addtocart/${userId}/${itemObj.productid}/1`,
-    })
-      .then(({data}) => {
-        console.log(data);
-        const newItem = {
-          ...itemObj,
-          keyId: uuidv4(),
-        };
-        setCartItems(prevState => [...prevState, newItem]);
-      })
-      .catch(err => {
-        console.log(err, " POST to cart");
-      });
+  const addCartItem = async (itemObj, userId) => {
+    const displaySuccessMsg = notification.success.bind(null, {
+      message: `${itemObj.productname} has been added!`,
+    });
+    const displayFailedMsg = notification.error.bind(null, {
+      message: `${itemObj.productname} has failed to be added to cart.`,
+    });
+    const data = await postAddCartItem(
+      userId,
+      itemObj.productid,
+      displaySuccessMsg,
+      displayFailedMsg,
+    );
+    if (data.status !== "error") {
+      const newItem = {
+        ...itemObj,
+        keyId: uuidv4(),
+      };
+      setCartItems(prevState => [...prevState, newItem]);
+    }
   };
 
   return {
@@ -185,7 +296,10 @@ const useCartItem = () => {
   };
 };
 const MainContent = styled.main`
-  padding: 5em 0.5em;
+  display: block;
+  margin: 0 auto;
+  padding: 5em 0.5em 8em 0.5em;
+  text-align: center;
 `;
 const ShopWrapper = styled.div``;
 
@@ -197,5 +311,16 @@ const ItemsListSpinner = styled(Spin)`
   left: 0;
   transform: translateY(30%);
   justify-content: center;
+`;
+const BuyBtn = styled(Button)`
+  display: ${props => (props.access_token ? "flex" : "none")};
+  justify-content: center;
+`;
+const LoginBtn = styled(Button)`
+  display: ${props => (props.access_token ? "none" : "flex")};
+  justify-content: center;
+`;
+const PaginateBtn = styled(Button)`
+  display: ${props => (props.search_merchandise.length > 0 ? "none" : "")};
 `;
 export default ShopPage;

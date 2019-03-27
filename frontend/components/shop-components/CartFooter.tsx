@@ -77,7 +77,7 @@ const CartFooter: React.SFC<Props> = ({
           Finish Checkout
         </FinishBtn>
         <ItemCardList>
-          {cartItems.map(item => {
+          {cartItems.map((item, i) => {
             return (
               <ItemCard
                 key={item.keyId}
@@ -86,14 +86,14 @@ const CartFooter: React.SFC<Props> = ({
                 imagePublicId={item.image}
                 imageHeight={50}
                 imageWidth={75}
-                actionBtn={
+                actionBtns={[
                   <Button
                     type="danger"
-                    onClick={() => deleteCartItem(item, userId)}
+                    onClick={() => deleteCartItem(item, userId, i)}
                   >
                     Delete
-                  </Button>
-                }
+                  </Button>,
+                ]}
               />
             );
           })}

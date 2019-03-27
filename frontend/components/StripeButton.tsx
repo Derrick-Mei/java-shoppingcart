@@ -1,16 +1,23 @@
 import StripeCheckout from "react-stripe-checkout";
-import {createBearerAxios, createBaseAxios} from "../lib/axiosInstances";
+import {createBearerAxios} from "../lib/axiosInstances";
+import {notification} from "antd";
+import postCreateOrder from "../lib/requestsEndpoints/postCreateOrder";
+import Router from "next/router";
+
 export interface Props {
   headerImg: string;
   amount: number;
+  userId: number;
 }
 
-const StripeBtn: React.SFC<Props> = ({headerImg, amount}) => {
+const StripeBtn: React.SFC<Props> = ({headerImg, amount, userId}) => {
   const publishableKey = "pk_test_fbmMQVyluBRGwx3QN5yo0Bi8";
 
   const onToken = (token: any) => {
     // console.log(token);
-    createBearerAxios()({
+    const authAxios = createBearerAxios();
+
+    authAxios({
       method: "post",
       url: "/charge",
       data: {
@@ -19,14 +26,40 @@ const StripeBtn: React.SFC<Props> = ({headerImg, amount}) => {
         stripeToken: token.id,
       },
     })
-      .then(({data}: any) => {
-        console.log(data);
-        //POST to server address information for next time
-        //Send a receipt to customer's email if they have one
+      .then(async ({data}: any) => {
+        // console.log(data);
+        if (data.status === "succeeded") {
+          notification.success({
+            message: "Stripe has processed payment!",
+          });
 
-        // Router.push({
-        //   pathname: "/order-completed",
-        // });
+          const saveUserDetailsSuccessCb = notification.success.bind(
+            null,
+            {
+              message: "Your information has been saved to our database.",
+            },
+          );
+          const saveUserDetailsFailureCb = notification.error.bind(null, {
+            message:
+              "Your information has failed to be saved in our database.",
+          });
+          const {address} = data.billingDetails;
+          const {line1, city, state, postalCode} = address;
+          const shipAddress = `${line1}, ${city} ${state} ${postalCode}`;
+          const orderData = await postCreateOrder(
+            {
+              shippingaddress: shipAddress,
+              paymentdetails: "credit card",
+            },
+            saveUserDetailsSuccessCb,
+            saveUserDetailsFailureCb,
+          );
+          Router.push({
+            pathname: "/order-completed",
+          });
+        } else {
+          notification.error("The payment process has failed");
+        }
       })
       .catch((err: any) => {
         console.log(err);
