@@ -1,7 +1,9 @@
-import {Drawer, Button, Card} from "antd";
+import {Drawer, Card} from "antd";
 import styled from "styled-components";
 import {useState} from "react";
 import {formatMoney} from "../../lib/formatMoney";
+import getOrderByOrderId from "../../lib/requestsEndpoints/getOrderByOrderId";
+import ItemCard from "./ItemCard";
 interface Order {
   keyId: string;
   totalPrice: number;
@@ -21,6 +23,22 @@ const OrderHistoryDrawer: React.SFC<Props> = ({
   ordersData,
 }) => {
   const [isChildVisible, setIsChildVisible] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [shipping, setShipping] = useState({});
+  const fetchOrderInfo = async (orderId: number) => {
+    const specificOrderData = await getOrderByOrderId(orderId);
+    const {
+      orderproducts,
+      shippedstatus,
+      shippingaddress,
+    } = specificOrderData;
+    setProducts(orderproducts);
+    setShipping({
+      status: shippedstatus,
+      address: shippingaddress,
+    });
+    console.log(specificOrderData);
+  };
   return (
     <>
       <ParentDrawer
@@ -32,8 +50,8 @@ const OrderHistoryDrawer: React.SFC<Props> = ({
         <CardsList
           onClick={e => {
             setIsChildVisible(true);
-            //TODO: Figure out event propogation with data attribute for better efficiency
-            console.log(e.target.dataset.orderid);
+            //@ts-ignore
+            fetchOrderInfo(e.target.dataset.orderid);
           }}
         >
           {Object.keys(ordersData).map((id: any) => {
@@ -55,14 +73,23 @@ const OrderHistoryDrawer: React.SFC<Props> = ({
           })}
         </CardsList>
       </ParentDrawer>
-
       <ChildDrawer
         title={`Order`}
         visible={isChildVisible}
         placement={"left"}
         onClose={() => setIsChildVisible(false)}
       >
-        {/* <ItemCard /> */}
+        {products.map((product: any) => {
+          return (
+            <ItemCard
+              imagePublicId={product.image}
+              imageHeight={100}
+              imageWidth={100}
+              title={product.productname}
+              description={product.description}
+            />
+          );
+        })}
       </ChildDrawer>
     </>
   );
