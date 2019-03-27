@@ -20,17 +20,19 @@ public class ChargeController
     StripeService paymentsService;
 
     @PostMapping("")
-    public Map<String, String> charge(@RequestBody ChargeRequest chargeRequest) throws StripeException
+    public Map<String, Object> charge(@RequestBody ChargeRequest chargeRequest) throws StripeException
     {
         chargeRequest.setDescription("Mean Mean Coffee Beans");
         chargeRequest.setCurrency(Currency.USD);
         Charge charge = paymentsService.charge(chargeRequest);
 
-        HashMap<String, String> map = new HashMap<>();
+        HashMap<String, Object> map = new HashMap<>();
         map.put("id", charge.getId());
         map.put("status", charge.getStatus());
         map.put("chargeId", charge.getId());
         map.put("balance_transaction", charge.getBalanceTransaction());
+        map.put("shippingDetails", charge.getShipping());
+        map.put("billingDetails", charge.getBillingDetails());
         return map;
     }
 
