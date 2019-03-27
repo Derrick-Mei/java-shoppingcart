@@ -1,49 +1,54 @@
 import {Drawer, Button, Card} from "antd";
 import styled from "styled-components";
 import {useState} from "react";
-import ItemCard from "./ItemCard";
-
+import {formatMoney} from "../../lib/formatMoney";
 interface Order {
+  keyId: string;
+  totalPrice: number;
   date: string;
+  time: string;
+  orderId: number;
   id: string;
-  description: string;
 }
 interface Props {
   isMainVisible: boolean;
   setIsMainVisible: Function;
-  mainData: any;
+  ordersData: [Order];
 }
 const OrderHistoryDrawer: React.SFC<Props> = ({
   isMainVisible,
   setIsMainVisible,
-  mainData,
+  ordersData,
 }) => {
   const [isChildVisible, setIsChildVisible] = useState(false);
   return (
     <>
-      <MainDrawer
+      <ParentDrawer
         title={"Your Past Orders"}
         visible={isMainVisible}
         placement={"left"}
         onClose={() => setIsMainVisible(false)}
       >
-        <Button type="primary" onClick={() => setIsMainVisible(false)}>
-          Back
-        </Button>
         <CardsList
           onClick={() => {
             setIsChildVisible(true);
           }}
         >
-          {mainData.map((order: Order) => {
+          {Object.keys(ordersData).map((id: any) => {
             return (
-              <Card key={order.id} title={`Order Date: ${order.date}`}>
-                {order.description}
-              </Card>
+              <OrderCard
+                key={ordersData[id].keyId}
+                title={`Total Order Price: ${formatMoney(
+                  ordersData[id].totalPrice,
+                )}`}
+              >
+                <p>Order Date: {ordersData[id].date}</p>
+                <p>Order Time: {ordersData[id].time}</p>
+              </OrderCard>
             );
           })}
         </CardsList>
-      </MainDrawer>
+      </ParentDrawer>
 
       <ChildDrawer
         title={`Order`}
@@ -56,8 +61,17 @@ const OrderHistoryDrawer: React.SFC<Props> = ({
     </>
   );
 };
-const MainDrawer = styled(Drawer)``;
+const ParentDrawer = styled(Drawer)``;
 const ChildDrawer = styled(Drawer)``;
+
+const OrderCard = styled(Card)`
+  cursor: pointer;
+  &:hover {
+    -webkit-box-shadow: 0px 0px 5px 8px rgba(51, 51, 51, 0.06);
+    -moz-box-shadow: 0px 0px 5px 8px rgba(51, 51, 51, 0.06);
+    box-shadow: 0px 0px 5px 8px rgba(51, 51, 51, 0.06);
+  }
+`;
 const CardsList = styled.div`
   display: flex;
   flex-direction: column;
