@@ -27,6 +27,7 @@ const ShopPage = () => {
   const [isItemsLoading, setItemsLoading] = useState(false);
   const [isReviewsPaneVisible, setReviewsPaneVisible] = useState(false);
   const [merchandisePage, setMerchandisePage] = useState(2);
+  const [isPaginatorLoading, setIsPaginatorLoading] = useState(false);
   const [isPaginatorDisabled, setIsPaginatorDisabled] = useState(true);
   const {
     cartItems,
@@ -53,12 +54,14 @@ const ShopPage = () => {
     },
   ];
   const getNextPageMerchandise = async () => {
+    setIsPaginatorLoading(true);
     const nextMerchandiseData = await getShopItemsByPage(merchandisePage);
     setMerchandise([...merchandise, ...nextMerchandiseData]);
     setMerchandisePage(merchandisePage + 1);
     setIsPaginatorDisabled(
       nextMerchandiseData.length === 0 ? true : false,
     );
+    setIsPaginatorLoading(false);
   };
   useEffect(() => {
     const fetchItems = async () => {
@@ -176,6 +179,7 @@ const ShopPage = () => {
                   onClick={() => {
                     getNextPageMerchandise();
                   }}
+                  loading={isPaginatorLoading}
                 >
                   Load Next Page
                 </PaginateBtn>
@@ -187,6 +191,7 @@ const ShopPage = () => {
             isItemsLoading,
             merchandisePage,
             isPaginatorDisabled,
+            isPaginatorLoading,
           ],
         )}
       </MainContent>
