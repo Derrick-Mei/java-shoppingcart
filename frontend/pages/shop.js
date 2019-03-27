@@ -26,8 +26,8 @@ const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
   const [isItemsLoading, setItemsLoading] = useState(false);
   const [isReviewsPaneVisible, setReviewsPaneVisible] = useState(false);
-  const [merchandisePage, setMerchandisePage] = useState(1);
-  const [isPaginatorDisabled, setisPaginatorDisabled] = useState(true);
+  const [merchandisePage, setMerchandisePage] = useState(2);
+  const [isPaginatorDisabled, setIsPaginatorDisabled] = useState(true);
   const {
     cartItems,
     setCartItems,
@@ -52,13 +52,21 @@ const ShopPage = () => {
       author: "herald",
     },
   ];
+  const getNextPageMerchandise = async () => {
+    const nextMerchandiseData = await getShopItemsByPage(merchandisePage);
+    setMerchandise([...merchandise, ...nextMerchandiseData]);
+    setMerchandisePage(merchandisePage + 1);
+    setIsPaginatorDisabled(
+      nextMerchandiseData.length === 0 ? true : false,
+    );
+  };
   useEffect(() => {
     const fetchItems = async () => {
       try {
         setItemsLoading(true);
-        const merchandiseData = await getShopItemsByPage(merchandisePage);
-        setMerchandise(prevState => [...prevState, ...merchandiseData]);
-        setisPaginatorDisabled(
+        const merchandiseData = await getShopItemsByPage(1);
+        setMerchandise(merchandiseData);
+        setIsPaginatorDisabled(
           merchandiseData.length === 0 ? true : false,
         );
         setItemsLoading(false);
@@ -72,7 +80,7 @@ const ShopPage = () => {
     };
     fetchItems();
     setAccessToken(window.localStorage.getItem("access_token"));
-  }, [merchandisePage]);
+  }, []);
 
   useEffect(() => {
     const fetchUserAndCart = async () => {
@@ -165,15 +173,21 @@ const ShopPage = () => {
                 <PaginateBtn
                   disabled={isPaginatorDisabled}
                   type="primary"
-                  onClick={() =>
-                    setMerchandisePage(prevState => prevState + 1)
-                  }
+                  onClick={() => {
+                    getNextPageMerchandise();
+                  }}
                 >
                   Load Next Page
                 </PaginateBtn>
               </>
             ),
-          [merchandise, userId, isItemsLoading, isPaginatorDisabled],
+          [
+            merchandise,
+            userId,
+            isItemsLoading,
+            merchandisePage,
+            isPaginatorDisabled,
+          ],
         )}
       </MainContent>
       <CartFooter
