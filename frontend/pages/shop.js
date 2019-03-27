@@ -128,7 +128,7 @@ const ShopPage = () => {
                           onClick={() => {
                             addCartItem(item, userId);
                           }}
-                          accessToken={accessToken}
+                          access_token={accessToken}
                         >
                           Buy {formatMoney(item.price)}
                         </BuyBtn>,
@@ -139,7 +139,7 @@ const ShopPage = () => {
                               pathname: "/auth",
                             });
                           }}
-                          accessToken={accessToken}
+                          access_token={accessToken}
                         >
                           Login to buy.
                         </LoginBtn>,
@@ -276,11 +276,11 @@ const ItemsListSpinner = styled(Spin)`
   justify-content: center;
 `;
 const BuyBtn = styled(Button)`
-  display: ${props => (props.accessToken ? "flex" : "none")};
+  display: ${props => (props.access_token ? "flex" : "none")};
   justify-content: center;
 `;
 const LoginBtn = styled(Button)`
-  display: ${props => (props.accessToken ? "none" : "flex")};
+  display: ${props => (props.access_token ? "none" : "flex")};
   justify-content: center;
 `;
 export default ShopPage;

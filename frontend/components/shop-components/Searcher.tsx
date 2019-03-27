@@ -7,10 +7,10 @@ export interface Props {}
 const Searcher: React.SFC<Props> = () => {
   const [searchActive, setSearchActive] = useState(false);
   return (
-    <SearchWrapper searchActive={searchActive}>
+    <SearchWrapper search_active={searchActive}>
       <SearchBox
         placeholder="Enter Search Input"
-        searchActive={searchActive}
+        search_active={searchActive}
       />
       <SearchBtn
         type="primary"
@@ -35,15 +35,15 @@ const SearchWrapper = styled.div`
   position: fixed;
   bottom: 46px;
   padding: 1em;
-  background: ${(props: {searchActive: boolean}) =>
-    props.searchActive ? "rgba(57,57,57, .8)" : "rgba(57, 57, 57, .2)"};
+  background: ${(props: {search_active: boolean}) =>
+    props.search_active ? "rgba(57,57,57, .8)" : "rgba(57, 57, 57, .2)"};
 `;
 const SearchBtn = styled(Button)`
   opacity: 1;
 `;
 const SearchBox = styled(Input)`
-  display: ${(props: {searchActive: boolean}) =>
-    props.searchActive ? "flex" : "none"};
+  display: ${(props: {search_active: boolean}) =>
+    props.search_active ? "flex" : "none"};
   width: 60%;
 `;
 export default Searcher;
