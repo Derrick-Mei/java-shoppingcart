@@ -9,7 +9,7 @@ export interface Props {
 }
 
 const Searcher: React.SFC<Props> = ({setMerchandise}) => {
-  const [searchActive, setSearchActive] = useState(false);
+  const [searchActive, setSearchActive] = useState("false");
   const [searchText, setSearchText] = useState("");
 
   const changeSearchTextHandler = (e: InputEventTarget) => {
@@ -42,8 +42,8 @@ const Searcher: React.SFC<Props> = ({setMerchandise}) => {
         shape="circle"
         icon="search"
         onClick={() => {
-          if (searchActive === false) {
-            setSearchActive(true);
+          if (searchActive === "false") {
+            setSearchActive("true");
           } else {
             runCriteriaSearch();
           }
@@ -60,15 +60,17 @@ const SearchWrapper = styled.div`
   position: fixed;
   bottom: 46px;
   padding: 1em;
-  background: ${(props: {search_active: boolean}) =>
-    props.search_active ? "rgba(57,57,57, .8)" : "rgba(57, 57, 57, .2)"};
+  background: ${(props: {search_active: string}) =>
+    props.search_active === "false"
+      ? "rgba(57,57,57, .8)"
+      : "rgba(57, 57, 57, .2)"};
 `;
 const SearchBtn = styled(Button)`
   opacity: 1;
 `;
 const SearchBox = styled(Input)`
-  display: ${(props: {search_active: boolean}) =>
-    props.search_active ? "flex" : "none"};
+  display: ${(props: {search_active: string}) =>
+    props.search_active === "false" ? "flex" : "none"};
   width: 60%;
 `;
 export default Searcher;
