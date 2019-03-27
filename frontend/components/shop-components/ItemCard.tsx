@@ -34,11 +34,11 @@ const ItemCard: React.SFC<Props> = ({
         <ItemTitle>{title}</ItemTitle>
         <ItemDescription>{description}</ItemDescription>
         {actionBtns ? (
-          <Button.Group>
+          <ActionsContainer>
             {actionBtns.map((btn, i) => {
               return React.cloneElement(btn, {key: uuidv4()});
             })}
-          </Button.Group>
+          </ActionsContainer>
         ) : (
           ""
         )}
@@ -52,6 +52,7 @@ const StyledCard = styled.div`
   width: 100%;
   padding: 0;
   margin-bottom: 24px;
+  max-width: 400px;
 `;
 const ItemTextContainer = styled.div`
   width: 100%;
@@ -69,7 +70,11 @@ const ItemDescription = styled.p`
   line-height: 1.3;
 `;
 const ActionsContainer = styled.div`
-  /* display: flex;
-  justify-content: space-around; */
+  display: flex;
+  flex-direction: column;
+  padding: 0 1em 0 0;
+  & > * {
+    margin-bottom: 1em;
+  }
 `;
 export default ItemCard;
