@@ -4,6 +4,7 @@ import {StyledAuthForm} from "./styles/StyledAuthForm";
 import {createBaseAxios} from "../lib/axiosInstances";
 import {Theme as ITheme, InputEventTarget} from "../interfaces/index";
 import {useState} from "react";
+import emailRegex from "../lib/formValidationRegex/emailRegex";
 interface Props {
   form: any;
   theme: ITheme;
@@ -16,6 +17,7 @@ interface Props {
 interface SignupValues {
   username: string;
   password: string;
+  email: string;
 }
 interface SignupSubmitData {
   data: {
@@ -45,6 +47,7 @@ const SignupForm: React.SFC<Props> = ({
 }) => {
   const {getFieldDecorator} = form;
   const [isLoading, setLoading] = useState(false);
+
   function handleSubmit(e: React.FormEvent<HTMLInputElement>) {
     e.preventDefault();
     form.validateFields(async (err: object, values: SignupValues) => {
@@ -59,6 +62,7 @@ const SignupForm: React.SFC<Props> = ({
           data: {
             username: values.username,
             password: values.password,
+            email: values.email,
           },
           timeout: 1000 * 10,
           validateStatus: function(status: number) {
@@ -100,16 +104,24 @@ const SignupForm: React.SFC<Props> = ({
         title="Signup"
         headStyle={{background: theme.black, color: theme.white}}
       >
-        {/* <Form.Item label="Email">
+        <Form.Item label="Email">
           {getFieldDecorator("email", {
-            rules: [{ required: true, message: "Please input an email!" }]
+            rules: [
+              {
+                required: true,
+                message: "Please input an email!",
+                pattern: emailRegex,
+              },
+            ],
           })(
             <Input
-              prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
+              prefix={
+                <Icon type="mail" style={{color: "rgba(0,0,0,.25)"}} />
+              }
               placeholder="Email"
-            />
+            />,
           )}
-        </Form.Item> */}
+        </Form.Item>
         <Form.Item label="Username">
           {getFieldDecorator("username", {
             rules: [{required: true, message: "Please input a username!"}],
