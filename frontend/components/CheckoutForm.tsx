@@ -10,11 +10,11 @@ import {
   CartItem as ICartItem,
 } from "../interfaces/index";
 import {formatMoney} from "../lib/formatMoney";
-import {createBearerAxios} from "../lib/axiosInstances";
 import ItemCard from "./shop-components/ItemCard";
 import ItemCardList from "./shop-components/ItemCardList";
 import {injectStripe} from "react-stripe-elements-universal";
 import StripeBtn from "./StripeButton";
+import getCartByUserId from "../lib/requestsEndpoints/getCartByUserId";
 interface Props {
   form: any;
   theme: ITheme;
@@ -28,17 +28,16 @@ const CheckoutForm: React.SFC<Props> = ({form, theme}) => {
   const [cartItems, setCartItems] = useState([]);
   const [totalCartPrice, setTotalCartPrice] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [accessToken, setAccessToken] = useState();
+  const [userId, setUserId] = useState();
   const CREDIT_CARD = "CREDIT_CARD";
   const GIFT_CARD = "GIFT_CARD";
   useEffect(() => {
-    //TODO: get all cart items for the user
-    //so that they can review their cart and have the total price of all products
     const fetchCartItems = async () => {
       try {
-        const {data: cartData} = await createBearerAxios()({
-          method: "get",
-          url: `/cart/${window.localStorage.getItem("userid")}`,
-        });
+        const userId = Number(window.localStorage.getItem("userid"));
+
+        const cartData = await getCartByUserId(userId);
 
         const items = [];
         let totalPriceInCart = 0;
@@ -65,6 +64,8 @@ const CheckoutForm: React.SFC<Props> = ({form, theme}) => {
     fetchCartItems();
     paymentMethodHandler(CREDIT_CARD);
     shippingMethodHandler(0);
+    setAccessToken(window.localStorage.getItem("access_token"));
+    setUserId(Number(window.localStorage.getItem("userid")));
   }, []);
 
   const paymentMethodHandler = (value: string) => {
@@ -174,11 +175,26 @@ const CheckoutForm: React.SFC<Props> = ({form, theme}) => {
           )}
         </Form.Item>
         {(() => {
-          if (form.getFieldValue("payment-group") === CREDIT_CARD) {
+          if (!accessToken) {
+            return (
+              <Button
+                type="primary"
+                onClick={() => {
+                  Router.push("/auth");
+                }}
+              >
+                Login to Start Payment
+              </Button>
+            );
+          } else if (form.getFieldValue("payment-group") === CREDIT_CARD) {
             return (
               <Form.Item>
                 {/* Stripe goes by cents 1000 would be 10 dollars, so I moved the decimal by 2 */}
-                <StripeBtn headerImg={""} amount={totalPrice * 100} />
+                <StripeBtn
+                  headerImg={""}
+                  amount={totalPrice * 100}
+                  userId={userId}
+                />
               </Form.Item>
             );
           } else if (form.getFieldValue("payment-group") === GIFT_CARD) {
