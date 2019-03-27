@@ -6,9 +6,10 @@ import getCriteriaSearch from "../../lib/requestsEndpoints/getCriteriaSearch";
 
 export interface Props {
   // pageNumber: number;
+  setMerchandiseFromSearch: Function;
 }
 
-const Searcher: React.SFC<Props> = ({setMerchandise}) => {
+const Searcher: React.SFC<Props> = ({setMerchandiseFromSearch}) => {
   const [searchActive, setSearchActive] = useState("false");
   const [searchText, setSearchText] = useState("");
 
@@ -16,9 +17,12 @@ const Searcher: React.SFC<Props> = ({setMerchandise}) => {
     setSearchText(e.target.value);
   };
   const runCriteriaSearch = async () => {
-    const searchData = await getCriteriaSearch(searchText, 1);
-    console.log(searchData);
-    // setMerchandise(prevState => [...prevState, ...searchData])
+    if (searchText) {
+      const searchData = await getCriteriaSearch(searchText, 1);
+      setMerchandiseFromSearch(searchData);
+    } else {
+      setMerchandiseFromSearch([]);
+    }
   };
   return (
     <SearchWrapper search_active={searchActive}>

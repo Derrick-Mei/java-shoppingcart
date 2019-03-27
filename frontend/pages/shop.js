@@ -24,6 +24,7 @@ import getShopItemsByPage from "../lib/requestsEndpoints/getShopItemsByPage";
 
 const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
+  const [merchandiseFromSearch, setMerchandiseFromSearch] = useState([]);
   const [isItemsLoading, setItemsLoading] = useState(false);
   const [isReviewsPaneVisible, setReviewsPaneVisible] = useState(false);
   const [merchandisePage, setMerchandisePage] = useState(2);
@@ -62,6 +63,11 @@ const ShopPage = () => {
       nextMerchandiseData.length === 0 ? true : false,
     );
     setIsPaginatorLoading(false);
+  };
+  const decideMerchandiseToShow = () => {
+    return merchandiseFromSearch.length > 0
+      ? merchandiseFromSearch
+      : merchandise;
   };
   useEffect(() => {
     const fetchItems = async () => {
@@ -129,7 +135,7 @@ const ShopPage = () => {
             ) : (
               <>
                 <ItemCardList>
-                  {merchandise.map(item => {
+                  {decideMerchandiseToShow().map(item => {
                     return (
                       <ItemCard
                         key={item.productid}
@@ -175,7 +181,7 @@ const ShopPage = () => {
                 </ItemCardList>
               </>
             ),
-          [merchandise, userId, isItemsLoading],
+          [merchandise, userId, isItemsLoading, merchandiseFromSearch],
         )}
         <PaginateBtn
           disabled={isPaginatorDisabled}
@@ -184,6 +190,7 @@ const ShopPage = () => {
             getNextPageMerchandise();
           }}
           loading={isPaginatorLoading}
+          search_merchandise={merchandiseFromSearch}
         >
           Load Next Page
         </PaginateBtn>
@@ -193,7 +200,7 @@ const ShopPage = () => {
         deleteCartItem={deleteCartItem}
         userId={userId}
       />
-      <Searcher />
+      <Searcher setMerchandiseFromSearch={setMerchandiseFromSearch} />
       <ReviewDrawer
         isVisible={isReviewsPaneVisible}
         commentsData={commentsData}
@@ -313,5 +320,7 @@ const LoginBtn = styled(Button)`
   display: ${props => (props.access_token ? "none" : "flex")};
   justify-content: center;
 `;
-const PaginateBtn = styled(Button)``;
+const PaginateBtn = styled(Button)`
+  display: ${props => (props.search_merchandise.length > 0 ? "none" : "")};
+`;
 export default ShopPage;
