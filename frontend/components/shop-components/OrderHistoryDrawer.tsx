@@ -79,7 +79,8 @@ const OrderHistoryDrawer: React.SFC<Props> = ({
         placement={"left"}
         onClose={() => setIsChildVisible(false)}
       >
-        {products.map((product: any) => {
+        {products
+          ? products.map((product: any) => {
           return (
             <ItemCard
               imagePublicId={product.image}
@@ -89,7 +90,8 @@ const OrderHistoryDrawer: React.SFC<Props> = ({
               description={product.description}
             />
           );
-        })}
+            })
+          : null}
       </ChildDrawer>
     </>
   );
