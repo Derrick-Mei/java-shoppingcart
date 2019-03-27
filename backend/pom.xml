@@ -148,6 +148,16 @@
             <version>7.28.0</version>
         </dependency>
 
+        <!--==============================SENDGRID DEPENDENCIES============================================-->
+
+        <!-- https://mvnrepository.com/artifact/com.sendgrid/sendgrid-java -->
+        <dependency>
+            <groupId>com.sendgrid</groupId>
+            <artifactId>sendgrid-java</artifactId>
+            <version>4.3.0</version>
+        </dependency>
+
+
 
     </dependencies>
 
