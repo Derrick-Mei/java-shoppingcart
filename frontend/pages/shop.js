@@ -22,11 +22,14 @@ import postAddCartItem from "../lib/requestsEndpoints/postAddCartItem";
 import deleteCartItemByUserIdAndProductId from "../lib/requestsEndpoints/deleteCartItemRequest";
 import deleteCartItemRequest from "../lib/requestsEndpoints/deleteCartItemRequest";
 import putModifyCartQuantity from "../lib/requestsEndpoints/putModifyCartQuantity";
+import getShopItemsByPage from "../lib/requestsEndpoints/getShopItemsByPage";
 
 const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
   const [isItemsLoading, setItemsLoading] = useState(false);
   const [isReviewsPaneVisible, setReviewsPaneVisible] = useState(false);
+  const [merchandisePage, setMerchandisePage] = useState(1);
+  const [isPaginatorDisabled, setisPaginatorDisabled] = useState(true);
   const {
     cartItems,
     setCartItems,
@@ -55,8 +58,11 @@ const ShopPage = () => {
     const fetchItems = async () => {
       try {
         setItemsLoading(true);
-        const merchandiseData = await getShopMerchandise();
-        setMerchandise(merchandiseData);
+        const merchandiseData = await getShopItemsByPage(merchandisePage);
+        setMerchandise(prevState => [...prevState, ...merchandiseData]);
+        setisPaginatorDisabled(
+          merchandiseData.length === 0 ? true : false,
+        );
         setItemsLoading(false);
       } catch (err) {
         console.log(err);
@@ -68,7 +74,7 @@ const ShopPage = () => {
     };
     fetchItems();
     setAccessToken(window.localStorage.getItem("access_token"));
-  }, []);
+  }, [merchandisePage]);
 
   useEffect(() => {
     const fetchUserAndCart = async () => {
@@ -112,51 +118,64 @@ const ShopPage = () => {
             isItemsLoading ? (
               <ItemsListSpinner size="large" />
             ) : (
-              <ItemCardList>
-                {merchandise.map(item => {
-                  return (
-                    <ItemCard
-                      key={item.productid}
-                      title={item.productname}
-                      description={item.description}
-                      imagePublicId={item.image}
-                      imageHeight={200}
-                      imageWidth={200}
-                      actionBtns={[
-                        <BuyBtn
-                          type="primary"
-                          onClick={() => {
-                            addCartItem(item, userId);
-                          }}
-                          access_token={accessToken}
-                        >
-                          Buy {formatMoney(item.price)}
-                        </BuyBtn>,
-                        <LoginBtn
-                          type="primary"
-                          onClick={() => {
-                            Router.push({
-                              pathname: "/auth",
-                            });
-                          }}
-                          access_token={accessToken}
-                        >
-                          Login to buy.
-                        </LoginBtn>,
-                        <Button
-                          onClick={() => {
-                            setReviewsPaneVisible(prevState => !prevState);
-                          }}
-                        >
-                          Reviews
-                        </Button>,
-                      ]}
-                    />
-                  );
-                })}
-              </ItemCardList>
+              <>
+                <ItemCardList>
+                  {merchandise.map(item => {
+                    return (
+                      <ItemCard
+                        key={item.productid}
+                        title={item.productname}
+                        description={item.description}
+                        imagePublicId={item.image}
+                        imageHeight={200}
+                        imageWidth={200}
+                        actionBtns={[
+                          <BuyBtn
+                            type="primary"
+                            onClick={() => {
+                              addCartItem(item, userId);
+                            }}
+                            access_token={accessToken}
+                          >
+                            Buy {formatMoney(item.price)}
+                          </BuyBtn>,
+                          <LoginBtn
+                            type="primary"
+                            onClick={() => {
+                              Router.push({
+                                pathname: "/auth",
+                              });
+                            }}
+                            access_token={accessToken}
+                          >
+                            Login to buy.
+                          </LoginBtn>,
+                          <Button
+                            onClick={() => {
+                              setReviewsPaneVisible(
+                                prevState => !prevState,
+                              );
+                            }}
+                          >
+                            Reviews
+                          </Button>,
+                        ]}
+                      />
+                    );
+                  })}
+                </ItemCardList>
+                <PaginateBtn
+                  disabled={isPaginatorDisabled}
+                  type="primary"
+                  onClick={() =>
+                    setMerchandisePage(prevState => prevState + 1)
+                  }
+                >
+                  Load Next Page
+                </PaginateBtn>
+              </>
             ),
-          [merchandise, userId, isItemsLoading],
+          [merchandise, userId, isItemsLoading, isPaginatorDisabled],
         )}
       </MainContent>
       <CartFooter
@@ -262,7 +281,8 @@ const useCartItem = () => {
 const MainContent = styled.main`
   display: block;
   margin: 0 auto;
-  padding: 5em 0.5em;
+  padding: 5em 0.5em 8em 0.5em;
+  text-align: center;
 `;
 const ShopWrapper = styled.div``;
 
@@ -283,4 +303,5 @@ const LoginBtn = styled(Button)`
   display: ${props => (props.access_token ? "none" : "flex")};
   justify-content: center;
 `;
+const PaginateBtn = styled(Button)``;
 export default ShopPage;
