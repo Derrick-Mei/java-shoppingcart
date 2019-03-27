@@ -147,7 +147,9 @@ const ChangeAvatarCard = ({username, userId}) => {
               src={
                 previewImage
                   ? previewImage
-                  : cloudinaryCore.url(imagePublicId)
+                  : cloudinaryCore.url(
+                      `users-avatars/profile-pic-${userId}`,
+                    )
               }
               alt=""
             />
