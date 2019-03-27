@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-//@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"username", "email"})})
 public class User
 {
     @Id
@@ -50,6 +49,9 @@ public class User
 
     //    @JsonIgnore
     private String paymentmethod;
+
+    // Used for SendGrid
+    private boolean receiveEmails = false;
 
     // *** OneToMany with Order ***
 //    @JsonIgnore
@@ -223,6 +225,7 @@ public class User
         this.totalorderhistory = totalorderhistory;
     }
 
+    // for changing password
     public String getRawPassword()
     {
         return rawPassword;
@@ -231,5 +234,17 @@ public class User
     public void setRawPassword(String rawPassword)
     {
         this.rawPassword = rawPassword;
+    }
+
+    //For SendGrid
+
+    public boolean isReceiveEmails()
+    {
+        return receiveEmails;
+    }
+
+    public void setReceiveEmails(boolean receiveEmails)
+    {
+        this.receiveEmails = receiveEmails;
     }
 }
