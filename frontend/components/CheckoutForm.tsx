@@ -190,7 +190,11 @@ const CheckoutForm: React.SFC<Props> = ({form, theme}) => {
             return (
               <Form.Item>
                 {/* Stripe goes by cents 1000 would be 10 dollars, so I moved the decimal by 2 */}
-                <StripeBtn headerImg={""} amount={totalPrice * 100} />
+                <StripeBtn
+                  headerImg={""}
+                  amount={totalPrice * 100}
+                  userId={userId}
+                />
               </Form.Item>
             );
           } else if (form.getFieldValue("payment-group") === GIFT_CARD) {
