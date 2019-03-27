@@ -30,7 +30,6 @@ const Searcher: React.SFC<Props> = ({setMerchandise}) => {
           changeSearchTextHandler(e);
         }}
         onKeyDown={e => {
-          console.log(e);
           //13 is the enter key
           if (e.keyCode === 13) {
             runCriteriaSearch();
@@ -61,7 +60,7 @@ const SearchWrapper = styled.div`
   bottom: 46px;
   padding: 1em;
   background: ${(props: {search_active: string}) =>
-    props.search_active === "false"
+    props.search_active === "true"
       ? "rgba(57,57,57, .8)"
       : "rgba(57, 57, 57, .2)"};
 `;
@@ -70,7 +69,7 @@ const SearchBtn = styled(Button)`
 `;
 const SearchBox = styled(Input)`
   display: ${(props: {search_active: string}) =>
-    props.search_active === "false" ? "flex" : "none"};
+    props.search_active === "true" ? "flex" : "none"};
   width: 60%;
 `;
 export default Searcher;
