@@ -9,7 +9,19 @@ import getCustomerOrdersByUserId from "../lib/requestsEndpoints/getCustomerOrder
 const TestPage = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [orders, setOrders] = useState({});
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const userId = window.localStorage.getItem("userid");
+        const orderData = await getCustomerOrdersByUserId(userId);
+        const ordersCardsData = manipulateForOrderCards(orderData);
+        setOrders(ordersCardsData);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchOrders();
+  }, []);
   return (
     <>
       <OrderHistoryDrawer

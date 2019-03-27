@@ -29,7 +29,16 @@ const MeanCoffeeHeader = () => {
         >
           User Profile
         </DrawerBtn>
-        <DrawerBtn block>Order History</DrawerBtn>
+        <DrawerBtn
+          onClick={() =>
+            Router.push({
+              pathname: "/test",
+            })
+          }
+          block
+        >
+          Order History
+        </DrawerBtn>
         {/* <DrawerBtn block>Light / Dark</DrawerBtn> */}
       </Drawer>
     </MeanCoffeeWrapper>
