@@ -3,24 +3,26 @@ import MeanCoffeeHeader from "../components/shop-components/MeanCoffeeHeader";
 import CartFooter from "../components/shop-components/CartFooter";
 import ItemCardList from "../components/shop-components/ItemCardList";
 import ItemCard from "../components/shop-components/ItemCard";
+import ReviewDrawer from "../components/shop-components/ReviewDrawer";
+import Searcher from "../components/shop-components/Searcher";
 import {Button, Spin, notification} from "antd";
 import {useEffect, useState, useMemo} from "react";
 import axios from "axios";
 import uuidv4 from "uuid/v4";
 import {createBaseAxios, createBearerAxios} from "../lib/axiosInstances";
 import {formatMoney} from "../lib/formatMoney";
-import ReviewDrawer from "../components/shop-components/ReviewDrawer";
-import Searcher from "../components/shop-components/Searcher";
-import getCustomerByUserId from "../lib/requestsEndpoints/getCustomerByUserId";
 import Router from "next/router";
-import getCustomerByUsername from "../lib/requestsEndpoints/getCustomerByUsername";
-import getCartByUserId from "../lib/requestsEndpoints/getCartByUserId";
-import getShopMerchandise from "../lib/requestsEndpoints/getShopMerchandise";
-import postAddCartItem from "../lib/requestsEndpoints/postAddCartItem";
-import deleteCartItemByUserIdAndProductId from "../lib/requestsEndpoints/deleteCartItemRequest";
-import deleteCartItemRequest from "../lib/requestsEndpoints/deleteCartItemRequest";
-import putModifyCartQuantity from "../lib/requestsEndpoints/putModifyCartQuantity";
-import getShopItemsByPage from "../lib/requestsEndpoints/getShopItemsByPage";
+import {
+  getCustomerByUsername,
+  getCustomerByUserId,
+  getCartByUserId,
+  getShopMerchandise,
+  getShopItemsByPage,
+  postAddCartItem,
+  deleteCartItemByUserIdAndProductId,
+  deleteCartItemRequest,
+  putModifyCartQuantity,
+} from "../lib/requestsEndpoints/index";
 
 const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
