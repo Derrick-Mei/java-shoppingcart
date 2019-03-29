@@ -12,6 +12,7 @@ export {default as getShopMerchandise} from "./getShopMerchandise";
 // POST
 export {default as postAddCartItem} from "./postAddCartItem";
 export {default as postCreateOrder} from "./postCreateOrder";
+export {default as postStripeCharge} from "./postStripeCharge";
 // PUT
 export {default as putModifyCartQuantity} from "./putModifyCartQuantity";
 // DELETE
