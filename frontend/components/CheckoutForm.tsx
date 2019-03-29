@@ -14,7 +14,7 @@ import ItemCard from "./shop-components/ItemCard";
 import ItemCardList from "./shop-components/ItemCardList";
 import {injectStripe} from "react-stripe-elements-universal";
 import StripeBtn from "./StripeButton";
-import getCartByUserId from "../lib/requestsEndpoints/getCartByUserId";
+import {getCartByUserId} from "../lib/requestsEndpoints/index";
 interface Props {
   form: any;
   theme: ITheme;
@@ -190,11 +190,7 @@ const CheckoutForm: React.SFC<Props> = ({form, theme}) => {
             return (
               <Form.Item>
                 {/* Stripe goes by cents 1000 would be 10 dollars, so I moved the decimal by 2 */}
-                <StripeBtn
-                  headerImg={""}
-                  amount={totalPrice * 100}
-                  userId={userId}
-                />
+                <StripeBtn headerImg={""} amount={totalPrice * 100} />
               </Form.Item>
             );
           } else if (form.getFieldValue("payment-group") === GIFT_CARD) {
