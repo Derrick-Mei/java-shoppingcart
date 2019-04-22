@@ -81,15 +81,15 @@ const OrderHistoryDrawer: React.SFC<Props> = ({
       >
         {products
           ? products.map((product: any) => {
-          return (
-            <ItemCard
-              imagePublicId={product.image}
-              imageHeight={100}
-              imageWidth={100}
-              title={product.productname}
-              description={product.description}
-            />
-          );
+              return (
+                <ItemCard
+                  imagePublicId={product.image}
+                  imageHeight={100}
+                  imageWidth={100}
+                  title={product.productname}
+                  description={product.description}
+                />
+              );
             })
           : null}
       </ChildDrawer>
