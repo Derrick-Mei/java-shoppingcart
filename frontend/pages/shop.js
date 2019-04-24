@@ -132,57 +132,57 @@ const ShopPage = () => {
       <MainContent>
         {merchandise.length
           ? useMemo(
-          () =>
-            isItemsLoading ? (
-              <ItemsListSpinner size="large" />
-            ) : (
-                <ItemCardList>
-                  {decideMerchandiseToShow().map(item => {
-                    return (
-                      <ItemCard
-                        key={item.productid}
-                        title={item.productname}
-                        description={item.description}
-                        imagePublicId={item.image}
-                        imageHeight={200}
-                        imageWidth={200}
-                        actionBtns={[
-                          <BuyBtn
-                            type="primary"
-                            onClick={() => {
-                              addCartItem(item, userId);
-                            }}
-                            access_token={accessToken}
-                          >
-                            Buy {formatMoney(item.price)}
-                          </BuyBtn>,
-                          <LoginBtn
-                            type="primary"
-                            onClick={() => {
-                              Router.push({
-                                pathname: "/auth",
-                              });
-                            }}
-                            access_token={accessToken}
-                          >
-                            Login to buy.
-                          </LoginBtn>,
-                          <Button
-                            onClick={() => {
-                              setReviewsPaneVisible(
-                                prevState => !prevState,
-                              );
-                            }}
-                          >
-                            Reviews
-                          </Button>,
-                        ]}
-                      />
-                    );
-                  })}
-                </ItemCardList>
-            ),
-          [merchandise, userId, isItemsLoading, merchandiseFromSearch],
+              () =>
+                isItemsLoading ? (
+                  <ItemsListSpinner size="large" />
+                ) : (
+                  <ItemCardList>
+                    {decideMerchandiseToShow().map(item => {
+                      return (
+                        <ItemCard
+                          key={item.productid}
+                          title={item.productname}
+                          description={item.description}
+                          imagePublicId={item.image}
+                          imageHeight={200}
+                          imageWidth={200}
+                          actionBtns={[
+                            <BuyBtn
+                              type="primary"
+                              onClick={() => {
+                                addCartItem(item, userId);
+                              }}
+                              access_token={accessToken}
+                            >
+                              Buy {formatMoney(item.price)}
+                            </BuyBtn>,
+                            <LoginBtn
+                              type="primary"
+                              onClick={() => {
+                                Router.push({
+                                  pathname: "/auth",
+                                });
+                              }}
+                              access_token={accessToken}
+                            >
+                              Login to buy.
+                            </LoginBtn>,
+                            <Button
+                              onClick={() => {
+                                setReviewsPaneVisible(
+                                  prevState => !prevState,
+                                );
+                              }}
+                            >
+                              Reviews
+                            </Button>,
+                          ]}
+                        />
+                      );
+                    })}
+                  </ItemCardList>
+                ),
+              [merchandise, userId, isItemsLoading, merchandiseFromSearch],
             )
           : null}
         <PaginateBtn

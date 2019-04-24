@@ -1,10 +1,28 @@
 import styled from "styled-components";
 import {Button, Drawer} from "antd";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import Router from "next/router";
+import OrderHistoryDrawer from "./OrderHistoryDrawer";
+import {getCustomerOrdersByUserId} from "../../lib/requestsEndpoints";
+import manipulateForOrderCards from "../../lib/manipulateData/manipulateForOrderCards";
 
 const MeanCoffeeHeader = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const [isOrderDrawerOpen, setIsOrderDrawerOpen] = useState(false);
+  const [orders, setOrders] = useState({});
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const userId = window.localStorage.getItem("userid");
+        const orderData = await getCustomerOrdersByUserId(userId);
+        const ordersCardsData = manipulateForOrderCards(orderData);
+        setOrders(ordersCardsData);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchOrders();
+  }, []);
   return (
     <MeanCoffeeWrapper>
       <Title>
@@ -29,18 +47,17 @@ const MeanCoffeeHeader = () => {
         >
           User Profile
         </DrawerBtn>
-        <DrawerBtn
-          onClick={() =>
-            Router.push({
-              pathname: "/test",
-            })
-          }
-          block
-        >
+        <DrawerBtn onClick={() => setIsOrderDrawerOpen(true)} block>
           Order History
         </DrawerBtn>
         {/* <DrawerBtn block>Light / Dark</DrawerBtn> */}
       </Drawer>
+
+      <OrderHistoryDrawer
+        isMainVisible={isOrderDrawerOpen}
+        setIsMainVisible={setIsOrderDrawerOpen}
+        ordersData={orders}
+      />
     </MeanCoffeeWrapper>
   );
 };
