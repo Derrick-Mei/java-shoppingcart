@@ -130,12 +130,12 @@ const ShopPage = () => {
     <ShopWrapper>
       <MeanCoffeeHeader />
       <MainContent>
-        {useMemo(
+        {merchandise.length
+          ? useMemo(
           () =>
             isItemsLoading ? (
               <ItemsListSpinner size="large" />
             ) : (
-              <>
                 <ItemCardList>
                   {decideMerchandiseToShow().map(item => {
                     return (
@@ -181,10 +181,10 @@ const ShopPage = () => {
                     );
                   })}
                 </ItemCardList>
-              </>
             ),
           [merchandise, userId, isItemsLoading, merchandiseFromSearch],
-        )}
+            )
+          : null}
         <PaginateBtn
           disabled={isPaginatorDisabled}
           type="primary"
