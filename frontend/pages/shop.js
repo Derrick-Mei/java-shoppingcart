@@ -103,22 +103,8 @@ const ShopPage = () => {
         setUserId(customerData.userId);
 
         window.localStorage.setItem("userid", customerData.userId);
-
-        const cartData = await getCartByUserId(customerData.userId);
-        const cartItems = [];
-        for (let i = 0; i < cartData.length; i++) {
-          let item = cartData[i];
-          const quantity = item.quantityincart;
-
-          for (let j = 0; j < quantity; j++) {
-            delete item.quantityincart;
-            cartItems.push({
-              ...item,
-              keyId: uuidv4(),
-            });
-          } // for j - used for adding the right amount of quantity in cart
-        } // for i - iterating through each product
-        setCartItems(cartItems);
+        const {itemsInCart} = customerData.cart;
+        setCartItems(itemsInCart);
       } catch (err) {
         console.log(err);
       }
