@@ -100,11 +100,11 @@ const ShopPage = () => {
         const username = window.localStorage.getItem("username");
         const customerData = await getCustomerByUsername(username);
 
-        setUserId(customerData.userid);
+        setUserId(customerData.userId);
 
-        window.localStorage.setItem("userid", customerData.userid);
+        window.localStorage.setItem("userid", customerData.userId);
 
-        const cartData = await getCartByUserId(customerData.userid);
+        const cartData = await getCartByUserId(customerData.userId);
         const cartItems = [];
         for (let i = 0; i < cartData.length; i++) {
           let item = cartData[i];
@@ -242,12 +242,12 @@ const useCartItem = () => {
     } else if (cartItem.quantityincart <= 1) {
       const deleteSuccessMsg = notification.success.bind(null, {
         message: `${
-          cartItem.productname
+          cartItem.product_name
         } no longer exists in cart, delete successful!`,
       });
       const deleteFailedMsg = notification.error.bind(null, {
         message: `${
-          cartItem.productname
+          cartItem.product_name
         } could not be deleted, try again later.`,
       });
       const data = await deleteCartItemRequest(
@@ -267,14 +267,14 @@ const useCartItem = () => {
 
   const addCartItem = async (itemObj, userId) => {
     const displaySuccessMsg = notification.success.bind(null, {
-      message: `${itemObj.productname} has been added!`,
+      message: `${itemObj.product_name} has been added!`,
     });
     const displayFailedMsg = notification.error.bind(null, {
-      message: `${itemObj.productname} has failed to be added to cart.`,
+      message: `${itemObj.product_name} has failed to be added to cart.`,
     });
     const data = await postAddCartItem(
       userId,
-      itemObj.productid,
+      itemObj.product_id,
       displaySuccessMsg,
       displayFailedMsg,
     );
