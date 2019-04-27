@@ -4,7 +4,7 @@ function createBaseAxios() {
   return axios.create({
     baseURL: isDev
       ? process.env.BACKEND_URL
-      : "https://meanbeanmysql.herokuapp.com",
+      : "https://meanbean2.herokuapp.com",
   });
 }
 
@@ -12,7 +12,7 @@ function createBearerAxios() {
   return axios.create({
     baseURL: isDev
       ? process.env.BACKEND_URL
-      : "https://meanbeanmysql.herokuapp.com",
+      : "https://meanbean2.herokuapp.com",
     headers: {
       Authorization:
         "Bearer " + window.localStorage.getItem("access_token"),

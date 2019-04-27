@@ -1,14 +1,21 @@
 import {createBearerAxios} from "../axiosInstances";
 
 export default async (
-  userId: String | null,
+  amount: number,
+  email: string,
+  id: string,
   onSuccess?: Function,
   onError?: Function,
 ) => {
   try {
     const {data} = await createBearerAxios()({
-      method: "get",
-      url: `/customer/orders/userid/${userId}`,
+      method: "post",
+      url: "/charge",
+      data: {
+        amount: amount,
+        stripeEmail: email,
+        stripeToken: id,
+      },
     });
     if (onSuccess) {
       onSuccess();

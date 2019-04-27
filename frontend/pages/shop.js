@@ -3,24 +3,26 @@ import MeanCoffeeHeader from "../components/shop-components/MeanCoffeeHeader";
 import CartFooter from "../components/shop-components/CartFooter";
 import ItemCardList from "../components/shop-components/ItemCardList";
 import ItemCard from "../components/shop-components/ItemCard";
+import ReviewDrawer from "../components/shop-components/ReviewDrawer";
+import Searcher from "../components/shop-components/Searcher";
 import {Button, Spin, notification} from "antd";
 import {useEffect, useState, useMemo} from "react";
 import axios from "axios";
 import uuidv4 from "uuid/v4";
 import {createBaseAxios, createBearerAxios} from "../lib/axiosInstances";
 import {formatMoney} from "../lib/formatMoney";
-import ReviewDrawer from "../components/shop-components/ReviewDrawer";
-import Searcher from "../components/shop-components/Searcher";
-import getCustomerByUserId from "../lib/requestsEndpoints/getCustomerByUserId";
 import Router from "next/router";
-import getCustomerByUsername from "../lib/requestsEndpoints/getCustomerByUsername";
-import getCartByUserId from "../lib/requestsEndpoints/getCartByUserId";
-import getShopMerchandise from "../lib/requestsEndpoints/getShopMerchandise";
-import postAddCartItem from "../lib/requestsEndpoints/postAddCartItem";
-import deleteCartItemByUserIdAndProductId from "../lib/requestsEndpoints/deleteCartItemRequest";
-import deleteCartItemRequest from "../lib/requestsEndpoints/deleteCartItemRequest";
-import putModifyCartQuantity from "../lib/requestsEndpoints/putModifyCartQuantity";
-import getShopItemsByPage from "../lib/requestsEndpoints/getShopItemsByPage";
+import {
+  getCustomerByUsername,
+  getCustomerByUserId,
+  getCartByUserId,
+  getShopMerchandise,
+  getShopItemsByPage,
+  postAddCartItem,
+  deleteCartItemByUserIdAndProductId,
+  deleteCartItemRequest,
+  putModifyCartQuantity,
+} from "../lib/requestsEndpoints/index";
 
 const ShopPage = () => {
   const [merchandise, setMerchandise] = useState([]);
@@ -74,6 +76,7 @@ const ShopPage = () => {
       try {
         setItemsLoading(true);
         const merchandiseData = await getShopItemsByPage(1);
+        console.log(merchandiseData);
         setMerchandise(merchandiseData);
         setIsPaginatorDisabled(
           merchandiseData.length === 0 ? true : false,
@@ -97,25 +100,11 @@ const ShopPage = () => {
         const username = window.localStorage.getItem("username");
         const customerData = await getCustomerByUsername(username);
 
-        setUserId(customerData.userid);
+        setUserId(customerData.userId);
 
-        window.localStorage.setItem("userid", customerData.userid);
-
-        const cartData = await getCartByUserId(customerData.userid);
-        const cartItems = [];
-        for (let i = 0; i < cartData.length; i++) {
-          let item = cartData[i];
-          const quantity = item.quantityincart;
-
-          for (let j = 0; j < quantity; j++) {
-            delete item.quantityincart;
-            cartItems.push({
-              ...item,
-              keyId: uuidv4(),
-            });
-          } // for j - used for adding the right amount of quantity in cart
-        } // for i - iterating through each product
-        setCartItems(cartItems);
+        window.localStorage.setItem("userid", customerData.userId);
+        const {itemsInCart} = customerData.cart;
+        setCartItems(itemsInCart);
       } catch (err) {
         console.log(err);
       }
@@ -133,53 +122,49 @@ const ShopPage = () => {
             isItemsLoading ? (
               <ItemsListSpinner size="large" />
             ) : (
-              <>
-                <ItemCardList>
-                  {decideMerchandiseToShow().map(item => {
-                    return (
-                      <ItemCard
-                        key={item.productid}
-                        title={item.productname}
-                        description={item.description}
-                        imagePublicId={item.image}
-                        imageHeight={200}
-                        imageWidth={200}
-                        actionBtns={[
-                          <BuyBtn
-                            type="primary"
-                            onClick={() => {
-                              addCartItem(item, userId);
-                            }}
-                            access_token={accessToken}
-                          >
-                            Buy {formatMoney(item.price)}
-                          </BuyBtn>,
-                          <LoginBtn
-                            type="primary"
-                            onClick={() => {
-                              Router.push({
-                                pathname: "/auth",
-                              });
-                            }}
-                            access_token={accessToken}
-                          >
-                            Login to buy.
-                          </LoginBtn>,
-                          <Button
-                            onClick={() => {
-                              setReviewsPaneVisible(
-                                prevState => !prevState,
-                              );
-                            }}
-                          >
-                            Reviews
-                          </Button>,
-                        ]}
-                      />
-                    );
-                  })}
-                </ItemCardList>
-              </>
+              <ItemCardList>
+                {decideMerchandiseToShow().map(item => {
+                  return (
+                    <ItemCard
+                      key={item.product_id}
+                      title={item.product_name}
+                      description={item.description}
+                      imagePublicId={item.image}
+                      imageHeight={200}
+                      imageWidth={200}
+                      actionBtns={[
+                        <BuyBtn
+                          type="primary"
+                          onClick={() => {
+                            addCartItem(item, userId);
+                          }}
+                          access_token={accessToken}
+                        >
+                          Buy {formatMoney(item.price)}
+                        </BuyBtn>,
+                        <LoginBtn
+                          type="primary"
+                          onClick={() => {
+                            Router.push({
+                              pathname: "/auth",
+                            });
+                          }}
+                          access_token={accessToken}
+                        >
+                          Login to buy.
+                        </LoginBtn>,
+                        <Button
+                          onClick={() => {
+                            setReviewsPaneVisible(prevState => !prevState);
+                          }}
+                        >
+                          Reviews
+                        </Button>,
+                      ]}
+                    />
+                  );
+                })}
+              </ItemCardList>
             ),
           [merchandise, userId, isItemsLoading, merchandiseFromSearch],
         )}
@@ -213,24 +198,27 @@ const useCartItem = () => {
   const [cartItems, setCartItems] = useState([]);
 
   const deleteCartItem = async (currItem, userId, deleteIndex) => {
-    const cartData = await getCartByUserId(userId);
+    const {cart} = await getCustomerByUserId(userId);
+    const {itemsInCart} = cart;
 
-    const cartItem = cartData.find(item => {
-      return item.productid === currItem.productid;
+    const cartItem = itemsInCart.find(item => {
+      return item.product.productId === currItem.product_id;
     });
-    if (cartItem.quantityincart > 1) {
+    if (cartItem.quantity > 1) {
       const modifySuccessMsg = notification.success.bind(null, {
         message: `Deleted ${
-          cartItem.productname
-        }, there are ${cartItem.quantityincart - 1} left in cart.`,
+          cartItem.product.productName
+        }, there are ${cartItem.quantity - 1} left in cart.`,
       });
       const modifyFailedMsg = notification.error.bind(null, {
-        message: `Deletion of ${cartItem} has failed, try again later...`,
+        message: `Deletion of ${
+          cartItem.product.productName
+        } has failed, try again later...`,
       });
       const data = await putModifyCartQuantity(
         userId,
-        cartItem.productid,
-        cartItem.quantityincart - 1,
+        cartItem.product.productId,
+        cartItem.quantity - 1,
         modifySuccessMsg,
         modifyFailedMsg,
       );
@@ -240,20 +228,20 @@ const useCartItem = () => {
           ...cartItems.slice(deleteIndex + 1),
         ]);
       }
-    } else if (cartItem.quantityincart <= 1) {
+    } else if (cartItem.quantity <= 1) {
       const deleteSuccessMsg = notification.success.bind(null, {
         message: `${
-          cartItem.productname
+          cartItem.product.productName
         } no longer exists in cart, delete successful!`,
       });
       const deleteFailedMsg = notification.error.bind(null, {
         message: `${
-          cartItem.productname
+          cartItem.product.productName
         } could not be deleted, try again later.`,
       });
       const data = await deleteCartItemRequest(
         userId,
-        cartItem.productid,
+        cartItem.product.productId,
         deleteSuccessMsg,
         deleteFailedMsg,
       );
@@ -268,14 +256,14 @@ const useCartItem = () => {
 
   const addCartItem = async (itemObj, userId) => {
     const displaySuccessMsg = notification.success.bind(null, {
-      message: `${itemObj.productname} has been added!`,
+      message: `${itemObj.product_name} has been added!`,
     });
     const displayFailedMsg = notification.error.bind(null, {
-      message: `${itemObj.productname} has failed to be added to cart.`,
+      message: `${itemObj.product_name} has failed to be added to cart.`,
     });
     const data = await postAddCartItem(
       userId,
-      itemObj.productid,
+      itemObj.product_id,
       displaySuccessMsg,
       displayFailedMsg,
     );
