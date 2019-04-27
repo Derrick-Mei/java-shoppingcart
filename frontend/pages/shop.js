@@ -212,24 +212,27 @@ const useCartItem = () => {
   const [cartItems, setCartItems] = useState([]);
 
   const deleteCartItem = async (currItem, userId, deleteIndex) => {
-    const cartData = await getCartByUserId(userId);
+    const {cart} = await getCustomerByUserId(userId);
+    const {itemsInCart} = cart;
 
-    const cartItem = cartData.find(item => {
-      return item.productid === currItem.productid;
+    const cartItem = itemsInCart.find(item => {
+      return item.product.productId === currItem.product_id;
     });
-    if (cartItem.quantityincart > 1) {
+    if (cartItem.quantity > 1) {
       const modifySuccessMsg = notification.success.bind(null, {
         message: `Deleted ${
-          cartItem.productname
-        }, there are ${cartItem.quantityincart - 1} left in cart.`,
+          cartItem.product.productName
+        }, there are ${cartItem.quantity - 1} left in cart.`,
       });
       const modifyFailedMsg = notification.error.bind(null, {
-        message: `Deletion of ${cartItem} has failed, try again later...`,
+        message: `Deletion of ${
+          cartItem.product.productName
+        } has failed, try again later...`,
       });
       const data = await putModifyCartQuantity(
         userId,
-        cartItem.productid,
-        cartItem.quantityincart - 1,
+        cartItem.product.productId,
+        cartItem.quantity - 1,
         modifySuccessMsg,
         modifyFailedMsg,
       );
@@ -239,20 +242,20 @@ const useCartItem = () => {
           ...cartItems.slice(deleteIndex + 1),
         ]);
       }
-    } else if (cartItem.quantityincart <= 1) {
+    } else if (cartItem.quantity <= 1) {
       const deleteSuccessMsg = notification.success.bind(null, {
         message: `${
-          cartItem.product_name
+          cartItem.product.productName
         } no longer exists in cart, delete successful!`,
       });
       const deleteFailedMsg = notification.error.bind(null, {
         message: `${
-          cartItem.product_name
+          cartItem.product.productName
         } could not be deleted, try again later.`,
       });
       const data = await deleteCartItemRequest(
         userId,
-        cartItem.productid,
+        cartItem.product.productId,
         deleteSuccessMsg,
         deleteFailedMsg,
       );
