@@ -81,7 +81,7 @@ const CartFooter: React.SFC<Props> = ({
             return (
               <ItemCard
                 key={item.keyId}
-                title={item.productname}
+                title={item.productName}
                 description={formatMoney(item.price)}
                 imagePublicId={item.image}
                 imageHeight={50}

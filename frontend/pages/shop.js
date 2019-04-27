@@ -75,13 +75,12 @@ const ShopPage = () => {
     const fetchItems = async () => {
       try {
         setItemsLoading(true);
-        const merchandiseData = await getShopItemsByPage(1);
+        const merchandiseData = await getShopMerchandise();
         console.log(merchandiseData);
         setMerchandise(merchandiseData);
         setIsPaginatorDisabled(
           merchandiseData.length === 0 ? true : false,
         );
-        setItemsLoading(false);
       } catch (err) {
         console.log(err);
         notification.error({
@@ -101,12 +100,20 @@ const ShopPage = () => {
       try {
         const username = window.localStorage.getItem("username");
         const customerData = await getCustomerByUsername(username);
-
         setUserId(customerData.userId);
 
         window.localStorage.setItem("userid", customerData.userId);
         const {itemsInCart} = customerData.cart;
-        setCartItems(itemsInCart);
+        const modifiedCartItems = [];
+        for (let i = 0; i < itemsInCart.length; i++) {
+          const {product} = itemsInCart[i];
+          modifiedCartItems.push({
+            ...product,
+            keyId: uuidv4(),
+          });
+        }
+        console.log(modifiedCartItems);
+        setCartItems(modifiedCartItems);
       } catch (err) {
         console.log(err);
       }
