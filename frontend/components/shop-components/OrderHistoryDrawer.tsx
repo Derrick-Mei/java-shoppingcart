@@ -11,11 +11,12 @@ interface Order {
   time: string;
   orderId: number;
   id: string;
+  itemsInOrder: any;
 }
 interface Props {
   isMainVisible: boolean;
   setIsMainVisible: Function;
-  ordersData: [Order];
+  ordersData: Order[];
 }
 const OrderHistoryDrawer: React.SFC<Props> = ({
   isMainVisible,
@@ -80,6 +81,7 @@ const OrderHistoryDrawer: React.SFC<Props> = ({
               const {product} = item;
               return (
                 <ItemCard
+                  key={item.orderItemId}
                   imagePublicId={product.image}
                   imageHeight={100}
                   imageWidth={100}
