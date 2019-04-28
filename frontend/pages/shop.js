@@ -75,7 +75,7 @@ const ShopPage = () => {
     const fetchItems = async () => {
       try {
         setItemsLoading(true);
-        const merchandiseData = await getShopMerchandise();
+        const merchandiseData = await getShopItemsByPage(1);
         console.log(merchandiseData);
         setMerchandise(merchandiseData);
         setIsPaginatorDisabled(

@@ -8,7 +8,7 @@ export default async (
   try {
     const {data} = await createBaseAxios()({
       method: "get",
-      url: `/shop/reviewitems/${page}`,
+      url: `/shop/reviewitems/page/${page}/orderby/productId/ascdesc/ascending`,
     });
     if (onSuccess) {
       onSuccess();
