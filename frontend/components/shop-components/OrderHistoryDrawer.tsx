@@ -1,8 +1,7 @@
-import {Drawer, Card} from "antd";
+import {Drawer, Card, Empty} from "antd";
 import styled from "styled-components";
 import {useState} from "react";
 import {formatMoney} from "../../lib/formatMoney";
-import getOrderByOrderId from "../../lib/requestsEndpoints/getOrderByOrderId";
 import ItemCard from "./ItemCard";
 interface Order {
   keyId: string;
@@ -46,27 +45,29 @@ const OrderHistoryDrawer: React.SFC<Props> = ({
             );
           }}
         >
-          {ordersData.length
-            ? ordersData.map((order: any) => {
-                return (
-                  <OrderCardWrapper
-                    key={order.orderId}
-                    data-orderid={order.orderId}
-                  >
-                    <OrderCard title={`${order.orderId}`}>
-                      <p>
-                        Order Date:
-                        {order.shipDateTime.match(/\d+-\d+-\d+/)}
-                      </p>
-                      <p>
-                        Order Time:
-                        {order.shipDateTime.match(/\d+:\d+:\d+/)}
-                      </p>
-                    </OrderCard>
-                  </OrderCardWrapper>
-                );
-              })
-            : null}
+          {ordersData.length ? (
+            ordersData.map((order: any) => {
+              return (
+                <OrderCardWrapper
+                  key={order.orderId}
+                  data-orderid={order.orderId}
+                >
+                  <OrderCard title={`${order.orderId}`}>
+                    <p>
+                      Order Date:
+                      {order.shipDateTime.match(/\d+-\d+-\d+/)}
+                    </p>
+                    <p>
+                      Order Time:
+                      {order.shipDateTime.match(/\d+:\d+:\d+/)}
+                    </p>
+                  </OrderCard>
+                </OrderCardWrapper>
+              );
+            })
+          ) : (
+            <Empty />
+          )}
         </CardsList>
       </ParentDrawer>
       <ChildDrawer
@@ -75,22 +76,24 @@ const OrderHistoryDrawer: React.SFC<Props> = ({
         placement={"left"}
         onClose={() => setIsChildVisible(false)}
       >
-        {itemsInOrder.length
-          ? itemsInOrder.map((item: any) => {
-              // console.log(item);
-              const {product} = item;
-              return (
-                <ItemCard
-                  key={item.orderItemId}
-                  imagePublicId={product.image}
-                  imageHeight={100}
-                  imageWidth={100}
-                  title={product.productName}
-                  description={product.description}
-                />
-              );
-            })
-          : null}
+        {itemsInOrder.length ? (
+          itemsInOrder.map((item: any) => {
+            // console.log(item);
+            const {product} = item;
+            return (
+              <ItemCard
+                key={item.orderItemId}
+                imagePublicId={product.image}
+                imageHeight={100}
+                imageWidth={100}
+                title={product.productName}
+                description={product.description}
+              />
+            );
+          })
+        ) : (
+          <Empty />
+        )}
       </ChildDrawer>
     </>
   );
