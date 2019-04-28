@@ -10,19 +10,7 @@ const MeanCoffeeHeader = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [isOrderDrawerOpen, setIsOrderDrawerOpen] = useState(false);
   const [orders, setOrders] = useState({});
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const userId = window.localStorage.getItem("userid");
-        const orderData = await getCustomerOrdersByUserId(userId);
-        const ordersCardsData = manipulateForOrderCards(orderData);
-        setOrders(ordersCardsData);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchOrders();
-  }, []);
+
   return (
     <MeanCoffeeWrapper>
       <Title>
@@ -47,7 +35,24 @@ const MeanCoffeeHeader = () => {
         >
           User Profile
         </DrawerBtn>
-        <DrawerBtn onClick={() => setIsOrderDrawerOpen(true)} block>
+        <DrawerBtn
+          onClick={() => {
+            setIsOrderDrawerOpen(true);
+            const fetchOrders = async () => {
+              try {
+                const userId = window.localStorage.getItem("userid");
+                const orderData = await getCustomerOrdersByUserId(userId);
+                // const ordersCardsData = manipulateForOrderCards(orderData);
+                // console.log(orderData);
+                setOrders(orderData);
+              } catch (err) {
+                console.log(err);
+              }
+            };
+            fetchOrders();
+          }}
+          block
+        >
           Order History
         </DrawerBtn>
         {/* <DrawerBtn block>Light / Dark</DrawerBtn> */}
