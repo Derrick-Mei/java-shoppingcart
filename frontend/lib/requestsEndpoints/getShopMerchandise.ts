@@ -4,7 +4,7 @@ export default async (onSuccess: Function, onError: Function) => {
   try {
     const {data} = await createBaseAxios()({
       method: "get",
-      url: `/shop`,
+      url: `/shop/reviewitems`,
     });
     if (onSuccess) {
       onSuccess();

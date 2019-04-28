@@ -81,13 +81,14 @@ const ShopPage = () => {
         setIsPaginatorDisabled(
           merchandiseData.length === 0 ? true : false,
         );
-        setItemsLoading(false);
       } catch (err) {
         console.log(err);
         notification.error({
           message:
             "Failed to fetch merchandise, it might be a server error try again.",
         });
+      } finally {
+        setItemsLoading(false);
       }
     };
     fetchItems();
@@ -98,13 +99,24 @@ const ShopPage = () => {
     const fetchUserAndCart = async () => {
       try {
         const username = window.localStorage.getItem("username");
+        if (!username) {
+          return;
+        }
         const customerData = await getCustomerByUsername(username);
-
         setUserId(customerData.userId);
 
         window.localStorage.setItem("userid", customerData.userId);
         const {itemsInCart} = customerData.cart;
-        setCartItems(itemsInCart);
+        const modifiedCartItems = [];
+        for (let i = 0; i < itemsInCart.length; i++) {
+          const {product} = itemsInCart[i];
+          modifiedCartItems.push({
+            ...product,
+            keyId: uuidv4(),
+          });
+        }
+        console.log(modifiedCartItems);
+        setCartItems(modifiedCartItems);
       } catch (err) {
         console.log(err);
       }
@@ -126,8 +138,8 @@ const ShopPage = () => {
                 {decideMerchandiseToShow().map(item => {
                   return (
                     <ItemCard
-                      key={item.product_id}
-                      title={item.product_name}
+                      key={item.productId}
+                      title={item.productName}
                       description={item.description}
                       imagePublicId={item.image}
                       imageHeight={200}
@@ -202,7 +214,7 @@ const useCartItem = () => {
     const {itemsInCart} = cart;
 
     const cartItem = itemsInCart.find(item => {
-      return item.product.productId === currItem.product_id;
+      return item.product.productId === currItem.productId;
     });
     if (cartItem.quantity > 1) {
       const modifySuccessMsg = notification.success.bind(null, {
@@ -256,14 +268,14 @@ const useCartItem = () => {
 
   const addCartItem = async (itemObj, userId) => {
     const displaySuccessMsg = notification.success.bind(null, {
-      message: `${itemObj.product_name} has been added!`,
+      message: `${itemObj.productName} has been added!`,
     });
     const displayFailedMsg = notification.error.bind(null, {
-      message: `${itemObj.product_name} has failed to be added to cart.`,
+      message: `${itemObj.productName} has failed to be added to cart.`,
     });
     const data = await postAddCartItem(
       userId,
-      itemObj.product_id,
+      itemObj.productId,
       displaySuccessMsg,
       displayFailedMsg,
     );

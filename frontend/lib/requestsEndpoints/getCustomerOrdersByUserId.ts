@@ -8,7 +8,7 @@ export default async (
   try {
     const {data} = await createBearerAxios()({
       method: "get",
-      url: `/customer/orders/userid/${userId}`,
+      url: `/customer/orders/allorders/${userId}`,
     });
     if (onSuccess) {
       onSuccess();

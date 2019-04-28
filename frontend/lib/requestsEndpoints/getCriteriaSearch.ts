@@ -10,7 +10,7 @@ export default async (
     // /shop/criteria/{search string}/page/{page}
     const {data} = await createBaseAxios()({
       method: "get",
-      url: `/shop/criteria/${itemName}/page/${pageNumber}`,
+      url: `shop/search/productwithreview/${itemName}/page/${pageNumber}/orderby/productId/ascdesc/ascending`,
     });
     if (onSuccess) {
       onSuccess();

@@ -14,7 +14,10 @@ import ItemCard from "./shop-components/ItemCard";
 import ItemCardList from "./shop-components/ItemCardList";
 import {injectStripe} from "react-stripe-elements-universal";
 import StripeBtn from "./StripeButton";
-import {getCartByUserId} from "../lib/requestsEndpoints/index";
+import {
+  getCartByUserId,
+  getCustomerByUserId,
+} from "../lib/requestsEndpoints/index";
 interface Props {
   form: any;
   theme: ITheme;
@@ -37,26 +40,25 @@ const CheckoutForm: React.SFC<Props> = ({form, theme}) => {
       try {
         const userId = Number(window.localStorage.getItem("userid"));
 
-        const cartData = await getCartByUserId(userId);
-
-        const items = [];
+        const customerData = await getCustomerByUserId(userId);
+        const {itemsInCart} = customerData.cart;
+        const modifiedItemsInCart = [];
         let totalPriceInCart = 0;
-        for (let i = 0; i < cartData.length; i++) {
-          const quantity = cartData[i].quantityincart;
-          totalPriceInCart +=
-            cartData[i].price * cartData[i].quantityincart;
+        for (let i = 0; i < itemsInCart.length; i++) {
+          const {quantity, product} = itemsInCart[i];
+          totalPriceInCart += product.price * quantity;
           for (let j = 0; j < quantity; j++) {
             const newItem = {
-              ...cartData[i],
+              ...product,
               keyId: uuidv4(),
             };
-            items.push(newItem);
+            modifiedItemsInCart.push(newItem);
           }
         }
         setTotalCartPrice(totalPriceInCart);
         setTotalPrice(totalPriceInCart);
         //@ts-ignore
-        setCartItems(items);
+        setCartItems(modifiedItemsInCart);
       } catch (err) {
         console.log(err);
       }
@@ -119,7 +121,7 @@ const CheckoutForm: React.SFC<Props> = ({form, theme}) => {
                 return (
                   <ItemCard
                     key={item.keyId}
-                    title={item.productname}
+                    title={item.productName}
                     description={formatMoney(item.price)}
                     imagePublicId={item.image}
                     imageHeight={50}

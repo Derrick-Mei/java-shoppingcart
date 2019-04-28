@@ -19,6 +19,7 @@ const Searcher: React.SFC<Props> = ({setMerchandiseFromSearch}) => {
   const runCriteriaSearch = async () => {
     if (searchText) {
       const searchData = await getCriteriaSearch(searchText, 1);
+      // console.log(searchData);
       setMerchandiseFromSearch(searchData);
     } else {
       setMerchandiseFromSearch([]);
