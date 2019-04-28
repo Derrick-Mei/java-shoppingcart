@@ -99,6 +99,9 @@ const ShopPage = () => {
     const fetchUserAndCart = async () => {
       try {
         const username = window.localStorage.getItem("username");
+        if (!username) {
+          return;
+        }
         const customerData = await getCustomerByUsername(username);
         setUserId(customerData.userId);
 
