@@ -7,6 +7,8 @@ import {Theme as ITheme, InputEventTarget} from "../interfaces/index";
 import {message} from "antd";
 import {useState} from "react";
 import {createBaseAxios} from "../lib/axiosInstances";
+import getConfig from "next/config";
+const {publicRuntimeConfig} = getConfig();
 interface LoginValues {
   username: string;
   password: string;
@@ -45,7 +47,7 @@ const LoginForm: React.SFC<Props> = ({
       setLoading(true);
       try {
         const bodyData = {
-          grant_type: process.env.GRANT_TYPE_PASSWORD,
+          grant_type: publicRuntimeConfig.GRANT_TYPE_PASSWORD,
           username: values.username,
           password: values.password,
         };
@@ -56,8 +58,8 @@ const LoginForm: React.SFC<Props> = ({
           timeout: 1000 * 10,
           data: qs.stringify(bodyData),
           auth: {
-            username: process.env.CLIENT_ID,
-            password: process.env.CLIENT_SECRET,
+            username: publicRuntimeConfig.CLIENT_ID,
+            password: publicRuntimeConfig.CLIENT_SECRET,
           },
           validateStatus: function(status: number) {
             if (status === 400) {
