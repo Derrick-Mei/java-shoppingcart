@@ -8,6 +8,10 @@ import Meta from "./Meta";
 import {CloudinaryContext} from "cloudinary-react";
 import cloudinary from "cloudinary-core";
 import Context from "../context/Context";
+import getConfig from "next/config";
+
+const {publicRuntimeConfig} = getConfig();
+
 const theme = {
   black: "#393939",
   grey: "#E7E7E7",
@@ -57,13 +61,13 @@ injectGlobal`
 const StyledPageWithTheme = withTheme(StyledPage);
 
 const cloudinaryCore = new cloudinary.Cloudinary({
-  cloud_name: process.env.CLOUD_NAME,
+  cloud_name: publicRuntimeConfig.CLOUD_NAME,
   secure: true,
 });
 class Page extends Component {
   render() {
     return (
-      <CloudinaryContext cloudName={process.env.CLOUD_NAME}>
+      <CloudinaryContext cloudName={publicRuntimeConfig.CLOUD_NAME}>
         <Context.Provider
           value={{
             cloudinaryCore,
