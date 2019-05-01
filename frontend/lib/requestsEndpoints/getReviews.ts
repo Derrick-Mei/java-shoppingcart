@@ -2,14 +2,13 @@ import {createBaseAxios} from "../axiosInstances";
 
 export default async (
   productId: number,
-  page: number,
   onSuccess?: Function,
   onError?: Function,
 ) => {
   try {
     const {data} = await createBaseAxios()({
       method: "get",
-      url: `/shop/reviews/${productId}/page/${page}`,
+      url: `/shop/reviews/${productId}`,
     });
     if (onSuccess) {
       onSuccess();

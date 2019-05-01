@@ -59,6 +59,14 @@ const ShopPage = () => {
       ? merchandiseFromSearch
       : merchandise;
   };
+  // useEffect(() => {
+  //   const fetchReviews = async () => {
+  //     const reviewData = await getReviews();
+  //     console.log(reviewData);
+  //     setReviews(prevState => [...prevState, reviewData]);
+  //   };
+  //   fetchReviews();
+  // }, [merchandisePage]);
   useEffect(() => {
     const fetchProductsInfo = async () => {
       try {
@@ -68,9 +76,6 @@ const ShopPage = () => {
         setIsPaginatorDisabled(
           merchandiseData.length === 0 ? true : false,
         );
-        const reviewData = await getReviews(1, 1);
-        console.log(reviewData);
-        setReviews(reviewData);
       } catch (err) {
         console.log(err);
         notification.error({
@@ -158,8 +163,13 @@ const ShopPage = () => {
                         </LoginBtn>,
 
                         <Button
-                          onClick={() => {
+                          onClick={async () => {
                             setReviewsPaneVisible(prevState => !prevState);
+                            const reviewsData = await getReviews(
+                              item.productId,
+                            );
+                            console.log(reviewsData);
+                            setReviews(reviewsData);
                           }}
                         >
                           {`${item.reviewCount} Reviews`}
