@@ -9,7 +9,7 @@ export {
 export {default as getOrderByOrderId} from "./getOrderByOrderId";
 export {default as getShopItemsByPage} from "./getShopItemsByPage";
 export {default as getShopMerchandise} from "./getShopMerchandise";
-export {default as getReviews} from "./getReviews";
+export {default as getReviewsByProductId} from "./getReviewsByProductId";
 // POST
 export {default as postAddCartItem} from "./postAddCartItem";
 export {default as postCreateOrder} from "./postCreateOrder";

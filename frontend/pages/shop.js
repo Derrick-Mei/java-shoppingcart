@@ -22,7 +22,7 @@ import {
   deleteCartItemByUserIdAndProductId,
   deleteCartItemRequest,
   putModifyCartQuantity,
-  getReviews,
+  getReviewsByProductId,
 } from "../lib/requestsEndpoints/index";
 
 const ShopPage = () => {
@@ -59,14 +59,7 @@ const ShopPage = () => {
       ? merchandiseFromSearch
       : merchandise;
   };
-  // useEffect(() => {
-  //   const fetchReviews = async () => {
-  //     const reviewData = await getReviews();
-  //     console.log(reviewData);
-  //     setReviews(prevState => [...prevState, reviewData]);
-  //   };
-  //   fetchReviews();
-  // }, [merchandisePage]);
+
   useEffect(() => {
     const fetchProductsInfo = async () => {
       try {
@@ -165,7 +158,7 @@ const ShopPage = () => {
                         <Button
                           onClick={async () => {
                             setReviewsPaneVisible(prevState => !prevState);
-                            const reviewsData = await getReviews(
+                            const reviewsData = await getReviewsByProductId(
                               item.productId,
                             );
                             console.log(reviewsData);
