@@ -71,6 +71,7 @@ class Page extends Component {
         <Context.Provider
           value={{
             cloudinaryCore,
+            publicRuntimeConfig,
           }}
         >
           <ThemeProvider theme={theme}>
