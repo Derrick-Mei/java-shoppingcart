@@ -157,7 +157,7 @@ const ShopPage = () => {
                             setReviewsPaneVisible(prevState => !prevState);
                           }}
                         >
-                          {item.reviewCount} Reviews
+                          {`${item.reviewCount} Reviews`}
                         </Button>,
                       ]}
                     />
