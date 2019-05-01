@@ -2,23 +2,26 @@ import {Comment, Divider, Rate, Button, Drawer} from "antd";
 import styled from "styled-components";
 import TextArea from "antd/lib/input/TextArea";
 
-interface ReviewComment {
-  avatar: string;
-  commentText: string;
-  rating: number;
-  keyId: string;
-  author: string;
+interface Review {
+  headline: string;
+  reviewBody: string;
+  stars: number;
+  reviewId: number;
+  reviewer: {
+    userId: number;
+    username: string;
+  };
 }
 export interface ReviewDrawerProps {
   isVisible: boolean;
-  commentsData: [ReviewComment];
+  reviewsData: [Review];
   setVisible: Function;
   productTitle: string;
 }
 
 const ReviewDrawer: React.SFC<ReviewDrawerProps> = ({
   isVisible,
-  commentsData,
+  reviewsData,
   setVisible,
   productTitle,
 }) => {
@@ -35,16 +38,17 @@ const ReviewDrawer: React.SFC<ReviewDrawerProps> = ({
         <Button type="primary">Submit Review</Button>
         <Rate />
         <TextArea rows={4} />
-        {commentsData.map(comment => {
+        {reviewsData.map(review => {
+          const {reviewer} = review;
           return (
             <Comment
-              key={comment.keyId}
-              avatar={comment.avatar}
-              author={comment.author}
+              key={review.reviewId}
+              avatar={""}
+              author={reviewer.username}
               content={
                 <ContentContainer>
-                  <p>{comment.commentText}</p>
-                  <Rate disabled value={comment.rating} />
+                  <p>{review.reviewBody}</p>
+                  <Rate disabled value={review.stars} />
                   <Divider />
                 </ContentContainer>
               }

@@ -22,6 +22,7 @@ import {
   deleteCartItemByUserIdAndProductId,
   deleteCartItemRequest,
   putModifyCartQuantity,
+  getReviews,
 } from "../lib/requestsEndpoints/index";
 
 const ShopPage = () => {
@@ -32,6 +33,8 @@ const ShopPage = () => {
   const [merchandisePage, setMerchandisePage] = useState(2);
   const [isPaginatorLoading, setIsPaginatorLoading] = useState(false);
   const [isPaginatorDisabled, setIsPaginatorDisabled] = useState(true);
+
+  const [reviews, setReviews] = useState([]);
   const {
     cartItems,
     setCartItems,
@@ -57,15 +60,17 @@ const ShopPage = () => {
       : merchandise;
   };
   useEffect(() => {
-    const fetchItems = async () => {
+    const fetchProductsInfo = async () => {
       try {
         setItemsLoading(true);
         const merchandiseData = await getShopItemsByPage(1);
-        console.log(merchandiseData);
         setMerchandise(merchandiseData);
         setIsPaginatorDisabled(
           merchandiseData.length === 0 ? true : false,
         );
+        const reviewData = await getReviews(1, 1);
+        console.log(reviewData);
+        setReviews(reviewData);
       } catch (err) {
         console.log(err);
         notification.error({
@@ -76,7 +81,7 @@ const ShopPage = () => {
         setItemsLoading(false);
       }
     };
-    fetchItems();
+    fetchProductsInfo();
     setAccessToken(window.localStorage.getItem("access_token"));
   }, []);
 
@@ -187,7 +192,7 @@ const ShopPage = () => {
       <Searcher setMerchandiseFromSearch={setMerchandiseFromSearch} />
       <ReviewDrawer
         isVisible={isReviewsPaneVisible}
-        commentsData={[]}
+        reviewsData={reviews}
         setVisible={setReviewsPaneVisible}
       />
     </ShopWrapper>
