@@ -63,6 +63,7 @@ const SearchWrapper = styled.div`
   width: 100%;
   position: fixed;
   bottom: 46px;
+  z-index: 1000;
   padding: 1em;
   background: ${(props: {search_active: string}) =>
     props.search_active === "true"
