@@ -14,7 +14,7 @@ const EditProfileSection = () => {
           message: "There was an error retreiving user by userId",
         });
       }
-      setUserId(userId);
+      setUserId(customerData.userId);
     };
     fetchUserId();
   }, [userId]);

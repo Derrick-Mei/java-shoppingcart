@@ -5,7 +5,7 @@ import ItemCardList from "../components/shop-components/ItemCardList";
 import ItemCard from "../components/shop-components/ItemCard";
 import ReviewDrawer from "../components/shop-components/ReviewDrawer";
 import Searcher from "../components/shop-components/Searcher";
-import {Button, Spin, notification} from "antd";
+import {Button, Spin, notification, Badge} from "antd";
 import {useEffect, useState, useMemo} from "react";
 import axios from "axios";
 import uuidv4 from "uuid/v4";
@@ -22,6 +22,7 @@ import {
   deleteCartItemByUserIdAndProductId,
   deleteCartItemRequest,
   putModifyCartQuantity,
+  getReviewsByProductId,
 } from "../lib/requestsEndpoints/index";
 
 const ShopPage = () => {
@@ -32,6 +33,8 @@ const ShopPage = () => {
   const [merchandisePage, setMerchandisePage] = useState(2);
   const [isPaginatorLoading, setIsPaginatorLoading] = useState(false);
   const [isPaginatorDisabled, setIsPaginatorDisabled] = useState(true);
+
+  const [reviews, setReviews] = useState([]);
   const {
     cartItems,
     setCartItems,
@@ -40,22 +43,7 @@ const ShopPage = () => {
   } = useCartItem();
   const [userId, setUserId] = useState();
   const [accessToken, setAccessToken] = useState("");
-  const commentsData = [
-    {
-      avatar: "",
-      commentText: "This product is awesome!",
-      rating: 5,
-      keyId: 1,
-      author: "John",
-    },
-    {
-      avatar: "",
-      commentText: "This product is alright",
-      rating: 3,
-      keyId: 2,
-      author: "herald",
-    },
-  ];
+
   const getNextPageMerchandise = async () => {
     setIsPaginatorLoading(true);
     const nextMerchandiseData = await getShopItemsByPage(merchandisePage);
@@ -71,12 +59,12 @@ const ShopPage = () => {
       ? merchandiseFromSearch
       : merchandise;
   };
+
   useEffect(() => {
-    const fetchItems = async () => {
+    const fetchProductsInfo = async () => {
       try {
         setItemsLoading(true);
         const merchandiseData = await getShopItemsByPage(1);
-        console.log(merchandiseData);
         setMerchandise(merchandiseData);
         setIsPaginatorDisabled(
           merchandiseData.length === 0 ? true : false,
@@ -91,7 +79,7 @@ const ShopPage = () => {
         setItemsLoading(false);
       }
     };
-    fetchItems();
+    fetchProductsInfo();
     setAccessToken(window.localStorage.getItem("access_token"));
   }, []);
 
@@ -144,6 +132,7 @@ const ShopPage = () => {
                       imagePublicId={item.image}
                       imageHeight={200}
                       imageWidth={200}
+                      avgRating={item.avgRating}
                       actionBtns={[
                         <BuyBtn
                           type="primary"
@@ -152,7 +141,7 @@ const ShopPage = () => {
                           }}
                           access_token={accessToken}
                         >
-                          Buy {formatMoney(item.price)}
+                          {`Buy ${formatMoney(item.price)}`}
                         </BuyBtn>,
                         <LoginBtn
                           type="primary"
@@ -165,12 +154,18 @@ const ShopPage = () => {
                         >
                           Login to buy.
                         </LoginBtn>,
+
                         <Button
-                          onClick={() => {
+                          onClick={async () => {
                             setReviewsPaneVisible(prevState => !prevState);
+                            const reviewsData = await getReviewsByProductId(
+                              item.productId,
+                            );
+                            console.log(reviewsData);
+                            setReviews(reviewsData);
                           }}
                         >
-                          Reviews
+                          {`${item.reviewCount} Reviews`}
                         </Button>,
                       ]}
                     />
@@ -200,7 +195,7 @@ const ShopPage = () => {
       <Searcher setMerchandiseFromSearch={setMerchandiseFromSearch} />
       <ReviewDrawer
         isVisible={isReviewsPaneVisible}
-        commentsData={commentsData}
+        reviewsData={reviews}
         setVisible={setReviewsPaneVisible}
       />
     </ShopWrapper>

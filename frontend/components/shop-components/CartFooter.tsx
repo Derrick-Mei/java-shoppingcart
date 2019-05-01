@@ -113,6 +113,7 @@ const CartFooterWrapper = styled.div`
   right: 0;
   background: ${props => props.theme.black};
   padding: 0.2em;
+  z-index: 1000;
 `;
 const TotalDisplay = styled.div`
   display: flex;

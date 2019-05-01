@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import {Image, Transformation} from "cloudinary-react";
-import {Button} from "antd";
+import {Badge, Icon} from "antd";
 import uuidv4 from "uuid/v4";
 export interface Props {
   imagePublicId: string;
@@ -10,6 +10,7 @@ export interface Props {
   description: string;
   price?: number;
   actionBtns?: [React.ReactElement];
+  avgRating?: number;
 }
 
 const ItemCard: React.SFC<Props> = ({
@@ -20,9 +21,22 @@ const ItemCard: React.SFC<Props> = ({
   description,
   price,
   actionBtns,
+  avgRating,
 }) => {
   return (
     <StyledCard>
+      <Badge
+        count={avgRating}
+        style={{background: "yellow", color: "black"}}
+      >
+        <StarPanel>
+          <Icon
+            type="star"
+            theme="filled"
+            style={{fontSize: "2rem", color: "yellow"}}
+          />
+        </StarPanel>
+      </Badge>
       <Image publicId={imagePublicId}>
         <Transformation
           crop="fit"
@@ -76,5 +90,17 @@ const ActionsContainer = styled.div`
   & > * {
     margin-bottom: 1em;
   }
+`;
+const StarPanel = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4rem;
+  height: 4rem;
+  background: ${props => props.theme.black};
+  border-bottom-right-radius: 20px;
 `;
 export default ItemCard;
