@@ -15,9 +15,10 @@ import {useState, useEffect, useContext, useRef} from "react";
 import qs from "qs";
 import axios from "axios";
 import styled from "styled-components";
+import {createBearerAxios} from "../../lib/axiosInstances";
 
 const ChangeAvatarCard = ({username, userId}) => {
-  const {cloudinaryCore} = useContext(Context);
+  const {cloudinaryCore, publicRuntimeConfig} = useContext(Context);
   const [imagePublicId, setImagePublicId] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
@@ -73,8 +74,8 @@ const ChangeAvatarCard = ({username, userId}) => {
 
   const submitUploadToCloud = () => {
     const cloudUploadLink =
-      process.env.CLOUDINARY_BASE_URL + "/image/upload";
-    const cloudPreset = process.env.CLOUDINARY_UPLOAD_PRESET;
+      publicRuntimeConfig.CLOUDINARY_BASE_URL + "/image/upload";
+    const cloudPreset = publicRuntimeConfig.CLOUDINARY_UPLOAD_PRESET;
 
     const formData = new FormData();
     formData.append("file", fileList[currFileIndex]);
@@ -88,12 +89,12 @@ const ChangeAvatarCard = ({username, userId}) => {
       },
       data: formData,
     })
-      .then(res => {
+      .then(({data}) => {
         notification.success({
           message: "Avatar Updated!",
           description: "The image has been saved into our database.",
         });
-        setImagePublicId(res.data.public_id);
+        setImagePublicId(data.public_id);
       })
       .catch(err => {
         console.log(err);
