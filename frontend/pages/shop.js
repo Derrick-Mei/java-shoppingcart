@@ -138,7 +138,7 @@ const ShopPage = () => {
                           }}
                           access_token={accessToken}
                         >
-                          Buy {formatMoney(item.price)}
+                          {`Buy ${formatMoney(item.price)}`}
                         </BuyBtn>,
                         <LoginBtn
                           type="primary"
