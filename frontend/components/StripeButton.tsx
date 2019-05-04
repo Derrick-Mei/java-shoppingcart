@@ -25,7 +25,7 @@ const StripeBtn: React.SFC<Props> = ({headerImg, amount}) => {
       token.id,
     );
 
-    // console.log({stripeData});
+    console.log({stripeData});
     if (stripeData.status === "succeeded") {
       notification.success({
         message: "Stripe has processed payment!",
@@ -43,8 +43,13 @@ const StripeBtn: React.SFC<Props> = ({headerImg, amount}) => {
       const shipAddress = `${line1}, ${city} ${state} ${postalCode}`;
       await postCreateOrder(
         {
-          shippingaddress: shipAddress,
-          paymentdetails: "credit card",
+          shippingAddress: {
+            addressId: 3,
+          },
+          billingAddress: {
+            addressId: 3,
+          },
+          paymentDetails: "credit card",
         },
         saveUserDetailsSuccessCb,
         saveUserDetailsFailureCb,
