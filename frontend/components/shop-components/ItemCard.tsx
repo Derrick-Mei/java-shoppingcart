@@ -2,6 +2,7 @@ import styled from "styled-components";
 import {Image, Transformation} from "cloudinary-react";
 import {Badge, Icon} from "antd";
 import uuidv4 from "uuid/v4";
+import React from "react";
 export interface Props {
   imagePublicId: string;
   imageHeight: number;
@@ -25,18 +26,20 @@ const ItemCard: React.SFC<Props> = ({
 }) => {
   return (
     <StyledCard>
-      <Badge
-        count={avgRating}
-        style={{background: "yellow", color: "black"}}
-      >
-        <StarPanel>
-          <Icon
-            type="star"
-            theme="filled"
-            style={{fontSize: "2rem", color: "yellow"}}
-          />
-        </StarPanel>
-      </Badge>
+      {avgRating ? (
+        <Badge
+          count={avgRating}
+          style={{background: "yellow", color: "black"}}
+        >
+          <StarPanel>
+            <Icon
+              type="star"
+              theme="filled"
+              style={{fontSize: "2rem", color: "yellow"}}
+            />
+          </StarPanel>
+        </Badge>
+      ) : null}
       <Image publicId={imagePublicId}>
         <Transformation
           crop="fit"

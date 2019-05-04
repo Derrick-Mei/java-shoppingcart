@@ -55,11 +55,15 @@ const OrderHistoryDrawer: React.SFC<Props> = ({
                   <OrderCard title={`${order.orderId}`}>
                     <p>
                       Order Date:
-                      {order.shipDateTime.match(/\d+-\d+-\d+/)}
+                      {order.shipDateTime
+                        ? order.shipDateTime.match(/\d+-\d+-\d+/)
+                        : "N/A"}
                     </p>
                     <p>
                       Order Time:
-                      {order.shipDateTime.match(/\d+:\d+:\d+/)}
+                      {order.shipDateTime
+                        ? order.shipDateTime.match(/\d+:\d+:\d+/)
+                        : "N/A"}
                     </p>
                   </OrderCard>
                 </OrderCardWrapper>

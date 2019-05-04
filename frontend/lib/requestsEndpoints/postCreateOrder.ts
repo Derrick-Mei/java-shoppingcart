@@ -1,8 +1,13 @@
 import {createBearerAxios} from "../axiosInstances";
 
 interface UserDetails {
-  shippingaddress: string;
-  paymentdetails: string;
+  shippingAddress: {
+    addressId: number;
+  };
+  billingAddress: {
+    addressId: number;
+  };
+  paymentDetails: string;
 }
 
 export default async (
