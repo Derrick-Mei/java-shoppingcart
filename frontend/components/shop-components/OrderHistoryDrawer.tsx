@@ -47,6 +47,7 @@ const OrderHistoryDrawer: React.SFC<Props> = ({
         >
           {ordersData.length ? (
             ordersData.map((order: any) => {
+              console.log(order);
               return (
                 <OrderCardWrapper
                   key={order.orderId}
@@ -55,14 +56,20 @@ const OrderHistoryDrawer: React.SFC<Props> = ({
                   <OrderCard title={`${order.orderId}`}>
                     <p>
                       Order Date:
-                      {order.shipDateTime
-                        ? order.shipDateTime.match(/\d+-\d+-\d+/)
+                      {order.createdAt
+                        ? order.createdAt.match(/\d+-\d+-\d+/)
                         : "N/A"}
                     </p>
                     <p>
                       Order Time:
+                      {order.createdAt
+                        ? order.createdAt.match(/\d+:\d+:\d+/)
+                        : "N/A"}
+                    </p>
+                    <p>
+                      Ship Date:
                       {order.shipDateTime
-                        ? order.shipDateTime.match(/\d+:\d+:\d+/)
+                        ? order.shipDateTime.match(/\d+-\d+-\d+/)
                         : "N/A"}
                     </p>
                   </OrderCard>
@@ -82,7 +89,7 @@ const OrderHistoryDrawer: React.SFC<Props> = ({
       >
         {itemsInOrder.length ? (
           itemsInOrder.map((item: any) => {
-            // console.log(item);
+            console.log(item);
             const {product} = item;
             return (
               <ItemCard
