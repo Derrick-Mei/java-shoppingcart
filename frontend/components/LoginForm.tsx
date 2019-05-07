@@ -64,6 +64,12 @@ const LoginForm: React.SFC<Props> = ({
           validateStatus: function(status: number) {
             if (status === 400) {
               message.error("Wrong username or password, try again!");
+            } else if (status === 404 || status === 401) {
+              message.error("User with that username does not exist.");
+            } else if (status !== 200) {
+              message.error(
+                "There must be a problem with the server, try again later.",
+              );
             }
             return status === 200;
           },

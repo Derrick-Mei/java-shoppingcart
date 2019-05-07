@@ -66,9 +66,13 @@ const SignupForm: React.SFC<Props> = ({
           },
           timeout: 1000 * 10,
           validateStatus: function(status: number) {
-            if (status === 404 || status === 401 || status === 400) {
+            if (status === 400) {
               message.error(
-                "There might be a server error, please try again later",
+                "User with that email or username exists already",
+              );
+            } else if (status !== 200) {
+              message.error(
+                "There must be a problem with the server, try again later.",
               );
             }
             return status === 200;
